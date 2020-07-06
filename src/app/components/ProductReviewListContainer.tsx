@@ -37,7 +37,10 @@ type ProductReviewListContainerStateProps = Pick<
   'productReviewIDs'
 >;
 
-type ProductReviewListContainerDispatchProps = {};
+type ProductReviewListContainerDispatchProps = Pick<
+  ProductReviewListProps,
+  never
+>;
 
 type ProductReviewListContainerOwnProps = Omit<
   ProductReviewListProps,

@@ -28,7 +28,7 @@ export function OrderList({ orderIDs }: OrderListProps) {
 
 type OrderListContainerStateProps = Pick<OrderListProps, 'orderIDs'>;
 
-type OrderListContainerDispatchProps = {};
+type OrderListContainerDispatchProps = Pick<OrderListProps, never>;
 
 type OrderListContainerOwnProps = Omit<
   OrderListProps,

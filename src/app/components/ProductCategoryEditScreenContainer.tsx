@@ -44,7 +44,10 @@ type ProductCategoryEditScreenContainerStateProps = Pick<
   'productCategoryID'
 >;
 
-type ProductCategoryEditScreenContainerDispatchProps = {};
+type ProductCategoryEditScreenContainerDispatchProps = Pick<
+  ProductCategoryEditScreenProps,
+  never
+>;
 
 type ProductCategoryEditScreenContainerOwnProps = Omit<
   ProductCategoryEditScreenProps,

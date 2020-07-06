@@ -9,7 +9,7 @@ type UserSummaryProps = ComponentProps<typeof UserSummary>;
 
 type UserSummaryContainerStateProps = Pick<UserSummaryProps, 'user'>;
 
-type UserSummaryContainerDispatchProps = {};
+type UserSummaryContainerDispatchProps = Pick<UserSummaryProps, never>;
 
 type UserSummaryContainerOwnProps = Omit<
   UserSummaryProps,

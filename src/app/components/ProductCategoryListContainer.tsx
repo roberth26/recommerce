@@ -11,7 +11,7 @@ type ProductCategoryListStateProps = Pick<
   'categories'
 >;
 
-type ProductCategoryListDispatchProps = {};
+type ProductCategoryListDispatchProps = Pick<ProductCategoryListProps, never>;
 
 type ProductCategoryListOwnProps = Omit<
   ProductCategoryListProps,

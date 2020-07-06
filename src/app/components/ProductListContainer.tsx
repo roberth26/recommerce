@@ -24,7 +24,7 @@ export function ProductList({ productIDs }: ProductListProps) {
 
 type ProductListContainerStateProps = Pick<ProductListProps, 'productIDs'>;
 
-type ProductListContainerDispatchProps = {};
+type ProductListContainerDispatchProps = Pick<ProductListProps, never>;
 
 type ProductListContainerOwnProps = Omit<
   ProductListProps,

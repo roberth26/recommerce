@@ -9,7 +9,7 @@ type OrderSummaryProps = ComponentProps<typeof OrderSummary>;
 
 type OrderSummaryContainerStateProps = Pick<OrderSummaryProps, 'order'>;
 
-type OrderSummaryContainerDispatchProps = {};
+type OrderSummaryContainerDispatchProps = Pick<OrderSummaryProps, never>;
 
 type OrderSummaryContainerOwnProps = Omit<
   OrderSummaryProps,

@@ -9,7 +9,7 @@ type ProductSummaryProps = ComponentProps<typeof ProductSummary>;
 
 type ProductSummaryContainerStateProps = Pick<ProductSummaryProps, 'product'>;
 
-type ProductSummaryContainerDispatchProps = {};
+type ProductSummaryContainerDispatchProps = Pick<ProductSummaryProps, never>;
 
 type ProductSummaryContainerOwnProps = Omit<
   ProductSummaryProps,

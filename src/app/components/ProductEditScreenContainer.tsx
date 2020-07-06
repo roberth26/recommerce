@@ -42,7 +42,10 @@ type ProductEditScreenContainerStateProps = Pick<
   'productID'
 >;
 
-type ProductEditScreenContainerDispatchProps = {};
+type ProductEditScreenContainerDispatchProps = Pick<
+  ProductEditScreenProps,
+  never
+>;
 
 type ProductEditScreenContainerOwnProps = Omit<
   ProductEditScreenProps,

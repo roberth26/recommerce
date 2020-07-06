@@ -23,7 +23,7 @@ export function UserList({ userIDs }: UserListProps) {
 
 type UserListContainerStateProps = Pick<UserListProps, 'userIDs'>;
 
-type UserListContainerDispatchProps = {};
+type UserListContainerDispatchProps = Pick<UserListProps, never>;
 
 type UserListContainerOwnProps = Omit<
   UserListProps,
