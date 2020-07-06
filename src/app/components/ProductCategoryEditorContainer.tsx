@@ -1,14 +1,14 @@
 import { ComponentProps } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { ProductCategoryEditor } from '../../entities/product-categories/components/ProductCategoryEditor';
-import { ProductCategoryID } from '../../entities/product-categories/types';
+import { ProductCategoryEditor } from '../../product-categories/components/ProductCategoryEditor';
+import { ProductCategoryID } from '../../product-categories/types';
 import { State } from '../types';
 import { getProductCategoryByID } from '../selectors';
 import {
   updateProductCategory,
   createProductCategory,
-} from '../../entities/product-categories/actions';
+} from '../../product-categories/actions';
 
 type ProductCategoryEditorProps = ComponentProps<typeof ProductCategoryEditor>;
 

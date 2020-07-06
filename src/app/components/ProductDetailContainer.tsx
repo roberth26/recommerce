@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
-import { ProductDetail } from '../../entities/products/components/ProductDetail';
+import { ProductDetail } from '../../products/components/ProductDetail';
 import { State } from '../types';
 import { getProductByIDDenormalized } from '../selectors';
-import { ProductID } from '../../entities/products/types';
-import { deleteProduct } from '../../entities/products/actions';
+import { ProductID } from '../../products/types';
+import { deleteProduct } from '../../products/actions';
 
 type ProductDetailProps = ComponentProps<typeof ProductDetail>;
 

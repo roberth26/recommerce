@@ -2,7 +2,7 @@ import React, { useState, ChangeEventHandler, useEffect } from 'react';
 import { uuid } from 'uuidv4';
 import { Product } from '../types';
 import { ProductCategory } from '../../product-categories/types';
-import { Field } from '../../../utils/Field';
+import { Field } from '../../utils/Field';
 
 type EditableProduct = Pick<
   Product<ProductCategory>,

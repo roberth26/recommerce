@@ -1,7 +1,7 @@
 import React, { useState, ChangeEventHandler } from 'react';
 import { uuid } from 'uuidv4';
 import { ProductCategory } from '../types';
-import { Field } from '../../../utils/Field';
+import { Field } from '../../utils/Field';
 
 type EditableProductCategory = Pick<ProductCategory, 'name'>;
 

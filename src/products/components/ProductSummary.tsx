@@ -6,7 +6,7 @@ import {
   ProductCategoryID,
   ProductCategory,
 } from '../../product-categories/types';
-import { ActionType as RoutesActionType } from '../../../routes/actions';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 import { StarRating } from '../../product-reviews/components/StarRating';
 
 type ProductSummaryProps = {

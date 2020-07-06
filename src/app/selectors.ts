@@ -1,27 +1,24 @@
 import { pipe, compact, map, sortBy } from 'lodash/fp';
 import { selectFromRoot } from '../utils/fn';
-import * as ProductCategoriesSelectors from '../entities/product-categories/selectors';
-import * as ProductReviewsSelectors from '../entities/product-reviews/selectors';
-import * as ProductsSelectors from '../entities/products/selectors';
-import * as UsersSelectors from '../entities/users/selectors';
-import * as OrdersSelectors from '../entities/orders/selectors';
+import * as ProductCategoriesSelectors from '../product-categories/selectors';
+import * as ProductReviewsSelectors from '../product-reviews/selectors';
+import * as ProductsSelectors from '../products/selectors';
+import * as UsersSelectors from '../users/selectors';
+import * as OrdersSelectors from '../orders/selectors';
 import * as RoutesSelectors from '../routes/selectors';
 import { State } from './types';
-import { UserID, User } from '../entities/users/types';
-import {
-  ProductReview,
-  ProductReviewID,
-} from '../entities/product-reviews/types';
-import { Product, ProductID } from '../entities/products/types';
+import { UserID, User } from '../users/types';
+import { ProductReview, ProductReviewID } from '../product-reviews/types';
+import { Product, ProductID } from '../products/types';
 import {
   ProductCategory,
   ProductCategoryID,
-} from '../entities/product-categories/types';
-import { Order, OrderID } from '../entities/orders/types';
+} from '../product-categories/types';
+import { Order, OrderID } from '../orders/types';
 import { screens } from './constants';
-import { normalizeProductReview } from '../entities/product-reviews/utils';
-import { normalizeProduct } from '../entities/products/utils';
-import { normalizeOrder } from '../entities/orders/utils';
+import { normalizeProductReview } from '../product-reviews/utils';
+import { normalizeProduct } from '../products/utils';
+import { normalizeOrder } from '../orders/utils';
 
 export const routes = (state: State) => state.routes;
 export const productCategories = (state: State) => state.productCategories;

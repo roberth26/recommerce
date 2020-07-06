@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
-import { UserDetail } from '../../entities/users/components/UserDetail';
+import { UserDetail } from '../../users/components/UserDetail';
 import { State } from '../types';
 import { getUserByID } from '../selectors';
-import { UserID } from '../../entities/users/types';
-import { deleteUser } from '../../entities/users/actions';
+import { UserID } from '../../users/types';
+import { deleteUser } from '../../users/actions';
 
 type UserDetailProps = ComponentProps<typeof UserDetail>;
 

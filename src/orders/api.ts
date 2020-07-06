@@ -1,6 +1,6 @@
 import { keyBy } from 'lodash/fp';
-import { delay } from '../../utils/fn';
-import { getDB } from '../../utils/db-mock';
+import { delay } from '../utils/fn';
+import { getDB } from '../utils/db-mock';
 import { OrderID, Order } from './types';
 import { normalizeOrder } from './utils';
 import { Product, ProductID } from '../products/types';

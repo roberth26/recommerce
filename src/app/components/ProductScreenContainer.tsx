@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ProductID, Product } from '../../entities/products/types';
+import { ProductID, Product } from '../../products/types';
 import { State } from '../types';
 import { getCurrentRouteProductID } from '../selectors';
 import { ProductDetailContainer } from './ProductDetailContainer';
 import { ProductReviewListContainer } from './ProductReviewListContainer';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
-import { ProductCategory } from '../../entities/product-categories/types';
+import { ProductCategory } from '../../product-categories/types';
 
 type ProductScreenProps = {
   productID: ProductID | undefined | null;

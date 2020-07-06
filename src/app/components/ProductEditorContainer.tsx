@@ -1,11 +1,11 @@
 import { ComponentProps } from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { ProductEditor } from '../../entities/products/components/ProductEditor';
-import { ProductID } from '../../entities/products/types';
+import { ProductEditor } from '../../products/components/ProductEditor';
+import { ProductID } from '../../products/types';
 import { State } from '../types';
 import { getProductByIDDenormalized, getProductCategories } from '../selectors';
-import { updateProduct, createProduct } from '../../entities/products/actions';
+import { updateProduct, createProduct } from '../../products/actions';
 
 type ProductEditorProps = ComponentProps<typeof ProductEditor>;
 

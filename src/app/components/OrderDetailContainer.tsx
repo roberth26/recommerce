@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
-import { OrderDetail } from '../../entities/orders/components/OrderDetail';
+import { OrderDetail } from '../../orders/components/OrderDetail';
 import { State } from '../types';
 import { getOrderByIDDenormalized } from '../selectors';
-import { OrderID } from '../../entities/orders/types';
-import { deleteOrder } from '../../entities/orders/actions';
+import { OrderID } from '../../orders/types';
+import { deleteOrder } from '../../orders/actions';
 
 type OrderDetailProps = ComponentProps<typeof OrderDetail>;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { ProductCategoryID } from '../../entities/product-categories/types';
+import { ProductCategoryID } from '../../product-categories/types';
 import { State } from '../types';
 import { getCurrentRouteProductCategoryID } from '../selectors';
 import { Page } from './Page';

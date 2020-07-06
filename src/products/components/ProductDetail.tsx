@@ -2,7 +2,7 @@ import React, { ImgHTMLAttributes } from 'react';
 import { Product } from '../types';
 import { ProductCategory } from '../../product-categories/types';
 import Link from 'redux-first-router-link';
-import { ActionType as RoutesActionType } from '../../../routes/actions';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductDetailProps = {
   product: Product<ProductCategory> | undefined | null;

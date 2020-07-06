@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '../types';
 import Link from 'redux-first-router-link';
-import { ActionType as RoutesActionType } from '../../../routes/actions';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type UserSummaryProps = {
   user: User | undefined | null;

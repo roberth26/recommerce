@@ -1,10 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import { OrderID } from '../../entities/orders/types';
+import { OrderID } from '../../orders/types';
 import { OrderSummaryContainer } from './OrderSummaryContainer';
 import { connect } from 'react-redux';
 import { State } from '../types';
 import { getOrderIDsByUserID, getOrderIDs } from '../selectors';
-import { UserID } from '../../entities/users/types';
+import { UserID } from '../../users/types';
 
 type OrderListProps = {
   orderIDs: Array<OrderID>;

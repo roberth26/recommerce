@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { UserID, User } from '../../entities/users/types';
+import { UserID, User } from '../../users/types';
 import { State } from '../types';
 import { getCurrentRouteUserID } from '../selectors';
 import { UserDetailContainer } from './UserDetailContainer';

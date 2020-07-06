@@ -1,9 +1,9 @@
 import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
-import { OrderSummary } from '../../entities/orders/components/OrderSummary';
+import { OrderSummary } from '../../orders/components/OrderSummary';
 import { State } from '../types';
 import { getOrderByIDDenormalized } from '../selectors';
-import { OrderID } from '../../entities/orders/types';
+import { OrderID } from '../../orders/types';
 
 type OrderSummaryProps = ComponentProps<typeof OrderSummary>;
 

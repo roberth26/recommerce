@@ -1,9 +1,9 @@
 import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
-import { ProductSummary } from '../../entities/products/components/ProductSummary';
+import { ProductSummary } from '../../products/components/ProductSummary';
 import { State } from '../types';
 import { getProductByIDDenormalized } from '../selectors';
-import { ProductID } from '../../entities/products/types';
+import { ProductID } from '../../products/types';
 
 type ProductSummaryProps = ComponentProps<typeof ProductSummary>;
 

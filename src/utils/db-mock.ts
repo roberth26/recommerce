@@ -1,14 +1,14 @@
 import { uuid } from 'uuidv4';
 import Faker from 'faker';
 import { keyBy, pipe, times, uniqBy } from 'lodash/fp';
-import { Order } from '../entities/orders/types';
-import { ProductID, Product } from '../entities/products/types';
-import { UserID, User } from '../entities/users/types';
+import { Order } from '../orders/types';
+import { ProductID, Product } from '../products/types';
+import { UserID, User } from '../users/types';
 import {
   ProductCategory,
   ProductCategoryID,
-} from '../entities/product-categories/types';
-import { ProductReview } from '../entities/product-reviews/types';
+} from '../product-categories/types';
+import { ProductReview } from '../product-reviews/types';
 
 export async function getDB() {
   const openDBRequest = window.indexedDB.open('recommerce', 1);

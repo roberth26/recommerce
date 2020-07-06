@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { OrderID, Order } from '../../entities/orders/types';
+import { OrderID, Order } from '../../orders/types';
 import { State } from '../types';
 import { getCurrentRouteOrderID } from '../selectors';
 import { OrderDetailContainer } from './OrderDetailContainer';

@@ -1,5 +1,5 @@
-import { delay } from '../../utils/fn';
-import { getDB } from '../../utils/db-mock';
+import { delay } from '../utils/fn';
+import { getDB } from '../utils/db-mock';
 import { UserID, User } from './types';
 
 export async function getUsers(

@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
 import { State } from '../types';
 import { getProductCategories } from '../selectors';
-import { ProductCategoryList } from '../../entities/product-categories/components/ProductCategoryList';
+import { ProductCategoryList } from '../../product-categories/components/ProductCategoryList';
 
 type ProductCategoryListProps = ComponentProps<typeof ProductCategoryList>;
 

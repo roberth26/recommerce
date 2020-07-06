@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from 'react';
-import { UserID } from '../../entities/users/types';
+import { UserID } from '../../users/types';
 import { UserSummaryContainer } from './UserSummaryContainer';
 import { connect } from 'react-redux';
 import { State } from '../types';

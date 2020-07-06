@@ -6,7 +6,7 @@ import { Product } from '../../products/types';
 import { User } from '../../users/types';
 import { ProductCategoryID } from '../../product-categories/types';
 import { ProductSummary } from '../../products/components/ProductSummary';
-import { ActionType as RoutesActionType } from '../../../routes/actions';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type OrderDetailProps = {
   order: Order<Product<ProductCategoryID>, User> | undefined | null;

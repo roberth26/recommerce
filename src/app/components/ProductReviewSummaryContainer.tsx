@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
-import { ProductReviewSummary } from '../../entities/product-reviews/components/ProductReviewSummary';
+import { ProductReviewSummary } from '../../product-reviews/components/ProductReviewSummary';
 import { connect } from 'react-redux';
-import { ProductReviewID } from '../../entities/product-reviews/types';
+import { ProductReviewID } from '../../product-reviews/types';
 import { State } from '../types';
 import { getProductReviewByIDDenormalized } from '../selectors';
-import { deleteProductReview } from '../../entities/product-reviews/actions';
+import { deleteProductReview } from '../../product-reviews/actions';
 
 type ProductReviewSummaryProps = ComponentProps<typeof ProductReviewSummary>;
 

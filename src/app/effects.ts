@@ -12,7 +12,7 @@ import {
   ReceiveProduct,
   ReceiveProducts,
   ProductDeleted,
-} from '../entities/products/actions';
+} from '../products/actions';
 import {
   requestOrders,
   requestOrder,
@@ -20,29 +20,29 @@ import {
   ReceiveOrder,
   ReceiveOrders,
   OrderDeleted,
-} from '../entities/orders/actions';
+} from '../orders/actions';
 import {
   requestUsers,
   requestUser,
   receiveUsers,
   ActionType as UsersActionType,
   UserDeleted,
-} from '../entities/users/actions';
+} from '../users/actions';
 import {
   requestProductCategories,
   receiveProductCategories,
   ActionType as ProductCategoriesActionType,
   ProductCategoryDeleted,
-} from '../entities/product-categories/actions';
+} from '../product-categories/actions';
 import {
   requestProductReviews,
   ActionType as ProductReviewsActionType,
   ReceiveProductReview,
   ReceiveProductReviews,
-} from '../entities/product-reviews/actions';
-import { User } from '../entities/users/types';
-import { Product } from '../entities/products/types';
-import { ProductCategory } from '../entities/product-categories/types';
+} from '../product-reviews/actions';
+import { User } from '../users/types';
+import { Product } from '../products/types';
+import { ProductCategory } from '../product-categories/types';
 
 export const productsRouteEpic: Epic = action$ =>
   action$.pipe(

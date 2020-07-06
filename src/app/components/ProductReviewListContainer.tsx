@@ -1,14 +1,14 @@
 import React, { HTMLAttributes } from 'react';
 import { connect } from 'react-redux';
-import { ProductReviewID } from '../../entities/product-reviews/types';
+import { ProductReviewID } from '../../product-reviews/types';
 import { ProductReviewSummaryContainer } from './ProductReviewSummaryContainer';
-import { ProductID } from '../../entities/products/types';
+import { ProductID } from '../../products/types';
 import { State } from '../types';
 import {
   getProductReviewIDsByProductID,
   getProductReviewIDsByUserID,
 } from '../selectors';
-import { UserID } from '../../entities/users/types';
+import { UserID } from '../../users/types';
 
 type ProductReviewListProps = {
   productReviewIDs: Array<ProductReviewID>;

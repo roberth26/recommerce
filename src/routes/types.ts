@@ -1,8 +1,8 @@
 import { NOT_FOUND } from 'redux-first-router';
-import { ProductID } from '../entities/products/types';
-import { OrderID } from '../entities/orders/types';
-import { UserID } from '../entities/users/types';
-import { ProductCategoryID } from '../entities/product-categories/types';
+import { ProductID } from '../products/types';
+import { OrderID } from '../orders/types';
+import { UserID } from '../users/types';
+import { ProductCategoryID } from '../product-categories/types';
 import { ActionType } from './actions';
 
 export type State =

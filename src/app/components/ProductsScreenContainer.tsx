@@ -5,11 +5,11 @@ import { ProductListContainer } from './ProductListContainer';
 import { SidebarLayout } from './SidebarLayout';
 import { ProductCategoryListContainer } from './ProductCategoryListContainer';
 import { Page } from './Page';
-import { ProductCategory } from '../../entities/product-categories/types';
+import { ProductCategory } from '../../product-categories/types';
 import { State } from '../types';
 import { getCurrentProductCategory } from '../selectors';
 import { ActionType as RoutesActionType } from '../../routes/actions';
-import { deleteProductCategory } from '../../entities/product-categories/actions';
+import { deleteProductCategory } from '../../product-categories/actions';
 
 type ProductsScreenProps = {
   productCategory: ProductCategory | undefined | null;

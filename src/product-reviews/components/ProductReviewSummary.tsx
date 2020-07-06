@@ -4,7 +4,7 @@ import { ProductReview } from '../types';
 import { ProductID, Product } from '../../products/types';
 import { User } from '../../users/types';
 import { StarRating } from './StarRating';
-import { ActionType as RoutesActionType } from '../../../routes/actions';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductReviewSummaryProps = {
   productReview: ProductReview<ProductID | Product, User> | undefined | null;

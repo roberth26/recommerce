@@ -1,10 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import { ProductID } from '../../entities/products/types';
+import { ProductID } from '../../products/types';
 import { ProductSummaryContainer } from './ProductSummaryContainer';
 import { connect } from 'react-redux';
 import { State } from '../types';
 import { getProductIDsByProductCategoryID, getProductIDs } from '../selectors';
-import { ProductCategoryID } from '../../entities/product-categories/types';
+import { ProductCategoryID } from '../../product-categories/types';
 
 type ProductListProps = {
   productIDs: Array<ProductID>;
