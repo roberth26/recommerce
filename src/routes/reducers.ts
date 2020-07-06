@@ -8,12 +8,6 @@ export const reducer: Reducer<State, ReceivedActionMeta> = (
   state = initialState,
   action
 ) => {
-  if (action.type === NOT_FOUND) {
-    return {
-      currentRoute: NOT_FOUND,
-    };
-  }
-
   switch (action.type) {
     case ActionType.PRODUCTS:
       return {
@@ -69,6 +63,11 @@ export const reducer: Reducer<State, ReceivedActionMeta> = (
       return {
         currentRoute: action.type,
         userID: action.payload.userID,
+      };
+
+    case NOT_FOUND:
+      return {
+        currentRoute: NOT_FOUND,
       };
 
     default:
