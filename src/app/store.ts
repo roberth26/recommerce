@@ -44,7 +44,7 @@ const rootEpic = combineEpics(
 const composeEnhancers =
   process.env.NODE_ENV === 'development'
     ? composeWithDevTools({
-        name: 'Store',
+        name: 'recommerce',
       })
     : compose;
 
