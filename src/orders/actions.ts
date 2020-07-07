@@ -10,6 +10,7 @@ export enum ActionType {
   UPDATE_ORDER = '@@orders/UPDATE_ORDER',
   DELETE_ORDER = '@@orders/DELETE_ORDER',
   ORDER_DELETED = '@@orders/ORDER_DELETED',
+  DELETE_ORDERS = '@@orders/DELETE_ORDERS',
 }
 
 export type RequestOrders = {
@@ -180,6 +181,28 @@ export function orderDeleted(
   };
 }
 
+export type DeleteOrders = {
+  type: ActionType.DELETE_ORDERS;
+  payload: {
+    orderIDs?: Array<OrderID>;
+    userID?: UserID;
+  };
+  meta?: {
+    id: string;
+  };
+};
+
+export function deleteOrders(
+  payload: DeleteOrders['payload'],
+  meta?: DeleteOrders['meta']
+): DeleteOrders {
+  return {
+    type: ActionType.DELETE_ORDERS,
+    payload,
+    meta,
+  };
+}
+
 export type AnyAction =
   | RequestOrders
   | RequestOrder
@@ -188,4 +211,5 @@ export type AnyAction =
   | CreateOrder
   | UpdateOrder
   | DeleteOrder
-  | OrderDeleted;
+  | OrderDeleted
+  | DeleteOrders;

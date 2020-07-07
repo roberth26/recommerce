@@ -1,6 +1,6 @@
 import { of, EMPTY, concat, merge } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
-import { ofType, Epic, combineEpics } from 'redux-observable';
+import { ofType, Epic, combineEpics, StateObservable } from 'redux-observable';
 import { ReceivedActionMeta } from 'redux-first-router';
 import { flatMap } from 'lodash/fp';
 import { ActionType as RoutesActionType } from '../routes/actions';
@@ -20,6 +20,7 @@ import {
   ReceiveOrder,
   ReceiveOrders,
   OrderDeleted,
+  deleteOrders,
 } from '../orders/actions';
 import {
   requestUsers,
@@ -39,10 +40,12 @@ import {
   ActionType as ProductReviewsActionType,
   ReceiveProductReview,
   ReceiveProductReviews,
+  deleteProductReviews,
 } from '../product-reviews/actions';
 import { User } from '../users/types';
 import { Product } from '../products/types';
 import { ProductCategory } from '../product-categories/types';
+import { State } from './types';
 
 export const productsRouteEpic: Epic = action$ =>
   action$.pipe(
@@ -159,13 +162,13 @@ export const userRouteEpic: Epic = action$ =>
     )
   );
 
-// store related entities when receiving denormalized ProductReviews
 export const productReviewsEpic: Epic = action$ =>
   action$.pipe(
     ofType(
       ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW,
       ProductReviewsActionType.RECEIVE_PRODUCT_REVIEWS
     ),
+    // store related entities when receiving denormalized ProductReviews
     mergeMap((action: ReceiveProductReview | ReceiveProductReviews) => {
       const users = (action.type ===
       ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW
@@ -208,42 +211,60 @@ export const productReviewsEpic: Epic = action$ =>
     })
   );
 
-// store related entities when receiving denormalized Products
-export const productsEpic: Epic = action$ =>
-  action$.pipe(
-    ofType(
-      ProductsActionType.RECEIVE_PRODUCT,
-      ProductsActionType.RECEIVE_PRODUCTS
-    ),
-    mergeMap((action: ReceiveProduct | ReceiveProducts) => {
-      const productCategories = (action.type ===
-      ProductsActionType.RECEIVE_PRODUCT
-        ? [action.payload.product]
-        : action.payload.products
-      )
-        .map(product => product.category)
-        .filter(
-          (
-            productCategoryOrProductCategoryID
-          ): productCategoryOrProductCategoryID is ProductCategory =>
-            productCategoryOrProductCategoryID != null &&
-            typeof productCategoryOrProductCategoryID !== 'string'
-        );
-
-      return productCategories.length === 0
-        ? EMPTY
-        : of(
-            receiveProductCategories({
-              productCategories,
-            })
+export const productsEpic: Epic = (action$, state$: StateObservable<State>) =>
+  merge(
+    action$.pipe(
+      ofType(
+        ProductsActionType.RECEIVE_PRODUCT,
+        ProductsActionType.RECEIVE_PRODUCTS
+      ),
+      // store related entities when receiving denormalized Products
+      mergeMap((action: ReceiveProduct | ReceiveProducts) => {
+        const productCategories = (action.type ===
+        ProductsActionType.RECEIVE_PRODUCT
+          ? [action.payload.product]
+          : action.payload.products
+        )
+          .map(product => product.category)
+          .filter(
+            (
+              productCategoryOrProductCategoryID
+            ): productCategoryOrProductCategoryID is ProductCategory =>
+              productCategoryOrProductCategoryID != null &&
+              typeof productCategoryOrProductCategoryID !== 'string'
           );
-    })
+
+        return productCategories.length === 0
+          ? EMPTY
+          : of(
+              receiveProductCategories({
+                productCategories,
+              })
+            );
+      })
+    ),
+    action$.pipe(
+      ofType(ProductsActionType.PRODUCT_DELETED),
+      // remove deleted Product's ProductReviews
+      mergeMap(({ payload: { productID } }: ProductDeleted) =>
+        of(deleteProductReviews({ productID }))
+      )
+    )
   );
 
-// store related entities when receiving denormalized Products
+export const usersEpic: Epic = action$ =>
+  action$.pipe(
+    ofType(UsersActionType.USER_DELETED),
+    // remove deleted User's ProductReviews and Orders
+    mergeMap(({ payload: { userID } }: UserDeleted) =>
+      of(deleteProductReviews({ userID }), deleteOrders({ userID }))
+    )
+  );
+
 export const ordersEpic: Epic = action$ =>
   action$.pipe(
     ofType(OrdersActionType.RECEIVE_ORDER, OrdersActionType.RECEIVE_ORDERS),
+    // store related entities when receiving denormalized Products
     mergeMap((action: ReceiveOrder | ReceiveOrders) => {
       const products = (action.type === OrdersActionType.RECEIVE_ORDER
         ? action.payload.order.products
@@ -290,5 +311,6 @@ export const epic = combineEpics(
   userRouteEpic,
   productReviewsEpic,
   productsEpic,
+  usersEpic,
   ordersEpic
 );

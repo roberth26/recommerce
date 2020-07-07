@@ -20,9 +20,8 @@ import { initialState } from './constants';
 import { normalizeOrder } from './utils';
 import { ProductID } from '../products/types';
 import { UserID } from '../users/types';
-import { ActionType as UsersActionType, UserDeleted } from '../users/actions';
 
-export const reducer: Reducer<State, AnyAction | UserDeleted> = (
+export const reducer: Reducer<State, AnyAction> = (
   state = initialState,
   action
 ) => {
@@ -120,21 +119,26 @@ export const reducer: Reducer<State, AnyAction | UserDeleted> = (
       };
     }
 
-    // remove deleted User's Orders
-    case UsersActionType.USER_DELETED: {
+    case ActionType.DELETE_ORDERS: {
       const {
-        payload: { userID },
+        payload: { orderIDs, userID },
       } = action;
 
+      const orderIDSet = new Set(orderIDs);
+
       const byID = pipe(
-        filter<Order<ProductID, UserID>>(order => order.user !== userID),
+        filter<Order<ProductID, UserID>>(
+          order =>
+            (userID != null ? order.user !== userID : true) &&
+            (orderIDs != null ? !orderIDSet.has(order.id) : true)
+        ),
         keyBy(order => order.id)
       )(state.byID);
 
       const idsByUserID = pipe(
         values,
         groupBy<Order<ProductID, UserID>>(order => order.user),
-        mapValues(map(order => order.id))
+        mapValues(map(productReview => productReview.id))
       )(byID);
 
       return {

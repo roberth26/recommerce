@@ -10,6 +10,7 @@ export enum ActionType {
   CREATE_PRODUCT_REVIEW = '@@product-reviews/CREATE_PRODUCT_REVIEW',
   UPDATE_PRODUCT_REVIEW = '@@product-reviews/UPDATE_PRODUCT_REVIEW',
   DELETE_PRODUCT_REVIEW = '@@product-reviews/DELETE_PRODUCT_REVIEW',
+  DELETE_PRODUCT_REVIEWS = '@@product-reviews/DELETE_PRODUCT_REVIEWS',
 }
 
 export type RequestProductReviews = {
@@ -160,6 +161,29 @@ export function deleteProductReview(
   };
 }
 
+export type DeleteProductReviews = {
+  type: ActionType.DELETE_PRODUCT_REVIEWS;
+  payload: {
+    productReviewIDs?: Array<ProductReviewID>;
+    productID?: ProductID;
+    userID?: UserID;
+  };
+  meta?: {
+    id: string;
+  };
+};
+
+export function deleteProductReviews(
+  payload: DeleteProductReviews['payload'],
+  meta?: DeleteProductReviews['meta']
+): DeleteProductReviews {
+  return {
+    type: ActionType.DELETE_PRODUCT_REVIEWS,
+    payload,
+    meta,
+  };
+}
+
 export type AnyAction =
   | RequestProductReviews
   | RequestProductReview
@@ -167,4 +191,5 @@ export type AnyAction =
   | ReceiveProductReview
   | CreateProductReview
   | UpdateProductReview
-  | DeleteProductReview;
+  | DeleteProductReview
+  | DeleteProductReviews;

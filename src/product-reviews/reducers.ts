@@ -17,17 +17,13 @@ import { AnyAction, ActionType } from './actions';
 import { initialState } from './constants';
 import { normalizeProductReview } from './utils';
 import { ProductID } from '../products/types';
-import {
-  ActionType as ProductsActionType,
-  ProductDeleted,
-} from '../products/actions';
+import { ProductDeleted } from '../products/actions';
 import { UserID } from '../users/types';
-import { ActionType as UsersActionType, UserDeleted } from '../users/actions';
 
-export const reducer: Reducer<
-  State,
-  AnyAction | ProductDeleted | UserDeleted
-> = (state = initialState, action) => {
+export const reducer: Reducer<State, AnyAction | ProductDeleted> = (
+  state = initialState,
+  action
+) => {
   switch (action.type) {
     case ActionType.CREATE_PRODUCT_REVIEW:
     case ActionType.RECEIVE_PRODUCT_REVIEW:
@@ -150,15 +146,21 @@ export const reducer: Reducer<
       };
     }
 
-    // remove deleted Product's ProductReviews
-    case ProductsActionType.PRODUCT_DELETED: {
+    case ActionType.DELETE_PRODUCT_REVIEWS: {
       const {
-        payload: { productID },
+        payload: { productID, productReviewIDs, userID },
       } = action;
+
+      const productReviewIDSet = new Set(productReviewIDs);
 
       const byID = pipe(
         filter<ProductReview<ProductID, UserID>>(
-          productReview => productReview.product !== productID
+          productReview =>
+            (productID != null ? productReview.product !== productID : true) &&
+            (productReviewIDs != null
+              ? !productReviewIDSet.has(productReview.id)
+              : true) &&
+            (userID != null ? productReview.user !== userID : true)
         ),
         keyBy(productReview => productReview.id)
       )(state.byID);
@@ -171,26 +173,6 @@ export const reducer: Reducer<
         mapValues(map(productReview => productReview.id))
       )(byID);
 
-      return {
-        ...state,
-        byID,
-        idsByProductID,
-      };
-    }
-
-    // remove deleted User's ProductReviews
-    case UsersActionType.USER_DELETED: {
-      const {
-        payload: { userID },
-      } = action;
-
-      const byID = pipe(
-        filter<ProductReview<ProductID, UserID>>(
-          productReview => productReview.user !== userID
-        ),
-        keyBy(productReview => productReview.id)
-      )(state.byID);
-
       const idsByUserID = pipe(
         values,
         groupBy<ProductReview<ProductID, UserID>>(
@@ -202,6 +184,7 @@ export const reducer: Reducer<
       return {
         ...state,
         byID,
+        idsByProductID,
         idsByUserID,
       };
     }
