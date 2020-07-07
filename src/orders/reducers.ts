@@ -138,7 +138,7 @@ export const reducer: Reducer<State, AnyAction> = (
       const idsByUserID = pipe(
         values,
         groupBy<Order<ProductID, UserID>>(order => order.user),
-        mapValues(map(productReview => productReview.id))
+        mapValues(map(order => order.id))
       )(byID);
 
       return {
