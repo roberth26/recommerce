@@ -3,7 +3,7 @@ import Link from 'redux-first-router-link';
 import { ProductReview } from '../types';
 import { ProductID, Product } from '../../products/types';
 import { User } from '../../users/types';
-import { StarRating } from './StarRating';
+import { StarRating } from '../../utils/StarRating';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductReviewSummaryProps = {

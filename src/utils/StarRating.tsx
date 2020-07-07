@@ -1,8 +1,7 @@
 import React, { HTMLAttributes } from 'react';
-import { ProductReview } from '../types';
 
 type StarRatingProps = {
-  rating: ProductReview['rating'] | undefined | null;
+  rating: number | undefined | null;
 };
 
 export function StarRating({ rating }: StarRatingProps) {

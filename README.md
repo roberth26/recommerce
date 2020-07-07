@@ -14,6 +14,8 @@ functions/components can define precisely the "completeness" of data they requir
 folder structure
 by-domain
 no dependencies on app, prevents circular dependency
+no run-time deps on other entity packages
+potentially create redux binding packages for each ent, eg redux-products
 domain-scoped selectors, selectFromRoot()
 containers have to be in app, by definition
 
