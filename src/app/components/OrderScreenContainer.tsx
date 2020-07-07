@@ -6,6 +6,7 @@ import { getCurrentRouteOrderID } from '../selectors';
 import { OrderDetailContainer } from './OrderDetailContainer';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
+import { ProductSummary } from '../../products/components/ProductSummary';
 
 type OrderScreenProps = {
   orderID: OrderID | undefined | null;
@@ -16,7 +17,11 @@ export function OrderScreen({ orderID, onOrderDelete }: OrderScreenProps) {
   return (
     <Page>
       <FullLayout>
-        <OrderDetailContainer orderID={orderID} onOrderDelete={onOrderDelete} />
+        <OrderDetailContainer
+          orderID={orderID}
+          onOrderDelete={onOrderDelete}
+          renderProduct={product => <ProductSummary product={product} />}
+        />
       </FullLayout>
     </Page>
   );

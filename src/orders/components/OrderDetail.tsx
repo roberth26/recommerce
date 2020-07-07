@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, ReactNode } from 'react';
 import Link from 'redux-first-router-link';
 import { pipe, groupBy, entries } from 'lodash/fp';
 import { Order } from '../types';
@@ -11,9 +11,14 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 type OrderDetailProps = {
   order: Order<Product<ProductCategoryID>, User> | undefined | null;
   onOrderDelete?: (order: Order<Product<ProductCategoryID>, User>) => void;
+  renderProduct: (product: Product<ProductCategoryID>) => ReactNode;
 };
 
-export function OrderDetail({ order, onOrderDelete }: OrderDetailProps) {
+export function OrderDetail({
+  order,
+  onOrderDelete,
+  renderProduct,
+}: OrderDetailProps) {
   if (order == null) {
     return null;
   }
@@ -46,7 +51,7 @@ export function OrderDetail({ order, onOrderDelete }: OrderDetailProps) {
           ({ 0: productID, 1: { 0: product, length: count } }) => (
             <ListItem key={productID}>
               <Count>{count} x</Count>
-              <ProductSummary product={product} />
+              {renderProduct(product)}
             </ListItem>
           )
         )}
