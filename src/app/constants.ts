@@ -8,20 +8,20 @@ import { OrderScreenContainer } from './components/OrderScreenContainer';
 import { OrdersScreen } from './components/OrdersScreen';
 import { UsersScreen } from './components/UsersScreen';
 import { ProductEditScreenContainer } from './components/ProductEditScreenContainer';
-import { ProductCreateScreen } from './components/ProductCreateScreen';
+import { ProductCreateScreenContainer } from './components/ProductCreateScreenContainer';
 import { ProductCategoryEditScreenContainer } from './components/ProductCategoryEditScreenContainer';
-import { ProductCategoryCreateScreen } from './components/ProductCategoryCreateScreen';
+import { ProductCategoryCreateScreenContainer } from './components/ProductCategoryCreateScreenContainer';
 
 export const screens: Record<
   RoutesActionType | typeof NOT_FOUND,
   React.ComponentType
 > = {
-  [RoutesActionType.PRODUCT_CREATE]: ProductCreateScreen,
+  [RoutesActionType.PRODUCT_CREATE]: ProductCreateScreenContainer,
   [RoutesActionType.PRODUCTS]: ProductsScreenContainer,
   [RoutesActionType.PRODUCT]: ProductScreenContainer,
   [RoutesActionType.PRODUCT_EDIT]: ProductEditScreenContainer,
   [RoutesActionType.PRODUCT_CATEGORY_EDIT]: ProductCategoryEditScreenContainer,
-  [RoutesActionType.PRODUCT_CATEGORY_CREATE]: ProductCategoryCreateScreen,
+  [RoutesActionType.PRODUCT_CATEGORY_CREATE]: ProductCategoryCreateScreenContainer,
   [RoutesActionType.ORDERS]: OrdersScreen,
   [RoutesActionType.ORDER]: OrderScreenContainer,
   [RoutesActionType.USERS]: UsersScreen,

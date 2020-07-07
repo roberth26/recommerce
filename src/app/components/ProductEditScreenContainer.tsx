@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { ProductID } from '../../products/types';
+import { connect } from 'react-redux';
+import { ProductID, Product } from '../../products/types';
 import { State } from '../types';
 import { getCurrentRouteProductID } from '../selectors';
 import { Page } from './Page';
@@ -10,11 +10,13 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductEditScreenProps = {
   productID: ProductID | undefined | null;
+  onProductEdit?: (product: Product) => void;
 };
 
-export function ProductEditScreen({ productID }: ProductEditScreenProps) {
-  const dispatch = useDispatch();
-
+export function ProductEditScreen({
+  productID,
+  onProductEdit,
+}: ProductEditScreenProps) {
   if (productID == null) {
     return null;
   }
@@ -25,12 +27,7 @@ export function ProductEditScreen({ productID }: ProductEditScreenProps) {
         <h2>Edit Product</h2>
         <ProductEditorContainer
           productID={productID}
-          onProductEdit={() =>
-            dispatch({
-              type: RoutesActionType.PRODUCT,
-              payload: { productID: productID },
-            })
-          }
+          onProductEdit={onProductEdit}
         />
       </FullLayout>
     </Page>
@@ -42,9 +39,8 @@ type ProductEditScreenContainerStateProps = Pick<
   'productID'
 >;
 
-type ProductEditScreenContainerDispatchProps = Pick<
-  ProductEditScreenProps,
-  never
+type ProductEditScreenContainerDispatchProps = Required<
+  Pick<ProductEditScreenProps, 'onProductEdit'>
 >;
 
 type ProductEditScreenContainerOwnProps = Omit<
@@ -58,6 +54,15 @@ export const ProductEditScreenContainer = connect<
   ProductEditScreenContainerDispatchProps,
   ProductEditScreenContainerOwnProps,
   State
->(state => ({
-  productID: getCurrentRouteProductID(state),
-}))(ProductEditScreen);
+>(
+  state => ({
+    productID: getCurrentRouteProductID(state),
+  }),
+  dispatch => ({
+    onProductEdit: product =>
+      dispatch({
+        type: RoutesActionType.PRODUCT,
+        payload: { productID: product.id },
+      }),
+  })
+)(ProductEditScreen);

@@ -1,6 +1,9 @@
 import React from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { ProductCategoryID } from '../../product-categories/types';
+import { connect } from 'react-redux';
+import {
+  ProductCategoryID,
+  ProductCategory,
+} from '../../product-categories/types';
 import { State } from '../types';
 import { getCurrentRouteProductCategoryID } from '../selectors';
 import { Page } from './Page';
@@ -10,13 +13,13 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductCategoryEditScreenProps = {
   productCategoryID: ProductCategoryID | undefined | null;
+  onProductCategoryEdit?: (productCategory: ProductCategory) => void;
 };
 
 export function ProductCategoryEditScreen({
   productCategoryID,
+  onProductCategoryEdit,
 }: ProductCategoryEditScreenProps) {
-  const dispatch = useDispatch();
-
   if (productCategoryID == null) {
     return null;
   }
@@ -27,12 +30,7 @@ export function ProductCategoryEditScreen({
         <h2>Edit Category</h2>
         <ProductCategoryEditorContainer
           productCategoryID={productCategoryID}
-          onProductCategoryEdit={() =>
-            dispatch({
-              type: RoutesActionType.PRODUCTS,
-              meta: { query: { productCategoryID } },
-            })
-          }
+          onProductCategoryEdit={onProductCategoryEdit}
         />
       </FullLayout>
     </Page>
@@ -44,9 +42,8 @@ type ProductCategoryEditScreenContainerStateProps = Pick<
   'productCategoryID'
 >;
 
-type ProductCategoryEditScreenContainerDispatchProps = Pick<
-  ProductCategoryEditScreenProps,
-  never
+type ProductCategoryEditScreenContainerDispatchProps = Required<
+  Pick<ProductCategoryEditScreenProps, 'onProductCategoryEdit'>
 >;
 
 type ProductCategoryEditScreenContainerOwnProps = Omit<
@@ -60,6 +57,15 @@ export const ProductCategoryEditScreenContainer = connect<
   ProductCategoryEditScreenContainerDispatchProps,
   ProductCategoryEditScreenContainerOwnProps,
   State
->(state => ({
-  productCategoryID: getCurrentRouteProductCategoryID(state),
-}))(ProductCategoryEditScreen);
+>(
+  state => ({
+    productCategoryID: getCurrentRouteProductCategoryID(state),
+  }),
+  dispatch => ({
+    onProductCategoryEdit: productCategory =>
+      dispatch({
+        type: RoutesActionType.PRODUCTS,
+        meta: { query: { productCategoryID: productCategory.id } },
+      }),
+  })
+)(ProductCategoryEditScreen);
