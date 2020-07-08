@@ -9304,6 +9304,14 @@ redux-first-router-link@^2.1.1:
     rudy-history "^1.0.0"
     rudy-match-path "^0.3.0"
 
+redux-first-router@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/redux-first-router/-/redux-first-router-2.1.5.tgz#3e250478ddef15656fddc4efd268e345b0b3aa98"
+  integrity sha512-roA/oYBLiJwdUf9c8pDmd4/xk2Jw8qe4MnSWPSHOuYPqyDmk30Pv9hZouwS6fZrPWL6VGJjrx67SwU6zBN/MKw==
+  dependencies:
+    rudy-history "^1.0.0"
+    rudy-match-path "^0.3.0"
+
 redux-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/redux-observable/-/redux-observable-1.2.0.tgz#ff51b6c6be2598e9b5e89fc36639186bb0e669c7"
