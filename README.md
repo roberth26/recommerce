@@ -1,7 +1,76 @@
-What is recommerce
-Recommerce is an ecommerce store. Sort of. I wanted to pick a project that was well understood. The app displays products, categories. More of an "administrator" app than consumer. Doesn't offer buy buttons, cart, etc. Allows crud operations on the various entities, no permissions. BLah blah
 
-Product:
+
+intro<<<<<>>>>>
+
+### Redux First
+I prefer to build Redux apps, with React acting as the view layer. I think of a web app in terms of entities, relationships, state transitions, and side effects. The view is a visual representation of the app's state, as well as an actor (the user), able to emit events. The app can respond to these events by enacting a state transition, or by affecting the outside world by yielding side-effects.
+
+Redux is a tiny library, but it establishes a straight-forward and highly scalable architectural pattern.
+
+### Aside on Boilerplate
+I'm not bothered by the verbose code a Redux app tends to have. TypeScript makes it even *more* verbose, and I'm still fine with it. In this example project, I refrained from using or creating abstractions for the sake of DRYness, in order to keep the patterns unmistakable. I copy-pasted **a lot**, and I think that's a good sign.
+
+### The Example Project
+Recommerce is a semi-functional ecommerce store. The user can browse and manage products, categories, reviews, orders, and users. My goal is not to demonstrate how to build a great shopping experience. Instead I chose an ecosystem of entities that are universally understood. The user cannot purchase products--there is no cart. The user is a sort of admin or "superuser" with the ability to create, edit, and delete entities.
+
+TALK ABOUT SCALABILITY
+
+### The APIs
+There is an `api.ts` file for each entity module, where functions interface with the entity's API. As this is an example project, there are no APIs. These functions issue local requests to the IndexedDB database in the browser instead of HTTP requests to a remote API. Observe the interfaces of these functions, but understand their bodies are simulated for demonstration purposes.
+
+### Folder Structure
+I prefer to organize by domain rather than by type. Within a domain I then organize by type: constants, types, utils, components, etc.
+
+Recommerce is broken into an `app` module, 5 entity modules, a `routes` module, and a `utils` module.
+
+#### App Module
+The `app` module--wait for it--*is* the application. It bootstraps the application, and forks the thread-like middleware provided by the modules. It composes the other modules and orchestrates between them. It also delegates to the other modules.
+`app` depends on the other modules, but they do not depend on it (the other modules do not import from `app`). I've found this to be a good strategy in avoiding circular dependency issues. It also produces reuseable, app-agnostic modules. Database tables and APIs are likely to be reused by applications.
+
+`app` defines the root-level `State` type of the Redux store. It does so by composing the `State` types of the other modules into a tree. Only `app` knows the shape of the top-level state tree. It does not need to know the shape of its branches.
+
+```typescript
+type State = {
+  productCategories: ProductCategoriesState;
+  productReviews: ProductReviewsState;
+  products: ProductsState;
+  users: UsersState;
+  orders: OrdersState;
+  routes: RoutesState;
+};
+```
+
+In a similar manner, `app` defines the root reducer by composing the reducers of the other modules.
+
+```typescript
+const rootReducer = combineReducers<State>({
+  productCategories: productCategoriesReducer,
+  productReviews: productReviewsReducer,
+  products: productsReducer,
+  users: usersReducer,
+  orders: ordersReducer,
+  routes: routesReducer,
+});
+```
+
+
+
+
+#### Entity Modules
+The entity modules do not know the shape of the top-level tree.
+These boundaries shield the modules from changes to the other modules. Entity-level selectors and reducers can only operate on their respective slice of state. Entity-level side-effects (Redux middleware) only respond to their own Redux actions. An entity module is independent, and a person or team can scale relentlessly within their domain as long as they don't breach the boundaries.
+
+##### Composing Selectors
+Entity selectors operate *only* on their respective branch of state.
+
+```typescript
+function selectFromRoot(sliceSelector, localSelector) {
+  return (state, ...args) =>
+    localSelector(sliceSelector(state), ...args);
+}
+```
+(I removed the type annotations for clarity.)
+
 
 ### The Entities
 #### User
@@ -13,7 +82,6 @@ type User = {
   name: string;
 };
 ```
-A `User` posts `ProductReview`s and makes `Order`s.
 
 #### ProductCategory
 ```typescript
@@ -24,85 +92,87 @@ type ProductCategory = {
   name: string;
 };
 ```
-A `ProductCategory` is applied to a `Product`.
 
 #### Product
 ```typescript
 type ProductID = string;
 
+type ProductProductCategory = ProductCategoryID | ProductCategory;
+
 type Product<
-  TCategory extends ProductCategoryID | ProductCategory =
-    | ProductCategoryID
-    | ProductCategory
+  TProductProductCategory extends ProductProductCategory = ProductProductCategory
 > = {
   id: ProductID;
   name: string;
   price: number;
-  category: TCategory | null;
+  category: TProductProductCategory | null;
   imageURI: string;
   rating: number | null;
   description: string;
 };
 ```
-A `Product` has a `ProductCategoryID` or a `ProductCategory`.
 
 #### Order
 ```typescript
 type OrderID = string;
 
+type OrderProduct = ProductID | Product;
+
+type OrderUser = UserID | User;
+
 type Order<
-  TProduct extends ProductID | Product<ProductCategoryID | ProductCategory> =
-    | ProductID
-    | Product<ProductCategoryID | ProductCategory>,
-  TUser extends UserID | User = UserID | User
+  TOrderProduct extends OrderProduct = OrderProduct,
+  TOrderUser extends OrderUser = OrderUser
 > = {
   id: OrderID;
   createdAt: string;
-  products: Array<TProduct>;
+  products: Array<TOrderProduct>;
   totalPrice: number;
-  user: TUser;
+  user: TOrderUser;
 };
 ```
-An `Order` contains a list of `ProductID`s or `Product`s, and a `UserID` or `User`.
 
 #### ProductReview
 ```typescript
 type ProductReviewID = string;
 
+type ProductReviewProduct = ProductID | Product;
+
+type ProductReviewUser = UserID | User;
+
 type ProductReview<
-  TProduct extends ProductID | Product<ProductCategoryID | ProductCategory> =
-    | ProductID
-    | Product<ProductCategoryID | ProductCategory>,
-  TUser extends UserID | User = UserID | User
+  TProductReviewProduct extends ProductReviewProduct = ProductReviewProduct,
+  TProductReviewUser extends ProductReviewUser = ProductReviewUser
 > = {
   id: ProductReviewID;
   rating: number;
   createdAt: string;
   body: string;
-  product: TProduct;
-  user: TUser;
+  product: TProductReviewProduct;
+  user: TProductReviewUser;
 };
 ```
-A `ProductReview` has a `ProductID` or `Product`, and a `UserID` or `User`.
 
-### TypeScript Generics
-Usually an API caters to the client by "joining"/"nesting" related entities in order to reduce requests to the API. Some endpoints should provide normalized "shallow" entities, and some should provide deeply nested entity graphs —it varies. With generics, we can accurately model an entity graph with arbitrary depths for all edges.
+### What the heck are those generics?
+Usually an API caters to its clients by "joining"/"nesting" related entities in order to reduce requests to the API. Some endpoints *need* to provide normalized "shallow" entities for performance reasons, and some can provide deeply nested entity trees—it varies. With generics, we can accurately model an entity tree of any depth.
 
-Lets use the `Order` type as an example. Blah blah talk about exact data requirements for a component, reducer, and api interface.
+Lets use the `Product` entity as an example. The `<ProductDetail />` React component needs to render the category name, so it requires a `Product` *and* its `ProductCategory`, modeled as `Product<ProductCategory>`. If `<ProductDetail />` received a `Product<ProductCategoryID>` it would only have the category's ID and be unable to render its name. The Redux action `ReceiveProduct` is non-specific; any depth of a `Product` tree can be dispatched with `ReceiveProduct`. This flexibility is modelled as `Product<ProductCategoryID | ProductCategory>`, simplified as `Product<ProductProductCategory>`, or just `Product` if we rely on the default type argument. The API function `updateProduct()` takes a `Product` of any depth, but returns a shallow `Product<ProductCategoryID>` as that's the behavior of the API.
 
-I'll admit the generics syntax could get pretty unwieldy when there's many relationships, or for some reason we need to model a deep graph (rare).
+The Redux store is normalized, so all entities are stored in their shallow forms. Selectors are used to denormalize the entities, essentialy stitching related entities together from different branches of the store. Normalizing an entity is a cheap and pure operation, as you can always produce the "bottom type" of the edge, the ID, with the full entity.
 
-### The APIs
-There is an `api.ts` file for each entity module, where functions interface with the entity's API. As this is a demo project, there are no APIs. These functions issue local requests to the IndexedDB database in the browser instead of HTTP requests to a remote API. Observe the interfaces of these functions, but understand their bodies are simulated for demo reasons.
+*I'll admit the generics syntax could get pretty unwieldy when there's many relationships, or for some reason we need to model a deep tree (unlikely).*
 
 
+### redux-observable
+I've used `redux-saga` religiously for three years now. That all said, I'm a huge fan of point-free, functional style programming. I love to use `lodash/fp` to build functional "pipelines".
 
 
-didn't create many abstractions for DRY, wanted to keep patterns obvious. lots of copy-paste
+react-redux, containers, reuseable components
+containers only in app
 
-Entity-first
-normalized/denormalized types
-functions/components can define precisely the "completeness" of data they require
+
+
+
 
 folder structure
 by-domain

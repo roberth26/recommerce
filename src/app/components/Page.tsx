@@ -1,7 +1,7 @@
 import React, { ReactNode, HTMLAttributes } from 'react';
 import Link from 'redux-first-router-link';
 import { ActionType as RoutesActionType } from '../../routes/actions';
-import { NavLink } from './NavLink';
+import { NavLink } from '../../utils/NavLink';
 
 type PageProps = {
   children: ReactNode;

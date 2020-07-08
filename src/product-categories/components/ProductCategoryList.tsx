@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 import { ProductCategory } from '../types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
-import { NavLink } from '../../app/components/NavLink';
+import { NavLink } from '../../utils/NavLink';
 
 type ProductCategoryListProps = {
   categories: ProductCategory[];
