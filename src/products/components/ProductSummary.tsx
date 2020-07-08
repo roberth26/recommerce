@@ -1,15 +1,11 @@
 import React, { ImgHTMLAttributes } from 'react';
 import Link from 'redux-first-router-link';
 import { Product } from '../types';
-import {
-  ProductCategoryID,
-  ProductCategory,
-} from '../../product-categories/types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { StarRating } from '../../utils/StarRating';
 
 type ProductSummaryProps = {
-  product: Product<ProductCategoryID | ProductCategory> | undefined | null;
+  product: Product | undefined | null;
 };
 
 export function ProductSummary({ product }: ProductSummaryProps) {

@@ -1,15 +1,14 @@
 import React from 'react';
 import Link from 'redux-first-router-link';
-import { ProductReview } from '../types';
-import { ProductID, Product } from '../../products/types';
+import { ProductReview, ProductReviewProduct } from '../types';
 import { User } from '../../users/types';
 import { StarRating } from '../../utils/StarRating';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductReviewSummaryProps = {
-  productReview: ProductReview<ProductID | Product, User> | undefined | null;
+  productReview: ProductReview<ProductReviewProduct, User> | undefined | null;
   onProductReviewDelete?: (
-    productReview: ProductReview<ProductID | Product, User>
+    productReview: ProductReview<ProductReviewProduct, User>
   ) => void;
 };
 

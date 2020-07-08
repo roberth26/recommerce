@@ -1,24 +1,22 @@
 import { UserID, User } from '../users/types';
 import { ProductID, Product } from '../products/types';
-import {
-  ProductCategoryID,
-  ProductCategory,
-} from '../product-categories/types';
 
 export type ProductReviewID = string;
 
+export type ProductReviewProduct = ProductID | Product;
+
+export type ProductReviewUser = UserID | User;
+
 export type ProductReview<
-  TProduct extends ProductID | Product<ProductCategoryID | ProductCategory> =
-    | ProductID
-    | Product<ProductCategoryID | ProductCategory>,
-  TUser extends UserID | User = UserID | User
+  TProductReviewProduct extends ProductReviewProduct = ProductReviewProduct,
+  TProductReviewUser extends ProductReviewUser = ProductReviewUser
 > = {
   id: ProductReviewID;
   rating: number;
   createdAt: string;
   body: string;
-  product: TProduct;
-  user: TUser;
+  product: TProductReviewProduct;
+  user: TProductReviewUser;
 };
 
 export type State = {

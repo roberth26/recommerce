@@ -5,15 +5,15 @@ import {
 
 export type ProductID = string;
 
+export type ProductProductCategory = ProductCategoryID | ProductCategory;
+
 export type Product<
-  TCategory extends ProductCategoryID | ProductCategory =
-    | ProductCategoryID
-    | ProductCategory
+  TProductProductCategory extends ProductProductCategory = ProductProductCategory
 > = {
   id: ProductID;
   name: string;
   price: number;
-  category: TCategory | null;
+  category: TProductProductCategory | null;
   imageURI: string;
   rating: number | null;
   description: string;

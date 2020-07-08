@@ -1,23 +1,21 @@
 import { ProductID, Product } from '../products/types';
 import { UserID, User } from '../users/types';
-import {
-  ProductCategoryID,
-  ProductCategory,
-} from '../product-categories/types';
 
 export type OrderID = string;
 
+export type OrderProduct = ProductID | Product;
+
+export type OrderUser = UserID | User;
+
 export type Order<
-  TProduct extends ProductID | Product<ProductCategoryID | ProductCategory> =
-    | ProductID
-    | Product<ProductCategoryID | ProductCategory>,
-  TUser extends UserID | User = UserID | User
+  TOrderProduct extends OrderProduct = OrderProduct,
+  TOrderUser extends OrderUser = OrderUser
 > = {
   id: OrderID;
   createdAt: string;
-  products: Array<TProduct>;
+  products: Array<TOrderProduct>;
   totalPrice: number;
-  user: TUser;
+  user: TOrderUser;
 };
 
 export type State = {
