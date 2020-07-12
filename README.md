@@ -1,6 +1,33 @@
-
-
+TODO:
+- content:
+```
 intro<<<<<>>>>>
+folder structure
+by-domain
+potentially create redux binding packages for each ent, eg redux-products
+domain-scoped selectors, selectFromRoot()
+
+redux app, react as view layer
+view can be swapped out
+
+reducers should only prpduce new references when absolutely necessary. i didn't worry about this and opted for declarative fp code
+memoized selectors - can I do better?
+
+indexedb, first time using
+wanted to simulate the apis/databases
+prosmisified all indexeddb operations
+"api" file makes requests to indexdb instead of network requests
+arbitrary slowness added for realism
+populated with randomly generated data on initial "api request"
+deleted entities,eg when a User is deleted, its ProductReviews and Orders are deleted, for simplicity
+
+functional lodash
+
+redux-first-router
+```
+- Organize further
+- Editing
+- References
 
 ### Redux First
 I prefer to build Redux apps, with React acting as the view layer. I think of a web app in terms of entities, relationships, state transitions, and side effects. The view is a visual representation of the app's state, as well as an actor (the user), able to emit events. The app can respond to these events by enacting a state transition, or by affecting the outside world by yielding side-effects.
@@ -10,10 +37,15 @@ Redux is a tiny library, but it establishes a straight-forward and highly scalab
 ### Aside on Boilerplate
 I'm not bothered by the verbose code a Redux app tends to have. TypeScript makes it even *more* verbose, and I'm still fine with it. In this example project, I refrained from using or creating abstractions for the sake of DRYness, in order to keep the patterns unmistakable. I copy-pasted **a lot**, and I think that's a good sign.
 
-### The Example Project
-Recommerce is a semi-functional ecommerce store. The user can browse and manage products, categories, reviews, orders, and users. My goal is not to demonstrate how to build a great shopping experience. Instead I chose an ecosystem of entities that are universally understood. The user cannot purchase products--there is no cart. The user is a sort of admin or "superuser" with the ability to create, edit, and delete entities.
+### Aside On My Opinions
+My opinions do not reflect those of Facebook in any way.
 
-TALK ABOUT SCALABILITY
+I should state that I am not preaching this architecture as gospel. Blah blah blah
+
+### The Example Project
+Meet Recommerce, a semi-functional ecommerce store. The user can browse and manage products, categories, reviews, orders, and users. My goal is not to demonstrate how to build a great shopping experience. Instead I chose an ecosystem of entities that are universally understood. The user cannot purchase products--there is no cart. The user is a sort of admin or "superuser" with the ability to create, edit, and delete entities. It's a bit ugly; I wrote only functional styles (inline), and avoided any sort of styling library. Styling is not the focus. FWIW, I prefer css-in-js ;)
+
+I believe the archecture laid out here allows an app like Recommerce to scale immensely by mere repetition.
 
 ### The APIs
 There is an `api.ts` file for each entity module, where functions interface with the entity's API. As this is an example project, there are no APIs. These functions issue local requests to the IndexedDB database in the browser instead of HTTP requests to a remote API. Observe the interfaces of these functions, but understand their bodies are simulated for demonstration purposes.
@@ -21,7 +53,7 @@ There is an `api.ts` file for each entity module, where functions interface with
 ### Folder Structure
 I prefer to organize by domain rather than by type. Within a domain I then organize by type: constants, types, utils, components, etc. WHY
 
-Recommerce is broken into an `app` module, 5 entity modules, a `routes` module, and a `utils` module.
+Recommerce is broken into an `/app` module, 5 entity modules, a `routes` module, and a `utils` module.
 ```
 index.tsx
 /app
@@ -51,10 +83,10 @@ index.tsx
 ```
 
 #### App Module
-The `app` module--wait for it--*is* the application. It bootstraps the application, and forks the thread-like middleware provided by the modules. It composes the other modules and orchestrates between them. It also delegates to the other modules.
-`app` depends on the other modules, but they do not depend on it (the other modules do not import from `app`). I've found this to be a good strategy in avoiding circular dependency issues. It also encourages reuseable, app-agnostic modules. Database schemas and APIs are likely to be reused by applications, so I like to build redux modules around those schemas and APIs.
+The `/app` module--wait for it--*is* the application. It bootstraps the application, and forks the thread-like middleware provided by the modules. It composes the other modules and orchestrates between them. It also delegates to the other modules.
+`/app` depends on the other modules, but they do not depend on it (the other modules do not import from `/app`). I've found this to be a good strategy in avoiding circular dependency issues. It also encourages reuseable, app-agnostic modules. Database schemas and APIs are likely to be reused by applications, so I like to build redux modules around those schemas and APIs.
 
-`app` defines the root-level `State` type of the Redux store. It does so by composing the `State` types of the other modules into a tree. Only `app` knows the shape of the top-level state tree. It does not need to know the shape of its branches.
+`/app` defines the root-level `State` type of the Redux store. It does so by composing the `State` types of the other modules into a tree. Only `/app` knows the shape of the top-level state tree. It does not need to know the shape of its branches.
 
 ```typescript
 type State = {
@@ -67,7 +99,7 @@ type State = {
 };
 ```
 
-In a similar manner, `app` defines the root reducer by composing the reducers of the other modules.
+In a similar manner, `/app` defines the root reducer by composing the reducers of the other modules.
 
 ```typescript
 const rootReducer = combineReducers<State>({
@@ -80,19 +112,18 @@ const rootReducer = combineReducers<State>({
 });
 ```
 
-
-
+#### Other Application specific modules
+TODO
 
 #### Entity Modules
-The entity modules do not know the shape of the top-level tree, or the shape of any other module. These boundaries shield the modules from changes to the other modules. Entity-level selectors and reducers can only operate on their respective slice of state. Entity-level side-effects (Redux middleware) only respond to their own Redux actions. An entity module is independent, and a person or team can scale relentlessly within their domain as long as they don't breach the boundaries.
+The entity modules do not know the shape of the top-level tree, or the shape of any other module. These boundaries shield the modules from changes to the other modules. Entity module selectors and reducers can only operate on their respective slice of state. Entity module side-effects (Redux middleware) only respond to their own Redux actions. An entity module is independent and portable, and a person or team can scale relentlessly within their entity as long as they don't breach the boundaries. The only cross-dependencies with entity modules is at the type level--there are no runtime dependencies.
 
 ##### Composing Selectors
-Entity selectors operate *only* on their respective branch of state.
+Entity module selectors operate *only* on their respective branch of state. This keeps the modules de-coupled from the application, therefore reuseable in another app.
 
 ```typescript
 function selectFromRoot(sliceSelector, localSelector) {
-  return (state, ...args) =>
-    localSelector(sliceSelector(state), ...args);
+  return (state, ...args) => localSelector(sliceSelector(state), ...args);
 }
 ```
 (I removed the type annotations for clarity.)
@@ -184,16 +215,30 @@ Usually an API caters to its clients by "joining"/"nesting" related entities in 
 
 Lets use the `Product` entity as an example. The `<ProductDetail />` React component needs to render the category name, so it requires a `Product` *and* its `ProductCategory`, modeled as `Product<ProductCategory>`. If `<ProductDetail />` received a `Product<ProductCategoryID>` it would only have the category's ID and be unable to render its name. The Redux action `ReceiveProduct` is non-specific; any depth of a `Product` tree can be dispatched with `ReceiveProduct`. This flexibility is modelled as `Product<ProductCategoryID | ProductCategory>`, simplified as `Product<ProductProductCategory>`, or just `Product` if we rely on the default type argument. The API function `updateProduct()` takes a `Product` of any depth, but returns a shallow `Product<ProductCategoryID>` as that's the behavior of the API.
 
-The Redux store is normalized, so all entities are stored in their shallow forms. Selectors are used to denormalize the entities, essentialy stitching related entities together from different branches of the store. Normalizing an entity is a cheap and pure operation, as you can always produce the "bottom type" of the edge, the ID, with the full entity.
+The Redux store is normalized, so all entities are stored in their shallow forms. We can use selectors to denormalize the entities, essentialy stitching related entities together from different branches of the store. Normalizing, on the other hand, is a cheap and pure operation, as we can just map a downstream entities to their IDs.
 
 *I'll admit the generics syntax could get pretty unwieldy when there's many relationships, or for some reason we need to model a deep tree (unlikely).*
 
+### Redux Middleware For Effects
+There are tons of great articles about redux middleware, so I'll assume some level of familiarity. I particularly prefer middleware that offer a thread-like behavior for running effects. I'm mainly referring to `redux-saga` and `redux-observable`.
+
+### Recommerce Effects
+Recommerce performs it's side effects within `redux-observable` epics (see `*/effects.ts`). It implements a form of the saga pattern. Each module defines self-contained "local" sagas (epics), where the only IO is the module's respective actions and API calls. The `/app` module defines higher-level sagas that act as orchestrators, pushing and pulling data to/from the local sagas through the universal message bus: the Redux store. A module's actions become the interface for its sagas. These orchestrator sagas can generate a transaction ID and provide that as action meta to the local sagas. The local sagas will pipe this transaction ID through all of the resulting actions so the orchestrator can safely identity related actions within a transaction flow. This makes it possible for the `/products` module to completely own the product creation transaction, as well as enable the orchestrator to dispatch `CREATE_PRODUCT` and identity the resulting `RECEIVE_PRODUCT`.
+
+Sometimes an entity type is received from another entity's API. For instance, the `getProduct()` API function returns a `Product` with its `ProductCategory`. We don't want that `ProductCategory` to go to waste when we normalize the product for storing, but we also don't want to couple the `/products` reducer to any of the `/product-categories`' actions. We can write an `/app` saga that integrates these two modules and stores any `ProductCategory` (`/product-categories`) that is received within a `RECEIVE_PRODUCT` action (`/products`).
 
 ### redux-observable
-I've used `redux-saga` religiously for three years now. That all said, I'm a huge fan of point-free, functional style programming. I love to use `lodash/fp` to build functional "pipelines".
+I'm a huge fan of point-free, functional style programming. I love to use `lodash/fp` to compose functions point-free. Even though I've used `redux-saga` religiously for the last three years, I wanted to try out `redux-observable` because of the point-free functional style of `rxjs`. I can't map (pun) most of my saga recipes into `rxjs` yet, but I enjoy this style much more. Experts, please let me know if I can improve any of the epics!
 
 
 ### Container Components
+I tend to decouple presentational components (I'll refer to them as components) from their redux-connected versions (containers). This seperation encourages building a more flexible and futureproof&trade; component API. Component's don't need to understand redux actions, dispatches, or generally their context within an app. Instead they offer delegation callbacks like `renderProduct`, and semantic, flexible event callbacks like `onOrderDelete`. All the `<OrderDetail />` component wishes to express is the User's intent to delete an order. A container composed around this component can dispatch `DELETE_ORDER` when the underlying component calls its `onOrderDelete`. The container is coupled to the application's state tree, selectors, actions, and maybe more. The component, on the other hand, is only coupled to the `Order` interface, and can be reused in other apps.
+
+In recommerce, modules are completely decoupled. For instance, `<OrderDetail />` delegates the rendering of products (`renderProduct`) to its parent/caller. The various modules define components dedicated to rendering their respespective entity (and no others), and the `/app` module builds containers around those components. Since these modules do not depend on the `/app` module (only the reverse is true), then only `/app` builds containers. Containers are coupled to the redux store, and only `/app` is aware of the store.
+
+#### Typing a Container Component
+Typing a container with TypeScript isn't exactly easy, and I won't offer an easy solution. Here's how we can achieve full type-safety and piece of mind when defining containers:
+
 ```typescript
 // Here we can derive the props from the presentational component <OrderDetail />
 type OrderDetailProps = ComponentProps<typeof OrderDetail>;
@@ -263,14 +308,14 @@ export const OrderDetailContainer = connect<
 ```
 
 ### State
-// WHYYY
-I think it's best we treat the Redux store like a database. It contains "tables" of normalized entities (1), precomputed "views" (2), and "indexes" for improved read performance (3). Let's break each of those down, in the context of the `ProductReview` state:
+I agree with the offical Redux recommendation to treat the Redux store like a database. The store contains "tables" of normalized entities (1), precomputed "views" (2), and "indexes" for improved read performance (3). Let's break each of those down, in the context of the `ProductReview` state:
+
 ```typescript
 type State = {
-  byID: Partial<Record<ProductReviewID, ProductReview<ProductID, UserID>>>;
-  allIDs: Array<ProductReviewID>;
-  idsByUserID: Partial<Record<UserID, Array<ProductReviewID>>>;
-  idsByProductID: Partial<Record<ProductID, Array<ProductReviewID>>>;
+  byID: Partial<Record<ProductReviewID, ProductReview<ProductID, UserID>>>; // 1) "table"
+  allIDs: Array<ProductReviewID>; // 2) "view"
+  idsByUserID: Partial<Record<UserID, Array<ProductReviewID>>>; // 3) "index"
+  idsByProductID: Partial<Record<ProductID, Array<ProductReviewID>>>; // 3) "index"
 };
 ```
 
@@ -279,20 +324,29 @@ type State = {
 > I use `Partial<>` to force myself to null-check dictionary reads.
 
 #### `byID`
-This is a dictionary where normalized `Order`s are stored by their ID. We can think of it as a representation of the orders table on the backend. It of course only holds the orders we've received from the orders API. An `Order` is *only* found in this dictionary. This prevents maintenance hazards where multiple references to the same order exist simultaneously in the store. Depending on our needs, we can choose to append to it and accumulate orders, or replace it each time we receive API results. I generally opt to "accumulate", as it can improve UX if an order is already cached. *Note: at a certain point, a huge dictionary will slow down writes, and some computational reads (eg Object.values(byID)).*
+This is a dictionary where normalized `ProductReview`s are stored by their ID. We can think of it as a representation of the product reviews table on the backend. It of course only holds the product reviews we've received from the product reviews API. A `ProductReview` is *only* found in this dictionary. This prevents maintenance hazards where multiple references to the same product review exist simultaneously in the store. Depending on our needs, we can choose to append to the dictionary and accumulate product reviews, or replace it each time we receive API results. I generally opt to "accumulate", as it can improve UX if a product review is already cached. *Note: at a certain point, a huge dictionary will slow down writes, and some computational reads (eg Object.values(byID)).*
 
- Retreiving a specific order by ID is easy and constantly fast, as it's just a key lookup on the dictionary. If we want to retreive a list of orders, we can have a few options:
+ Retreiving a specific product review by ID is easy and constantly fast, as it's just a key lookup on the dictionary. If we want to retreive a list of product reviews, we have a few options:
  1. Derive the list from the dictionary in a selector. Usually this means some form of `Object.values()`. We may need to sort.
- 2. Same as 1) but memoize on the `byID` reference. Any update, insert, or delete to `byID` will require the selector to recompute.
- 3. Compute a "view" on write.
+ 2. Same as 1) but memoize on the `byID` dictionary reference. Any update, insert, or delete to `byID` will require the selector to recompute.
+ 3. Compute a "view" on write, for more efficient reads.
 
 Generally 2) or 3) are preferred.
 
 #### `allIDs`
-This list of order IDs is similar to a database "view". We can precompute this list, potentially sorted, whenever we write to the store. This can help improve read performance, as little or no computation is needed. The cost is incurred during write, but in general, writes are less frequent than reads in a frontend app.
+This list of product reviews IDs is similar to a database "view". We can precompute this list, potentially sorted, whenever we write to the store. This can help improve read performance, as little or no computation is needed. The cost is incurred during write, but in general, writes to the store are less frequent than reads.
 
-
-
+#### `idsByUserID`
+This dictionary is similar to a database "index". We can create these indexes so we can read related entities in constant or linear time (with a reduced set). By maintaining this index on write, we can efficiently read a user's product reviews without any sort of searching. Here's an example of an efficent read using this index:
+```typescript
+const getProductReviewsByUserID = (
+  state: State,
+  userID: UserID
+): Array<ProductReview> =>
+  state.productReviews.idsByUserID[userID].map(productReviewID =>
+    state.productReviews.byID[productReviewID]
+  );
+```
 
 ### Request State
 You'll notice a lack of loading indicators in Recommerce, or confusing text that reads "No orders" when you first load the `/orders` route. That is my laziness.
@@ -376,59 +430,3 @@ if (order == null && request?.state === 'LAGGING') {
 }
 // ..
 ```
-
-react-redux, containers, reuseable components
-containers only in app
-
-
-
-
-
-folder structure
-by-domain
-no dependencies on app, prevents circular dependency
-no run-time deps on other entity packages
-potentially create redux binding packages for each ent, eg redux-products
-domain-scoped selectors, selectFromRoot()
-containers have to be in app, by definition
-
-redux app, react as view layer
-view can be swapped out
-side effects in middleware
-
-connect - keeping components reusable
-typescript props, stateprops, dispatchprops etc
-
-redux state
-"database", with indexes/jointables (correct analogies?)
-normalized, deduplication
-computation like sorting on write, as reading is far more frequent
-reducers should only prpduce new references when absolutely necessary. i didn't worry about this and opted for declarative fp code
-memoized selectors - can I do better?
-no network request state, for simplicity. therefore no loading states, "no products"
-
-indexedb, first time using
-wanted to simulate the apis/databases
-prosmisified all indexeddb operations
-"api" file makes requests to indexdb instead of network requests
-arbitrary slowness added for realism
-populated with randomly generated data on initial "api request"
-deleted entities,eg when a User is deleted, its ProductReviews and Orders are deleted, for simplicity
-
-redux-observable for side-effects
-wanted to learn it/try it for first time
-love the functional style
-used sagas for 3 years
-saga pattern (orchestration), app/effects is the orchestrator, domain effects are de-coupled
-
-functional lodash
-
-redux-first-router
-
-styling - minimalism, only functional styles
-created styled primitives using inline styles
-
-
-
-
-
