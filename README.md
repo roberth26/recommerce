@@ -260,7 +260,7 @@ Sometimes an entity type is received from another entity's API. For instance, th
 I'm a huge fan of point-free, functional style programming. I love to use `lodash/fp` to compose functions point-free. Even though I've used `redux-saga` religiously for the last three years, I wanted to try out `redux-observable` because of the point-free functional style of `rxjs`. I can't map (pun) most of my saga recipes into `rxjs` yet, but I enjoy this style much more. Experts, please let me know if I can improve any of the epics!
 
 ### Container Components
-I tend to decouple presentational components (I'll refer to them as components) from their redux-connected versions (containers). This seperation encourages building a more flexible and futureproof&trade; component API. Component's don't need to understand redux actions, dispatches, or generally their context within an app. Instead they offer delegation callbacks like `renderProduct`, and semantic, flexible event callbacks like `onOrderDelete`. All the `<OrderDetail />` component wishes to express is the User's intent to delete an order. A container composed around this component can dispatch `DELETE_ORDER` when the underlying component calls its `onOrderDelete`. The container is coupled to the application's state tree, selectors, actions, and maybe more. The component, on the other hand, is only coupled to the `Order` interface, and can be reused in other apps.
+I tend to decouple presentational components (I'll refer to them as components) from their redux-connected versions (containers). This seperation encourages building a more flexible and futureproof&trade; component API. Component's don't need to understand redux actions, dispatches, or generally their context within an app. Instead they offer delegation callbacks like `renderProduct`, and semantic, flexible event callbacks like `onOrderDelete`. All the `<OrderDetail />` component wishes to express is the User's intent to delete an order. A container composed around this component can dispatch `ORDER_DELETE_REQUESTED` when the underlying component calls its `onOrderDelete`. The container is coupled to the application's state tree, selectors, actions, and maybe more. The component, on the other hand, is only coupled to the `Order` interface, and can be reused in other apps.
 
 In recommerce, modules are completely decoupled. For instance, `<OrderDetail />` delegates the rendering of products (`renderProduct`) to its parent/caller. The various modules define components dedicated to rendering their respespective entity (and no others), and the `/app` module builds containers around those components. Since these modules do not depend on the `/app` module (only the reverse is true), then only `/app` builds containers. Containers are coupled to the redux store, and only `/app` is aware of the store.
 
@@ -328,7 +328,7 @@ export const OrderDetailContainer = connect<
   }),
   (dispatch, { onOrderDelete }) => ({
     onOrderDelete: order => {
-      dispatch(deleteOrder({ orderID: order.id }));
+      dispatch(orderDeleteRequested({ orderID: order.id }));
       onOrderDelete?.(order);
     },
   })
@@ -484,7 +484,7 @@ case ActionType.ORDER_REQUEST_STATE_CHANGED: {
   };
 }
 // ...
-// We can remove the request when handling RECEIVE_ORDER
+// We can remove the request when handling ORDER_REQUEST_STATE_CHANGED
 ```
 
 We then need to dispatch `ORDER_REQUEST_STATE_CHANGED` in our middleware (epics/sagas/middlewares) where we're making the requests.
