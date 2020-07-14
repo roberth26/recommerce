@@ -4,8 +4,6 @@ TODO:
 intro<<<<<>>>>>
 folder structure
 by-domain
-potentially create redux binding packages for each ent, eg redux-products
-domain-scoped selectors, selectFromRoot()
 
 redux app, react as view layer
 view can be swapped out
@@ -23,7 +21,7 @@ deleted entities,eg when a User is deleted, its ProductReviews and Orders are de
 
 functional lodash
 
-redux-first-router
+
 ```
 - Organize further
 - Editing
@@ -82,9 +80,8 @@ index.tsx
 /utils
 ```
 
-#### App Module
-The `/app` module--wait for it--*is* the application. It bootstraps the application, and forks the thread-like middleware provided by the modules. It composes the other modules and orchestrates between them. It also delegates to the other modules.
-`/app` depends on the other modules, but they do not depend on it (the other modules do not import from `/app`). I've found this to be a good strategy in avoiding circular dependency issues. It also encourages reuseable, app-agnostic modules. Database schemas and APIs are likely to be reused by applications, so I like to build redux modules around those schemas and APIs.
+#### The `/app` Module
+The `/app` module--wait for it--*is* the application. It bootstraps the application, and forks the thread-like middleware provided by the modules. It is the "god module" and the intersection point for all the decoupled modules. It composes the other modules and orchestrates between them. It also delegates to the other modules. `/app` depends on the other modules, but they do not depend on it (the other modules do not import from `/app`). I've found this to be a good strategy in avoiding circular dependency issues. It also encourages reuseable, app-agnostic modules that can evolve into standalone packages.
 
 `/app` defines the root-level `State` type of the Redux store. It does so by composing the `State` types of the other modules into a tree. Only `/app` knows the shape of the top-level state tree. It does not need to know the shape of its branches.
 
@@ -112,21 +109,53 @@ const rootReducer = combineReducers<State>({
 });
 ```
 
-#### Other Application specific modules
-TODO
+#### The `/routes` Module
+The `/routes` module serves a logical grouping of everything pertaining *only* to Recommerce's routing. It does not depend on `/app`, but `/app` depends on it; this way we're safe from circular reference issues. It is however, specific to Recommerce.
 
-#### Entity Modules
-The entity modules do not know the shape of the top-level tree, or the shape of any other module. These boundaries shield the modules from changes to the other modules. Entity module selectors and reducers can only operate on their respective slice of state. Entity module side-effects (Redux middleware) only respond to their own Redux actions. An entity module is independent and portable, and a person or team can scale relentlessly within their entity as long as they don't breach the boundaries. The only cross-dependencies with entity modules is at the type level--there are no runtime dependencies.
+#### The `/utils` Module
+The `/utils` module serves as a bucket for general purpose, reusable code. It has no dependencies on the other modules, but they may depend on it. This is another way we'll save ourselves from circular reference issues.
+
+#### The Entity Modules
+These may as well be seperate packages from the app.
+The entity modules are completely decoupled from the app, therefore they do not know the shape of the top-level state tree, or the shape of any other module's state. These boundaries shield the modules from changes to the others. But maybe more importantly, it allows us to reason about a module locally. Entity module selectors and reducers can only operate on their respective slice of state. Entity module side-effects (Redux middleware) only respond to their own Redux actions. An entity module is independent and portable, and a person or team can scale relentlessly (in in parallel) within their module as long as they don't breach the boundaries. The only cross-dependencies with entity modules is at the type level--there are no runtime dependencies.
+
+Database schemas and APIs are likely to be reused by applications, so I like to build redux modules/packages around those schemas and APIs. In a large codebase with multiple apps, I like to create a `products` package. This `products` package will define the product types, API client, and utils. It contains only the lowest common denominator of technologies used in all the apps. Most likely this means React components are included in the `products` package. If Redux isn't ubiquitous across all the apps, then I'll create a `redux-products` package that depends on `products`, and provides all of the Redux bindings: reducers, selectors, actions, and middleware.
 
 ##### Composing Selectors
-Entity module selectors operate *only* on their respective branch of state. This keeps the modules de-coupled from the application, therefore reuseable in another app.
+Entity module selectors operate *only* on their respective state slice. They cannot select from other slices. This decoupling keeps them reuseable in other apps.
 
+Selectors are only composable if the outer selector's input state branch is the same or an ancestor of the inner selector's input state branch. In practicality this means the app needs to promote the local entity selectors into root selectors so they all share the same root: the root of the application state tree.
+
+We can create root selectors from local selectors using the utility `selectFromRoot`.
 ```typescript
+// simplified from /utils/fn.ts
 function selectFromRoot(sliceSelector, localSelector) {
   return (state, ...args) => localSelector(sliceSelector(state), ...args);
 }
 ```
-(I removed the type annotations for clarity.)
+
+We can then take a local selector such as `/products`' `getProductByID`...
+```typescript
+// /products/selectors.ts
+const getProductByID = (
+  state: State, // /products State
+  productID: ProductID | undefined | null
+) => (productID && byID(state)[productID]) || null;
+```
+
+...and promote it to a root selector.
+```typescript
+// /app/selectors.ts
+const products = (state: State) => state.products;
+
+const getProductByID = selectFromRoot(
+  products,
+  ProductsSelectors.getProductByID
+);
+```
+
+Now we can compose these root selectors and are free to reconfigure the root state shape at any point. Bonus: container components are decoupled from the root state shape if they're only using root selectors.
+
 
 
 ### The Entities
@@ -229,7 +258,6 @@ Sometimes an entity type is received from another entity's API. For instance, th
 
 ### redux-observable
 I'm a huge fan of point-free, functional style programming. I love to use `lodash/fp` to compose functions point-free. Even though I've used `redux-saga` religiously for the last three years, I wanted to try out `redux-observable` because of the point-free functional style of `rxjs`. I can't map (pun) most of my saga recipes into `rxjs` yet, but I enjoy this style much more. Experts, please let me know if I can improve any of the epics!
-
 
 ### Container Components
 I tend to decouple presentational components (I'll refer to them as components) from their redux-connected versions (containers). This seperation encourages building a more flexible and futureproof&trade; component API. Component's don't need to understand redux actions, dispatches, or generally their context within an app. Instead they offer delegation callbacks like `renderProduct`, and semantic, flexible event callbacks like `onOrderDelete`. All the `<OrderDetail />` component wishes to express is the User's intent to delete an order. A container composed around this component can dispatch `DELETE_ORDER` when the underlying component calls its `onOrderDelete`. The container is coupled to the application's state tree, selectors, actions, and maybe more. The component, on the other hand, is only coupled to the `Order` interface, and can be reused in other apps.
@@ -348,8 +376,56 @@ const getProductReviewsByUserID = (
   );
 ```
 
+### Reducer Logic
+In general, it's best practice to preserve existing references in the state tree whenever their objects are unaffected by the state transition. This enables selectors and components to memoize by these references. However, like any best practice, there are tradeoffs.
+
+Lets look at `/products`' reducer.
+```typescript
+// /products/reducers.ts
+case ActionType.CREATE_PRODUCT:
+case ActionType.UPDATE_PRODUCT:
+case ActionType.RECEIVE_PRODUCT: {
+  const {
+    payload: { product },
+  } = action;
+  const productNormalized = normalizeProduct(product);
+
+  if (
+    action.type === ActionType.UPDATE_PRODUCT &&
+    state.byID[productNormalized.id] == null
+  ) {
+    return state;
+  }
+
+  const byID: typeof state['byID'] = {
+    ...state.byID,
+    [productNormalized.id]: productNormalized,
+  };
+
+  // an UPDATE doesn't affect the idea
+  const allIDs: typeof state['allIDs'] = pipe(
+    values,
+    map<Product<ProductCategoryID>, ProductID>(product => product.id)
+  )(byID);
+
+  const idsByProductCategoryID: typeof state['idsByProductCategoryID'] = pipe(
+    values,
+    groupBy<Product<ProductCategoryID>>(product => product.category),
+    mapValues(map(product => product.id))
+  )(byID);
+
+  return {
+    ...state,
+    byID,
+    allIDs,
+    idsByProductCategoryID,
+  };
+}
+...
+```
+
 ### Request State
-You'll notice a lack of loading indicators in Recommerce, or confusing text that reads "No orders" when you first load the `/orders` route. That is my laziness.
+Notice the lack of loading indicators in Recommerce, and confusing text that reads "No orders" when tbe user first load the `/orders` route. That is my laziness.
 
 Here's how we can implement tracking of request state so we can render loading indication. Let's just focus on `Order` requests.
 
@@ -429,4 +505,90 @@ if (order == null && request?.state === 'LAGGING') {
   return <div>{request.error}</div>;
 }
 // ..
+```
+
+### Routing
+I've used `react-router` ever since I started using React. It's a great library for a react-first architecture, where the component tree is the whole app: state, side-effects, and UI all within components. However `redux-first-router` is much more inline with my idea of redux-first architecture.
+
+Here's a quick summary of how it works.
+
+#### Define a Route Map
+```typescript
+// /routes/constants.ts
+const routeMap: Record<ActionType, string> = {
+  [ActionType.PRODUCT]: '/products/:productID',
+  [ActionType.PRODUCT_EDIT]: '/products/edit/:productID',
+  [ActionType.PRODUCT_CREATE]: '/create',
+  [ActionType.PRODUCT_CATEGORY_EDIT]: '/categories/edit/:productCategoryID',
+  [ActionType.PRODUCT_CATEGORY_CREATE]: '/categories/create',
+  [ActionType.PRODUCTS]: '/',
+  [ActionType.ORDER]: '/orders/:orderID',
+  [ActionType.ORDERS]: '/orders/',
+  [ActionType.USER]: '/users/:userID',
+  [ActionType.USERS]: '/users/',
+};
+```
+Notice the keys of the map are the `/routes` module's `ActionType`. This alludes to the fact that we model route transitions *as* Redux actions.
+
+**The `redux-first-router` library maps our action types to the URL, bidrectionally.**
+
+1) The library will dispatch our *own* action types when the route transitions. This means we can build a reducer to store information about the current route.
+```typescript
+// /routes/reducers.ts
+...
+switch (action.type) {
+  case ActionType.PRODUCTS:
+    return {
+      currentRoute: action.type,
+      productCategoryID: action.meta.query?.productCategoryID,
+    };
+...
+```
+Our middleware listens for `ActionType.PRODUCTS` in the action stream, and runs effects for that route.
+```typescript
+// simplified from /app/effects.ts
+const productsRouteEpic: Epic = action$ =>
+  action$.pipe(
+    ofType(RoutesActionType.PRODUCTS),
+    mergeMap(({ meta }: ReceivedActionMeta) =>
+      of(
+        requestProducts({
+          productCategoryID: meta?.query?.productCategoryID,
+        }),
+        requestProductCategories()
+      )
+    )
+  );
+```
+
+Our UI reads the route data from the store and determines which component to render.
+```typescript
+// /app/components/App.tsx
+function CurrentScreen() {
+  const Screen = useSelector(getCurrentScreenComponent);
+
+  return <Screen />;
+}
+```
+*This is a rare time I'll use `useSelector`.*
+
+2) We dispatch our *own* action types to transition routes.
+```typescript
+// expresses the intent to transition to the /users route
+// the library changes the URL for us
+store.dispatch({ type: RoutesActionType.USERS }); 
+```
+And use the `<Link />` or `<NavLink />` component from `redux-first-router-link`.
+```typescript
+// simplified from /app/components/ProductCategoryList.tsx
+<NavLink
+  to={{
+    type: RoutesActionType.PRODUCTS,
+    meta: {
+      query: { productCategoryID: category.id },
+    },
+  }}
+>
+  {category.name}
+</NavLink>
 ```
