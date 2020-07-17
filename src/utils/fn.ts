@@ -6,9 +6,8 @@ export function selectFromRoot<
 >(
   sliceSelector: (state: RootState) => LocalState,
   localSelector: (state: LocalState, ...args: Args) => Return
-) {
-  return (state: RootState, ...args: Args) =>
-    localSelector(sliceSelector(state), ...args);
+): (state: RootState, ...args: Args) => Return {
+  return (state, ...args) => localSelector(sliceSelector(state), ...args);
 }
 
 export function delay(ms: number) {
