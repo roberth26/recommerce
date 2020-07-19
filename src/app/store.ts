@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { State } from './types';
@@ -41,12 +41,9 @@ const rootEpic = combineEpics(
   ordersEpic
 );
 
-const composeEnhancers =
-  process.env.NODE_ENV === 'development'
-    ? composeWithDevTools({
-        name: 'recommerce',
-      })
-    : compose;
+const composeEnhancers = composeWithDevTools({
+  name: 'recommerce',
+});
 
 export const store = createStore(rootReducer, composeEnhancers(...enhancers));
 
