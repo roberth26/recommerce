@@ -2,9 +2,7 @@ import { delay } from '../utils/fn';
 import { getDB } from '../utils/db-mock';
 import { ProductCategoryID, ProductCategory } from './types';
 
-export async function getProductCategories(
-  productCategoryID?: ProductCategoryID | null
-): Promise<
+export async function getProductCategories(): Promise<
   | {
       productCategories: Array<ProductCategory>;
       error?: never;
@@ -16,12 +14,8 @@ export async function getProductCategories(
   const db = await getDB();
   const productCategories = await db.getAllProductCategories();
 
-  const filteredProductCategories = productCategories.filter(productCategory =>
-    productCategoryID == null ? true : productCategory.id === productCategoryID
-  );
-
   return {
-    productCategories: filteredProductCategories,
+    productCategories,
   };
 }
 

@@ -2,9 +2,7 @@ import { delay } from '../utils/fn';
 import { getDB } from '../utils/db-mock';
 import { UserID, User } from './types';
 
-export async function getUsers(
-  userID?: UserID | null
-): Promise<
+export async function getUsers(): Promise<
   | {
       users: Array<User>;
       error?: never;
@@ -16,12 +14,8 @@ export async function getUsers(
   const db = await getDB();
   const users = await db.getAllUsers();
 
-  const filteredUsers = users.filter(user =>
-    userID == null ? true : user.id === userID
-  );
-
   return {
-    users: filteredUsers,
+    users,
   };
 }
 
