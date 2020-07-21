@@ -1,6 +1,6 @@
 import { keyBy } from 'lodash/fp';
 import { delay } from '../utils/fn';
-import { getDB } from '../utils/db-mock';
+import * as DB from '../utils/db-mock';
 import { ProductReviewID, ProductReview } from './types';
 import { normalizeProductReview } from './utils';
 import { Product, ProductID } from '../products/types';
@@ -19,11 +19,10 @@ export async function getProductReviews(params?: {
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
   const [productReviews, products, users] = await Promise.all([
-    db.getAllProductReviews(),
-    db.getAllProducts(),
-    db.getAllUsers(),
+    DB.getAllProductReviews(),
+    DB.getAllProducts(),
+    DB.getAllUsers(),
   ]);
 
   const productsByID = keyBy(product => product.id, products);
@@ -63,8 +62,7 @@ export async function getProductReview(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const productReview = await db.getProductReview(productReviewID);
+  const productReview = await DB.getProductReview(productReviewID);
 
   if (productReview == null) {
     return {
@@ -73,8 +71,8 @@ export async function getProductReview(
   }
 
   const [products, user] = await Promise.all([
-    db.getAllProducts(),
-    db.getUser(productReview.user),
+    DB.getAllProducts(),
+    DB.getUser(productReview.user),
   ]);
 
   if (user == null) {
@@ -108,8 +106,7 @@ export async function createProductReview(
   await delay(Math.random() * 2000 + 500);
 
   const prodReview = normalizeProductReview(productReview);
-  const db = await getDB();
-  await db.putProductReview(prodReview);
+  await DB.putProductReview(prodReview);
 
   return {
     productReview: prodReview,
@@ -121,8 +118,7 @@ export async function deleteProductReview(
 ): Promise<{ error?: never } | { error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.deleteProductReview(productReviewID);
+  await DB.deleteProductReview(productReviewID);
 
   return {};
 }
@@ -136,8 +132,7 @@ export async function updateProductReview(
   await delay(Math.random() * 2000 + 500);
 
   const prodReview = normalizeProductReview(productReview);
-  const db = await getDB();
-  await db.putProductReview(prodReview);
+  await DB.putProductReview(prodReview);
 
   return {
     productReview: prodReview,

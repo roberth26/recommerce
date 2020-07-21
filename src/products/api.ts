@@ -1,6 +1,6 @@
 import { keyBy } from 'lodash/fp';
 import { delay } from '../utils/fn';
-import { getDB } from '../utils/db-mock';
+import * as DB from '../utils/db-mock';
 import {
   ProductCategoryID,
   ProductCategory,
@@ -16,10 +16,9 @@ export async function getProducts(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
   const [products, productCategories] = await Promise.all([
-    db.getAllProducts(),
-    db.getAllProductCategories(),
+    DB.getAllProducts(),
+    DB.getAllProductCategories(),
   ]);
 
   const productCategoriesByID = keyBy(
@@ -52,8 +51,7 @@ export async function getProduct(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const product = await db.getProduct(productID);
+  const product = await DB.getProduct(productID);
 
   if (product == null) {
     return {
@@ -64,7 +62,7 @@ export async function getProduct(
   const productCategory =
     product.category == null
       ? null
-      : await db.getProductCategory(product.category);
+      : await DB.getProductCategory(product.category);
 
   if (product.category != null && productCategory == null) {
     return {
@@ -91,8 +89,7 @@ export async function createProduct(
   await delay(Math.random() * 2000 + 500);
 
   const prod = normalizeProduct(product);
-  const db = await getDB();
-  await db.putProduct(prod);
+  await DB.putProduct(prod);
 
   return {
     product: prod,
@@ -104,17 +101,16 @@ export async function deleteProduct(
 ): Promise<{ error?: never } | { error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.deleteProduct(productID);
+  await DB.deleteProduct(productID);
 
   await Promise.all([
     // remove Product from Orders
-    db.getAllOrders().then(orders =>
+    DB.getAllOrders().then(orders =>
       Promise.all(
         orders
           .filter(order => order.products.some(prodID => prodID === productID))
           .map(order =>
-            db.putOrder({
+            DB.putOrder({
               ...order,
               products: order.products.filter(prodID => prodID !== productID),
             })
@@ -122,15 +118,13 @@ export async function deleteProduct(
       )
     ),
     // Remove Product's ProductReviews
-    db
-      .getAllProductReviews()
-      .then(productReviews =>
-        Promise.all(
-          productReviews
-            .filter(productReview => productReview.product === productID)
-            .map(productReview => db.deleteProductReview(productReview.id))
-        )
-      ),
+    DB.getAllProductReviews().then(productReviews =>
+      Promise.all(
+        productReviews
+          .filter(productReview => productReview.product === productID)
+          .map(productReview => DB.deleteProductReview(productReview.id))
+      )
+    ),
   ]);
 
   return {};
@@ -145,8 +139,7 @@ export async function updateProduct(
   await delay(Math.random() * 2000 + 500);
 
   const prod = normalizeProduct(product);
-  const db = await getDB();
-  await db.putProduct(prod);
+  await DB.putProduct(prod);
 
   return {
     product: prod,

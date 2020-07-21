@@ -1,6 +1,6 @@
 import { keyBy } from 'lodash/fp';
 import { delay } from '../utils/fn';
-import { getDB } from '../utils/db-mock';
+import * as DB from '../utils/db-mock';
 import { OrderID, Order } from './types';
 import { normalizeOrder } from './utils';
 import { Product, ProductID } from '../products/types';
@@ -15,11 +15,10 @@ export async function getOrders(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
   const [orders, products, users] = await Promise.all([
-    db.getAllOrders(),
-    db.getAllProducts(),
-    db.getAllUsers(),
+    DB.getAllOrders(),
+    DB.getAllProducts(),
+    DB.getAllUsers(),
   ]);
 
   const productsByID = keyBy(product => product.id, products);
@@ -48,8 +47,7 @@ export async function getOrder(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const order = await db.getOrder(orderID);
+  const order = await DB.getOrder(orderID);
 
   if (order == null) {
     return {
@@ -58,8 +56,8 @@ export async function getOrder(
   }
 
   const [products, user] = await Promise.all([
-    db.getAllProducts(),
-    db.getUser(order.user),
+    DB.getAllProducts(),
+    DB.getUser(order.user),
   ]);
 
   if (user == null) {
@@ -90,8 +88,7 @@ export async function createOrder(
   await delay(Math.random() * 2000 + 500);
 
   const ord = normalizeOrder(order);
-  const db = await getDB();
-  await db.putOrder(ord);
+  await DB.putOrder(ord);
 
   return {
     order: ord,
@@ -103,8 +100,7 @@ export async function deleteOrder(
 ): Promise<{ error?: never } | { error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.deleteOrder(orderID);
+  await DB.deleteOrder(orderID);
 
   return {};
 }
@@ -118,8 +114,7 @@ export async function updateOrder(
   await delay(Math.random() * 2000 + 500);
 
   const ord = normalizeOrder(order);
-  const db = await getDB();
-  await db.putOrder(ord);
+  await DB.putOrder(ord);
 
   return {
     order: ord,

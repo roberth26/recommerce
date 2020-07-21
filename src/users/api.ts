@@ -1,5 +1,5 @@
 import { delay } from '../utils/fn';
-import { getDB } from '../utils/db-mock';
+import * as DB from '../utils/db-mock';
 import { UserID, User } from './types';
 
 export async function getUsers(): Promise<
@@ -11,8 +11,7 @@ export async function getUsers(): Promise<
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const users = await db.getAllUsers();
+  const users = await DB.getAllUsers();
 
   return {
     users,
@@ -24,8 +23,7 @@ export async function getUser(
 ): Promise<{ user: User; error?: never } | { user?: never; error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const user = await db.getUser(userID);
+  const user = await DB.getUser(userID);
 
   if (user == null) {
     return {
@@ -49,8 +47,7 @@ export async function createUser(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.putUser(user);
+  await DB.putUser(user);
 
   return {
     user,
@@ -62,30 +59,25 @@ export async function deleteUser(
 ): Promise<{ error?: never } | { error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.deleteUser(userID);
+  await DB.deleteUser(userID);
 
   await Promise.all([
     // delete User's Orders
-    db
-      .getAllOrders()
-      .then(orders =>
-        Promise.all(
-          orders
-            .filter(order => order.user === userID)
-            .map(order => db.deleteOrder(order.id))
-        )
-      ),
+    DB.getAllOrders().then(orders =>
+      Promise.all(
+        orders
+          .filter(order => order.user === userID)
+          .map(order => DB.deleteOrder(order.id))
+      )
+    ),
     // delete User's ProductReviews
-    db
-      .getAllProductReviews()
-      .then(productReviews =>
-        Promise.all(
-          productReviews
-            .filter(productReview => productReview.user === userID)
-            .map(productReview => db.deleteProductReview(productReview.id))
-        )
-      ),
+    DB.getAllProductReviews().then(productReviews =>
+      Promise.all(
+        productReviews
+          .filter(productReview => productReview.user === userID)
+          .map(productReview => DB.deleteProductReview(productReview.id))
+      )
+    ),
   ]);
 
   return {};
@@ -102,8 +94,7 @@ export async function updateUser(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.putUser(user);
+  await DB.putUser(user);
 
   return {
     user,

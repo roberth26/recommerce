@@ -1,5 +1,5 @@
 import { delay } from '../utils/fn';
-import { getDB } from '../utils/db-mock';
+import * as DB from '../utils/db-mock';
 import { ProductCategoryID, ProductCategory } from './types';
 
 export async function getProductCategories(): Promise<
@@ -11,8 +11,7 @@ export async function getProductCategories(): Promise<
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const productCategories = await db.getAllProductCategories();
+  const productCategories = await DB.getAllProductCategories();
 
   return {
     productCategories,
@@ -27,8 +26,7 @@ export async function getProductCategory(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  const productCategory = await db.getProductCategory(productCategoryID);
+  const productCategory = await DB.getProductCategory(productCategoryID);
 
   if (productCategory == null) {
     return {
@@ -52,8 +50,7 @@ export async function createProductCategory(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.putProductCategory(productCategory);
+  await DB.putProductCategory(productCategory);
 
   return {
     productCategory,
@@ -65,15 +62,14 @@ export async function deleteProductCategory(
 ): Promise<{ error?: never } | { error: string }> {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.deleteProductCategory(productCategoryID);
+  await DB.deleteProductCategory(productCategoryID);
 
   // Remove ProductCategory from Products
-  const products = await db.getAllProducts();
+  const products = await DB.getAllProducts();
   await Promise.all(
     products
       .filter(product => product.category === productCategoryID)
-      .map(product => db.putProduct({ ...product, category: null }))
+      .map(product => DB.putProduct({ ...product, category: null }))
   );
 
   return {};
@@ -90,8 +86,7 @@ export async function updateProductCategory(
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const db = await getDB();
-  await db.putProductCategory(productCategory);
+  await DB.putProductCategory(productCategory);
 
   return {
     productCategory,

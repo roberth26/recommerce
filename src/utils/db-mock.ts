@@ -11,17 +11,6 @@ import {
 import { ProductReview } from '../product-reviews/types';
 
 export async function getDB() {
-  const openDBRequest = window.indexedDB.open('recommerce', 1);
-  const dbPromise = openDB(openDBRequest);
-
-  const winner = await Promise.race([populateDB(openDBRequest), dbPromise]);
-
-  if (winner instanceof IDBDatabase) {
-    winner.close();
-  } else {
-    await dbPromise;
-  }
-
   return {
     getAllOrders,
     getOrder,
@@ -46,21 +35,21 @@ export async function getDB() {
   };
 }
 
-export function openDB(openDBRequest = window.indexedDB.open('recommerce', 1)) {
-  return new Promise<IDBDatabase>(resolve =>
-    openDBRequest.addEventListener('success', () =>
-      resolve(openDBRequest.result)
-    )
-  );
+export async function openDB() {
+  const openDBRequest = window.indexedDB.open('recommerce', 1);
+
+  await new Promise((resolve, reject) => {
+    openDBRequest.addEventListener('success', resolve);
+    openDBRequest.addEventListener('error', reject);
+    openDBRequest.addEventListener('upgradeneeded', () =>
+      populateDB(openDBRequest.result).then(resolve)
+    );
+  });
+
+  return openDBRequest.result;
 }
 
-export async function populateDB(openDBRequest: IDBRequest) {
-  await new Promise(resolve =>
-    openDBRequest.addEventListener('upgradeneeded', resolve)
-  );
-
-  const db = openDBRequest.result;
-
+export async function populateDB(db: IDBDatabase) {
   const productCategories = generateProductCategories();
   const products = generateProducts(productCategories);
   const users = generateUsers();
@@ -93,7 +82,7 @@ export async function createObjectStore(db: IDBDatabase, storeName: string) {
 
   await new Promise((resolve, reject) => {
     store.transaction.addEventListener('complete', resolve);
-    store.transaction.addEventListener('complete', reject);
+    store.transaction.addEventListener('error', reject);
   });
 }
 
