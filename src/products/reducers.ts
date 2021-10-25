@@ -45,11 +45,12 @@ export const reducer: Reducer<State, AnyAction> = (
         map<Product<ProductCategoryID>, ProductID>(product => product.id)
       )(byID);
 
-      const idsByProductCategoryID: typeof state['idsByProductCategoryID'] = pipe(
-        values,
-        groupBy<Product<ProductCategoryID>>(product => product.category),
-        mapValues(map(product => product.id))
-      )(byID);
+      const idsByProductCategoryID: typeof state['idsByProductCategoryID'] =
+        pipe(
+          values,
+          groupBy<Product<ProductCategoryID>>(product => product.category),
+          mapValues(map(product => product.id))
+        )(byID);
 
       return {
         ...state,
@@ -108,11 +109,12 @@ export const reducer: Reducer<State, AnyAction> = (
         map<Product<ProductCategoryID>, ProductID>(product => product.id)
       )(byID);
 
-      const idsByProductCategoryID: typeof state['idsByProductCategoryID'] = pipe(
-        values,
-        groupBy<Product<ProductCategoryID>>(product => product.category),
-        mapValues(map(product => product.id))
-      )(byID);
+      const idsByProductCategoryID: typeof state['idsByProductCategoryID'] =
+        pipe(
+          values,
+          groupBy<Product<ProductCategoryID>>(product => product.category),
+          mapValues(map(product => product.id))
+        )(byID);
 
       return {
         ...state,

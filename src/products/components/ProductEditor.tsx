@@ -29,19 +29,21 @@ export function ProductEditor({
   }, [product, productCategories]);
 
   const isEdit = product != null;
-  const handleChange = (
-    key: keyof EditableProduct
-  ): ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  > => changeEvent => {
-    const {
-      currentTarget: { value },
-    } = changeEvent;
-    setState(state => ({
-      ...state,
-      [key]: value,
-    }));
-  };
+  const handleChange =
+    (
+      key: keyof EditableProduct
+    ): ChangeEventHandler<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    > =>
+    changeEvent => {
+      const {
+        currentTarget: { value },
+      } = changeEvent;
+      setState(state => ({
+        ...state,
+        [key]: value,
+      }));
+    };
   const handleCategoryChange = (productCategory: ProductCategory) => {
     setState(state => ({
       ...state,
@@ -86,7 +88,7 @@ export function ProductEditor({
             />
           ) : key === 'category' ? (
             <Picker
-              value={(value as ProductCategory).id}
+              value={(value as ProductCategory | null)?.id ?? ''}
               items={productCategories}
               getItemKey={productCategory => productCategory.id}
               getItemText={productCategory => productCategory.name}
