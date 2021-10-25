@@ -11,9 +11,7 @@ export function StarRating({ rating }: StarRatingProps) {
 
   return (
     <Root>
-      {Array.from(new Array(5))
-        .fill(null)
-        .map((_, index) => (index <= rating ? '★' : '☆'))}
+      {Array.from(new Array(5), (_, index) => (index < rating ? '★' : '☆'))}
     </Root>
   );
 }
