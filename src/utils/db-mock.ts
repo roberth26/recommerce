@@ -10,31 +10,6 @@ import {
 } from '../product-categories/types';
 import { ProductReview } from '../product-reviews/types';
 
-export async function getDB() {
-  return {
-    getAllOrders,
-    getOrder,
-    putOrder,
-    deleteOrder,
-    getAllProductCategories,
-    getProductCategory,
-    putProductCategory,
-    deleteProductCategory,
-    getAllProductReviews,
-    getProductReview,
-    putProductReview,
-    deleteProductReview,
-    getAllProducts,
-    getProduct,
-    putProduct,
-    deleteProduct,
-    getAllUsers,
-    getUser,
-    putUser,
-    deleteUser,
-  };
-}
-
 export async function openDB() {
   const openDBRequest = window.indexedDB.open('recommerce', 1);
 
@@ -267,25 +242,20 @@ export const getOrder = get<Order<ProductID, UserID>>('orders');
 export const putOrder = put<Order<ProductID, UserID>>('orders');
 export const deleteOrder = del<Order<ProductID, UserID>>('orders');
 
-export const getAllProductCategories = getAll<ProductCategory>(
-  'productCategories'
-);
+export const getAllProductCategories =
+  getAll<ProductCategory>('productCategories');
 export const getProductCategory = get<ProductCategory>('productCategories');
 export const putProductCategory = put<ProductCategory>('productCategories');
 export const deleteProductCategory = del<ProductCategory>('productCategories');
 
-export const getAllProductReviews = getAll<ProductReview<ProductID, UserID>>(
-  'productReviews'
-);
-export const getProductReview = get<ProductReview<ProductID, UserID>>(
-  'productReviews'
-);
-export const putProductReview = put<ProductReview<ProductID, UserID>>(
-  'productReviews'
-);
-export const deleteProductReview = del<ProductReview<ProductID, UserID>>(
-  'productReviews'
-);
+export const getAllProductReviews =
+  getAll<ProductReview<ProductID, UserID>>('productReviews');
+export const getProductReview =
+  get<ProductReview<ProductID, UserID>>('productReviews');
+export const putProductReview =
+  put<ProductReview<ProductID, UserID>>('productReviews');
+export const deleteProductReview =
+  del<ProductReview<ProductID, UserID>>('productReviews');
 
 export const getAllProducts = getAll<Product<ProductCategoryID>>('products');
 export const getProduct = get<Product<ProductCategoryID>>('products');

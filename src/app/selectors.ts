@@ -139,9 +139,8 @@ export const denormalizeProductReview = (
     return null;
   }
 
-  const { product: productID, user: userID } = normalizeProductReview(
-    productReview
-  );
+  const { product: productID, user: userID } =
+    normalizeProductReview(productReview);
 
   const product = getProductByID(state, productID);
 
@@ -283,7 +282,7 @@ export const getOrderByIDDenormalized = (
   orderID: OrderID | undefined | null
 ) => denormalizeOrder(state, getOrderByID(state, orderID));
 
-export const getOrderssDenormalized = (state: State) =>
+export const getOrdersDenormalized = (state: State) =>
   pipe(
     getOrders,
     map(order => denormalizeOrder(state, order)),
@@ -299,6 +298,3 @@ export const getOrdersByUserIDDenormalized = (
     map(orderID => getOrderByIDDenormalized(state, orderID)),
     compact
   )();
-
-export const getCurrentOrderDenormalized = (state: State) =>
-  getOrderByIDDenormalized(state, getCurrentRouteOrderID(state));

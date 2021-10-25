@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { UserID, User } from '../../users/types';
+import { UserID } from '../../users/types';
 import { State } from '../types';
 import { getCurrentRouteUserID } from '../selectors';
 import { UserDetailContainer } from './UserDetailContainer';
@@ -12,17 +12,13 @@ import { SplitPane } from '../../utils/SplitPane';
 
 type UserScreenProps = {
   userID: UserID | undefined | null;
-  onUserDelete?: (user: User) => void;
 };
 
-export function UserScreen({ userID, onUserDelete }: UserScreenProps) {
+export function UserScreen({ userID }: UserScreenProps) {
   return (
     <Page>
       <FullLayout>
-        <UserDetailContainer
-          userID={userID}
-          onUserDelete={user => onUserDelete?.(user)}
-        />
+        <UserDetailContainer userID={userID} />
         <SplitPane>
           <div>
             <h2>Reviews</h2>
@@ -40,7 +36,7 @@ export function UserScreen({ userID, onUserDelete }: UserScreenProps) {
 
 type UserScreenContainerStateProps = Pick<UserScreenProps, 'userID'>;
 
-type UserScreenContainerDispatchProps = Pick<UserScreenProps, 'onUserDelete'>;
+type UserScreenContainerDispatchProps = Pick<UserScreenProps, never>;
 
 type UserScreenContainerOwnProps = Omit<
   UserScreenProps,

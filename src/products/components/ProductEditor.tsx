@@ -3,6 +3,7 @@ import { uuid } from 'uuidv4';
 import { Product } from '../types';
 import { ProductCategory } from '../../product-categories/types';
 import { Field } from '../../utils/Field';
+import { Picker } from '../../utils/Picker';
 
 type EditableProduct = Pick<
   Product<ProductCategory>,
@@ -11,21 +12,21 @@ type EditableProduct = Pick<
 
 type ProductEditorProps = {
   product: Product<ProductCategory> | undefined | null;
-  categories: Array<ProductCategory>;
+  productCategories: Array<ProductCategory>;
   onProductEdit?: (product: Product<ProductCategory>) => void;
 };
 
 export function ProductEditor({
   product,
-  categories,
+  productCategories,
   onProductEdit,
 }: ProductEditorProps) {
   const [state, setState] = useState<EditableProduct>(
-    getInitialState(product, categories)
+    getInitialState(product, productCategories)
   );
   useEffect(() => {
-    setState(getInitialState(product, categories));
-  }, [product, categories]);
+    setState(getInitialState(product, productCategories));
+  }, [product, productCategories]);
 
   const isEdit = product != null;
   const handleChange = (
@@ -38,10 +39,13 @@ export function ProductEditor({
     } = changeEvent;
     setState(state => ({
       ...state,
-      [key]:
-        key === 'category'
-          ? categories.find(category => category.id === value) || state.category
-          : value,
+      [key]: value,
+    }));
+  };
+  const handleCategoryChange = (productCategory: ProductCategory) => {
+    setState(state => ({
+      ...state,
+      category: productCategory,
     }));
   };
   const handleConfirmClick = () => {
@@ -81,18 +85,14 @@ export function ProductEditor({
               onChange={handleChange('price')}
             />
           ) : key === 'category' ? (
-            <select
-              id={key}
-              value={(value as ProductCategory)?.id}
-              onChange={handleChange('category')}
-              required={true}
-            >
-              {categories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+            <Picker
+              value={(value as ProductCategory).id}
+              items={productCategories}
+              getItemKey={productCategory => productCategory.id}
+              getItemText={productCategory => productCategory.name}
+              onChange={handleCategoryChange}
+              selectElementAttributes={{ id: key, required: true }}
+            />
           ) : key === 'description' ? (
             <textarea
               id={key}
@@ -109,12 +109,12 @@ export function ProductEditor({
 
 function getInitialState(
   product: Product<ProductCategory> | undefined | null,
-  categories: Array<ProductCategory>
+  productCategories: Array<ProductCategory>
 ): EditableProduct {
   return {
     name: product?.name ?? '',
     price: product?.price ?? 0,
-    category: product?.category ?? categories[0],
+    category: product?.category ?? productCategories[0],
     imageURI: product?.imageURI ?? '',
     description: product?.description ?? '',
   };

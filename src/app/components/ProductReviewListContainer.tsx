@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 import { connect } from 'react-redux';
 import { ProductReviewID } from '../../product-reviews/types';
 import { ProductReviewSummaryContainer } from './ProductReviewSummaryContainer';
@@ -9,6 +9,9 @@ import {
   getProductReviewIDsByUserID,
 } from '../selectors';
 import { UserID } from '../../users/types';
+import { ProductReviewEditorContainer } from './ProductReviewEditorContainer';
+import { ProductPickerContainer } from './ProductPickerContainer';
+import { UserPickerContainer } from './UserPickerContainer';
 
 type ProductReviewListProps = {
   productReviewIDs: Array<ProductReviewID>;
@@ -17,15 +20,50 @@ type ProductReviewListProps = {
 export function ProductReviewList({
   productReviewIDs,
 }: ProductReviewListProps) {
+  const [
+    editingProductReviewID,
+    setEditingProductReviewID,
+  ] = useState<ProductReviewID | null>(null);
+
   if (productReviewIDs.length === 0) {
     return <div>No reviews</div>;
   }
+
+  const handleProductReviewEdit = () => {
+    setEditingProductReviewID(null);
+  };
 
   return (
     <List>
       {productReviewIDs.map(productReviewID => (
         <ListItem key={productReviewID}>
-          <ProductReviewSummaryContainer productReviewID={productReviewID} />
+          {productReviewID === editingProductReviewID ? (
+            <ProductReviewEditorContainer
+              productReviewID={productReviewID}
+              onProductReviewEdit={handleProductReviewEdit}
+              renderProductPicker={({ productID, onProductChange }) => (
+                <ProductPickerContainer
+                  value={productID}
+                  getItemKey={product => product.id}
+                  getItemText={product => product.name}
+                  onChange={product => onProductChange?.(product.id)}
+                />
+              )}
+              renderUserPicker={({ userID, onUserChange }) => (
+                <UserPickerContainer
+                  value={userID}
+                  getItemKey={user => user.id}
+                  getItemText={user => user.name}
+                  onChange={user => onUserChange?.(user.id)}
+                />
+              )}
+            />
+          ) : (
+            <ProductReviewSummaryContainer
+              productReviewID={productReviewID}
+              onEdit={() => setEditingProductReviewID(productReviewID)}
+            />
+          )}
         </ListItem>
       ))}
     </List>

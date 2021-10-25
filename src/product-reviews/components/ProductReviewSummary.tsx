@@ -10,11 +10,13 @@ type ProductReviewSummaryProps = {
   onProductReviewDelete?: (
     productReview: ProductReview<ProductReviewProduct, User>
   ) => void;
+  onEdit?: () => void;
 };
 
 export function ProductReviewSummary({
   productReview,
   onProductReviewDelete,
+  onEdit,
 }: ProductReviewSummaryProps) {
   if (productReview == null) {
     return null;
@@ -46,6 +48,7 @@ export function ProductReviewSummary({
       >
         Delete
       </button>
+      <button onClick={onEdit}>Edit</button>
     </div>
   );
 }

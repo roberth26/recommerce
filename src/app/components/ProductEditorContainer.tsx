@@ -11,7 +11,7 @@ type ProductEditorProps = ComponentProps<typeof ProductEditor>;
 
 type ProductEditorContainerStateProps = Pick<
   ProductEditorProps,
-  'product' | 'categories'
+  'product' | 'productCategories'
 >;
 
 type ProductEditorContainerDispatchProps = Pick<ProductEditorProps, never> & {
@@ -39,7 +39,7 @@ export const ProductEditorContainer = connect<
 >(
   (state, { productID }) => ({
     product: getProductByIDDenormalized(state, productID),
-    categories: getProductCategories(state),
+    productCategories: getProductCategories(state),
   }),
   dispatch => ({
     dispatch,

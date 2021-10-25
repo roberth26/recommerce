@@ -79,7 +79,12 @@ export const productRouteEpic: Epic = action$ =>
     ofType(RoutesActionType.PRODUCT),
     mergeMap(({ payload: { productID } }: ReceivedActionMeta) =>
       merge(
-        of(requestProduct({ productID }), requestProductReviews({ productID })),
+        of(
+          requestProduct({ productID }),
+          requestProductReviews({ productID }),
+          requestProducts(),
+          requestUsers()
+        ),
         action$.pipe(
           ofType(ProductsActionType.PRODUCT_DELETED),
           take(1),

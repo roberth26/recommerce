@@ -21,7 +21,8 @@ export const screens: Record<
   [RoutesActionType.PRODUCT]: ProductScreenContainer,
   [RoutesActionType.PRODUCT_EDIT]: ProductEditScreenContainer,
   [RoutesActionType.PRODUCT_CATEGORY_EDIT]: ProductCategoryEditScreenContainer,
-  [RoutesActionType.PRODUCT_CATEGORY_CREATE]: ProductCategoryCreateScreenContainer,
+  [RoutesActionType.PRODUCT_CATEGORY_CREATE]:
+    ProductCategoryCreateScreenContainer,
   [RoutesActionType.ORDERS]: OrdersScreen,
   [RoutesActionType.ORDER]: OrderScreenContainer,
   [RoutesActionType.USERS]: UsersScreen,
