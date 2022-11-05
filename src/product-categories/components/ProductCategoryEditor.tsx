@@ -18,19 +18,19 @@ export function ProductCategoryEditor({
     name: productCategory?.name ?? '',
   });
   const isEdit = productCategory != null;
-  const handleChange = (
-    key: keyof EditableProductCategory
-  ): ChangeEventHandler<
-    HTMLInputElement | HTMLSelectElement
-  > => changeEvent => {
-    const {
-      currentTarget: { value },
-    } = changeEvent;
-    setState(state => ({
-      ...state,
-      [key]: value,
-    }));
-  };
+  const handleChange =
+    (
+      key: keyof EditableProductCategory
+    ): ChangeEventHandler<HTMLInputElement | HTMLSelectElement> =>
+    changeEvent => {
+      const {
+        currentTarget: { value },
+      } = changeEvent;
+      setState(state => ({
+        ...state,
+        [key]: value,
+      }));
+    };
   const handleConfirmClick = () => {
     const editedProductCategory: ProductCategory = {
       ...state,
@@ -54,6 +54,7 @@ export function ProductCategoryEditor({
           ) : null}
         </Field>
       ))}
+      {/** TODO: add cancel button */}
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );
