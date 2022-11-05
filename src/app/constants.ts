@@ -8,7 +8,7 @@ import { OrderPageContainer } from './components/OrderPageContainer';
 import { OrdersPage } from './components/OrdersPage';
 import { UsersPage } from './components/UsersPage';
 import { ProductEditPageContainer } from './components/ProductEditPageContainer';
-import { ProductCreatePageContainer } from './components/ProductCreatePageContainer';
+import { ProductCreatePage } from './components/ProductCreatePage';
 import { ProductCategoryEditPageContainer } from './components/ProductCategoryEditPageContainer';
 import { ProductCategoryCreatePage } from './components/ProductCategoryCreatePage';
 
@@ -16,7 +16,7 @@ export const pages: Record<
   RoutesActionType | typeof NOT_FOUND,
   React.ComponentType
 > = {
-  [RoutesActionType.PRODUCT_CREATE]: ProductCreatePageContainer,
+  [RoutesActionType.PRODUCT_CREATE]: ProductCreatePage,
   [RoutesActionType.PRODUCTS]: ProductsPageContainer,
   [RoutesActionType.PRODUCT]: ProductPageContainer,
   [RoutesActionType.PRODUCT_EDIT]: ProductEditPageContainer,
