@@ -1,6 +1,6 @@
 import { uuid } from 'uuidv4';
 import Faker from 'faker';
-import { keyBy, pipe, times, uniqBy } from 'lodash/fp';
+import { keyBy, pipe, sample, times, uniqBy } from 'lodash/fp';
 import { Order } from '../orders/types';
 import { ProductID, Product } from '../products/types';
 import { UserID, User } from '../users/types';
@@ -116,27 +116,31 @@ export function generateProductReviews(
 
 export function generateProductCategories(): Array<ProductCategory> {
   return pipe(
+    () => Math.floor(Math.random() * 10 + 10),
     times<ProductCategory>(() => ({
       id: uuid(),
       name: Faker.commerce.department(),
     })),
     uniqBy(productCategory => productCategory.name)
-  )(Math.floor(Math.random() * 10 + 10));
+  )();
 }
 
 export function generateProducts(
   productCategories: Array<ProductCategory>
 ): Array<Product<ProductCategoryID>> {
+  const keywords = ['product', 'car', 'watch', 'jewelry', 'book', 'toy'];
   return Array.from(new Array(100))
     .fill(null)
-    .map<Product<ProductCategoryID>>(() => ({
+    .map<Product<ProductCategoryID>>((_, index) => ({
       id: uuid(),
       name: Faker.commerce.productName(),
       price: parseFloat((Math.random() * 100).toFixed(2)),
       category:
         productCategories[Math.floor(Math.random() * productCategories.length)]
           .id,
-      imageURI: Faker.image.abstract(480, 480),
+      imageURI: `https://loremflickr.com/480/480/${sample(keywords)}?lock=${
+        index + 1
+      }`,
       rating: Math.floor(Math.random() * 5),
       description: Faker.lorem.paragraph(),
     }));

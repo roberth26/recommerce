@@ -1,4 +1,4 @@
-import { of, EMPTY, concat, merge } from 'rxjs';
+import { of, merge } from 'rxjs';
 import { map, mergeMap, take } from 'rxjs/operators';
 import { ofType, Epic, combineEpics, StateObservable } from 'redux-observable';
 import { ReceivedActionMeta } from 'redux-first-router';
@@ -66,8 +66,8 @@ export const productsRouteEpic: Epic = action$ =>
               payload: { productCategoryID: deletedProductCategoryID },
             }: ProductCategoryDeleted) =>
               deletedProductCategoryID === meta?.query?.productCategoryID
-                ? of({ type: RoutesActionType.PRODUCTS })
-                : EMPTY
+                ? [{ type: RoutesActionType.PRODUCTS }]
+                : []
           )
         )
       )
@@ -82,7 +82,6 @@ export const productRouteEpic: Epic = action$ =>
         of(
           requestProduct({ productID }),
           requestProductReviews({ productID }),
-          requestProducts(),
           requestUsers()
         ),
         action$.pipe(
@@ -91,8 +90,8 @@ export const productRouteEpic: Epic = action$ =>
           mergeMap(
             ({ payload: { productID: deletedProductID } }: ProductDeleted) =>
               deletedProductID === productID
-                ? of({ type: RoutesActionType.PRODUCTS })
-                : EMPTY
+                ? [{ type: RoutesActionType.PRODUCTS }]
+                : []
           )
         )
       )
@@ -115,7 +114,7 @@ export const productEditRouteEpic: Epic = action$ =>
 export const productCreateRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_CREATE),
-    map((action: ReceivedActionMeta) => requestProductCategories())
+    map(() => requestProductCategories())
   );
 
 export const ordersRouteEpic: Epic = action$ =>
@@ -135,8 +134,8 @@ export const orderRouteEpic: Epic = action$ =>
           take(1),
           mergeMap(({ payload: { orderID: deletedOrderID } }: OrderDeleted) =>
             deletedOrderID === orderID
-              ? of({ type: RoutesActionType.ORDERS })
-              : EMPTY
+              ? [{ type: RoutesActionType.ORDERS }]
+              : []
           )
         )
       )
@@ -163,9 +162,7 @@ export const userRouteEpic: Epic = action$ =>
           ofType(UsersActionType.USER_DELETED),
           take(1),
           mergeMap(({ payload: { userID: deletedUserID } }: UserDeleted) =>
-            deletedUserID === userID
-              ? of({ type: RoutesActionType.USERS })
-              : EMPTY
+            deletedUserID === userID ? [{ type: RoutesActionType.USERS }] : []
           )
         )
       )
@@ -202,22 +199,22 @@ export const productReviewsEpic: Epic = action$ =>
             typeof productOrProductID !== 'string'
         );
 
-      return concat(
-        users.length === 0
-          ? EMPTY
-          : of(
+      return [
+        ...(users.length
+          ? [
               receiveUsers({
                 users,
-              })
-            ),
-        products.length === 0
-          ? EMPTY
-          : of(
+              }),
+            ]
+          : []),
+        ...(products.length
+          ? [
               receiveProducts({
                 products,
-              })
-            )
-      );
+              }),
+            ]
+          : []),
+      ];
     })
   );
 
@@ -244,20 +241,20 @@ export const productsEpic: Epic = (action$, state$: StateObservable<State>) =>
               typeof productCategoryOrProductCategoryID !== 'string'
           );
 
-        return productCategories.length === 0
-          ? EMPTY
-          : of(
+        return productCategories.length
+          ? [
               receiveProductCategories({
                 productCategories,
-              })
-            );
+              }),
+            ]
+          : [];
       })
     ),
     action$.pipe(
       ofType(ProductsActionType.PRODUCT_DELETED),
       // remove deleted Product's ProductReviews
-      mergeMap(({ payload: { productID } }: ProductDeleted) =>
-        of(deleteProductReviews({ productID }))
+      map(({ payload: { productID } }: ProductDeleted) =>
+        deleteProductReviews({ productID })
       )
     )
   );
@@ -266,9 +263,10 @@ export const usersEpic: Epic = action$ =>
   action$.pipe(
     ofType(UsersActionType.USER_DELETED),
     // remove deleted User's ProductReviews and Orders
-    mergeMap(({ payload: { userID } }: UserDeleted) =>
-      of(deleteProductReviews({ userID }), deleteOrders({ userID }))
-    )
+    mergeMap(({ payload: { userID } }: UserDeleted) => [
+      deleteProductReviews({ userID }),
+      deleteOrders({ userID }),
+    ])
   );
 
 export const ordersEpic: Epic = action$ =>
@@ -293,22 +291,10 @@ export const ordersEpic: Epic = action$ =>
         (userOrUserID): userOrUserID is User => typeof userOrUserID !== 'string'
       );
 
-      return concat(
-        products.length === 0
-          ? EMPTY
-          : of(
-              receiveProducts({
-                products,
-              })
-            ),
-        users.length === 0
-          ? EMPTY
-          : of(
-              receiveUsers({
-                users,
-              })
-            )
-      );
+      return [
+        ...(products.length ? [receiveProducts({ products })] : []),
+        ...(users.length ? [receiveUsers({ users })] : []),
+      ];
     })
   );
 
