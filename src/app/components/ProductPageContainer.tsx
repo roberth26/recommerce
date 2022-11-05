@@ -9,15 +9,12 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductCategory } from '../../product-categories/types';
 
-type ProductScreenProps = {
+type ProductPageProps = {
   productID: ProductID | undefined | null;
   onProductDelete?: (product: Product<ProductCategory>) => void;
 };
 
-export function ProductScreen({
-  productID,
-  onProductDelete,
-}: ProductScreenProps) {
+export function ProductPage({ productID, onProductDelete }: ProductPageProps) {
   return (
     <Page>
       <FullLayout>
@@ -32,24 +29,23 @@ export function ProductScreen({
   );
 }
 
-type ProductScreenContainerStateProps = Pick<ProductScreenProps, 'productID'>;
+type ProductPageContainerStateProps = Pick<ProductPageProps, 'productID'>;
 
-type ProductScreenContainerDispatchProps = Pick<
-  ProductScreenProps,
+type ProductPageContainerDispatchProps = Pick<
+  ProductPageProps,
   'onProductDelete'
 >;
 
-type ProductScreenContainerOwnProps = Omit<
-  ProductScreenProps,
-  | keyof ProductScreenContainerStateProps
-  | keyof ProductScreenContainerDispatchProps
+type ProductPageContainerOwnProps = Omit<
+  ProductPageProps,
+  keyof ProductPageContainerStateProps | keyof ProductPageContainerDispatchProps
 >;
 
-export const ProductScreenContainer = connect<
-  ProductScreenContainerStateProps,
-  ProductScreenContainerDispatchProps,
-  ProductScreenContainerOwnProps,
+export const ProductPageContainer = connect<
+  ProductPageContainerStateProps,
+  ProductPageContainerDispatchProps,
+  ProductPageContainerOwnProps,
   State
 >(state => ({
   productID: getCurrentRouteProductID(state),
-}))(ProductScreen);
+}))(ProductPage);

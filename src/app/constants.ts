@@ -1,31 +1,31 @@
 import { NOT_FOUND } from 'redux-first-router';
 import { ActionType as RoutesActionType } from '../routes/actions';
-import { ProductScreenContainer } from './components/ProductScreenContainer';
-import { NotFoundScreen } from './components/NotFoundScreen';
-import { ProductsScreenContainer } from './components/ProductsScreenContainer';
-import { UserScreenContainer } from './components/UserScreenContainer';
-import { OrderScreenContainer } from './components/OrderScreenContainer';
-import { OrdersScreen } from './components/OrdersScreen';
-import { UsersScreen } from './components/UsersScreen';
-import { ProductEditScreenContainer } from './components/ProductEditScreenContainer';
-import { ProductCreateScreenContainer } from './components/ProductCreateScreenContainer';
-import { ProductCategoryEditScreenContainer } from './components/ProductCategoryEditScreenContainer';
-import { ProductCategoryCreateScreenContainer } from './components/ProductCategoryCreateScreenContainer';
+import { ProductPageContainer } from './components/ProductPageContainer';
+import { NotFoundPage } from './components/NotFoundPage';
+import { ProductsPageContainer } from './components/ProductsPageContainer';
+import { UserPageContainer } from './components/UserPageContainer';
+import { OrderPageContainer } from './components/OrderPageContainer';
+import { OrdersPage } from './components/OrdersPage';
+import { UsersPage } from './components/UsersPage';
+import { ProductEditPageContainer } from './components/ProductEditPageContainer';
+import { ProductCreatePageContainer } from './components/ProductCreatePageContainer';
+import { ProductCategoryEditPageContainer } from './components/ProductCategoryEditPageContainer';
+import { ProductCategoryCreatePageContainer } from './components/ProductCategoryCreatePageContainer';
 
-export const screens: Record<
+export const pages: Record<
   RoutesActionType | typeof NOT_FOUND,
   React.ComponentType
 > = {
-  [RoutesActionType.PRODUCT_CREATE]: ProductCreateScreenContainer,
-  [RoutesActionType.PRODUCTS]: ProductsScreenContainer,
-  [RoutesActionType.PRODUCT]: ProductScreenContainer,
-  [RoutesActionType.PRODUCT_EDIT]: ProductEditScreenContainer,
-  [RoutesActionType.PRODUCT_CATEGORY_EDIT]: ProductCategoryEditScreenContainer,
+  [RoutesActionType.PRODUCT_CREATE]: ProductCreatePageContainer,
+  [RoutesActionType.PRODUCTS]: ProductsPageContainer,
+  [RoutesActionType.PRODUCT]: ProductPageContainer,
+  [RoutesActionType.PRODUCT_EDIT]: ProductEditPageContainer,
+  [RoutesActionType.PRODUCT_CATEGORY_EDIT]: ProductCategoryEditPageContainer,
   [RoutesActionType.PRODUCT_CATEGORY_CREATE]:
-    ProductCategoryCreateScreenContainer,
-  [RoutesActionType.ORDERS]: OrdersScreen,
-  [RoutesActionType.ORDER]: OrderScreenContainer,
-  [RoutesActionType.USERS]: UsersScreen,
-  [RoutesActionType.USER]: UserScreenContainer,
-  [NOT_FOUND]: NotFoundScreen,
+    ProductCategoryCreatePageContainer,
+  [RoutesActionType.ORDERS]: OrdersPage,
+  [RoutesActionType.ORDER]: OrderPageContainer,
+  [RoutesActionType.USERS]: UsersPage,
+  [RoutesActionType.USER]: UserPageContainer,
+  [NOT_FOUND]: NotFoundPage,
 };

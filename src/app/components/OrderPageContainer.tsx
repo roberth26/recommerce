@@ -8,12 +8,12 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductSummary } from '../../products/components/ProductSummary';
 
-type OrderScreenProps = {
+type OrderPageProps = {
   orderID: OrderID | undefined | null;
   onOrderDelete?: (order: Order) => void;
 };
 
-export function OrderScreen({ orderID, onOrderDelete }: OrderScreenProps) {
+export function OrderPage({ orderID, onOrderDelete }: OrderPageProps) {
   return (
     <Page>
       <FullLayout>
@@ -27,23 +27,20 @@ export function OrderScreen({ orderID, onOrderDelete }: OrderScreenProps) {
   );
 }
 
-type OrderScreenContainerStateProps = Pick<OrderScreenProps, 'orderID'>;
+type OrderPageContainerStateProps = Pick<OrderPageProps, 'orderID'>;
 
-type OrderScreenContainerDispatchProps = Pick<
-  OrderScreenProps,
-  'onOrderDelete'
+type OrderPageContainerDispatchProps = Pick<OrderPageProps, 'onOrderDelete'>;
+
+type OrderPageContainerOwnProps = Omit<
+  OrderPageProps,
+  keyof OrderPageContainerStateProps | keyof OrderPageContainerDispatchProps
 >;
 
-type OrderScreenContainerOwnProps = Omit<
-  OrderScreenProps,
-  keyof OrderScreenContainerStateProps | keyof OrderScreenContainerDispatchProps
->;
-
-export const OrderScreenContainer = connect<
-  OrderScreenContainerStateProps,
-  OrderScreenContainerDispatchProps,
-  OrderScreenContainerOwnProps,
+export const OrderPageContainer = connect<
+  OrderPageContainerStateProps,
+  OrderPageContainerDispatchProps,
+  OrderPageContainerOwnProps,
   State
 >(state => ({
   orderID: getCurrentRouteOrderID(state),
-}))(OrderScreen);
+}))(OrderPage);

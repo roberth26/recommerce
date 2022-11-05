@@ -8,15 +8,15 @@ import { FullLayout } from './FullLayout';
 import { ProductEditorContainer } from './ProductEditorContainer';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 
-type ProductEditScreenProps = {
+type ProductEditPageProps = {
   productID: ProductID | undefined | null;
   onProductEdit?: (product: Product) => void;
 };
 
-export function ProductEditScreen({
+export function ProductEditPage({
   productID,
   onProductEdit,
-}: ProductEditScreenProps) {
+}: ProductEditPageProps) {
   if (productID == null) {
     return null;
   }
@@ -34,25 +34,25 @@ export function ProductEditScreen({
   );
 }
 
-type ProductEditScreenContainerStateProps = Pick<
-  ProductEditScreenProps,
+type ProductEditPageContainerStateProps = Pick<
+  ProductEditPageProps,
   'productID'
 >;
 
-type ProductEditScreenContainerDispatchProps = Required<
-  Pick<ProductEditScreenProps, 'onProductEdit'>
+type ProductEditPageContainerDispatchProps = Required<
+  Pick<ProductEditPageProps, 'onProductEdit'>
 >;
 
-type ProductEditScreenContainerOwnProps = Omit<
-  ProductEditScreenProps,
-  | keyof ProductEditScreenContainerStateProps
-  | keyof ProductEditScreenContainerDispatchProps
+type ProductEditPageContainerOwnProps = Omit<
+  ProductEditPageProps,
+  | keyof ProductEditPageContainerStateProps
+  | keyof ProductEditPageContainerDispatchProps
 >;
 
-export const ProductEditScreenContainer = connect<
-  ProductEditScreenContainerStateProps,
-  ProductEditScreenContainerDispatchProps,
-  ProductEditScreenContainerOwnProps,
+export const ProductEditPageContainer = connect<
+  ProductEditPageContainerStateProps,
+  ProductEditPageContainerDispatchProps,
+  ProductEditPageContainerOwnProps,
   State
 >(
   state => ({
@@ -66,4 +66,4 @@ export const ProductEditScreenContainer = connect<
         payload: { productID: product.id },
       }),
   })
-)(ProductEditScreen);
+)(ProductEditPage);

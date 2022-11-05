@@ -11,15 +11,15 @@ import { FullLayout } from './FullLayout';
 import { ProductCategoryEditorContainer } from './ProductCategoryEditorContainer';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 
-type ProductCategoryEditScreenProps = {
+type ProductCategoryEditPageProps = {
   productCategoryID: ProductCategoryID | undefined | null;
   onProductCategoryEdit?: (productCategory: ProductCategory) => void;
 };
 
-export function ProductCategoryEditScreen({
+export function ProductCategoryEditPage({
   productCategoryID,
   onProductCategoryEdit,
-}: ProductCategoryEditScreenProps) {
+}: ProductCategoryEditPageProps) {
   if (productCategoryID == null) {
     return null;
   }
@@ -37,25 +37,25 @@ export function ProductCategoryEditScreen({
   );
 }
 
-type ProductCategoryEditScreenContainerStateProps = Pick<
-  ProductCategoryEditScreenProps,
+type ProductCategoryEditPageContainerStateProps = Pick<
+  ProductCategoryEditPageProps,
   'productCategoryID'
 >;
 
-type ProductCategoryEditScreenContainerDispatchProps = Required<
-  Pick<ProductCategoryEditScreenProps, 'onProductCategoryEdit'>
+type ProductCategoryEditPageContainerDispatchProps = Required<
+  Pick<ProductCategoryEditPageProps, 'onProductCategoryEdit'>
 >;
 
-type ProductCategoryEditScreenContainerOwnProps = Omit<
-  ProductCategoryEditScreenProps,
-  | keyof ProductCategoryEditScreenContainerStateProps
-  | keyof ProductCategoryEditScreenContainerDispatchProps
+type ProductCategoryEditPageContainerOwnProps = Omit<
+  ProductCategoryEditPageProps,
+  | keyof ProductCategoryEditPageContainerStateProps
+  | keyof ProductCategoryEditPageContainerDispatchProps
 >;
 
-export const ProductCategoryEditScreenContainer = connect<
-  ProductCategoryEditScreenContainerStateProps,
-  ProductCategoryEditScreenContainerDispatchProps,
-  ProductCategoryEditScreenContainerOwnProps,
+export const ProductCategoryEditPageContainer = connect<
+  ProductCategoryEditPageContainerStateProps,
+  ProductCategoryEditPageContainerDispatchProps,
+  ProductCategoryEditPageContainerOwnProps,
   State
 >(
   state => ({
@@ -68,4 +68,4 @@ export const ProductCategoryEditScreenContainer = connect<
         meta: { query: { productCategoryID: productCategory.id } },
       }),
   })
-)(ProductCategoryEditScreen);
+)(ProductCategoryEditPage);

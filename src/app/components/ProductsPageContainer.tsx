@@ -11,15 +11,15 @@ import { getCurrentProductCategory } from '../selectors';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { deleteProductCategory } from '../../product-categories/actions';
 
-type ProductsScreenProps = {
+type ProductsPageProps = {
   productCategory: ProductCategory | undefined | null;
   onProductCategoryDelete?: (productCategory: ProductCategory) => void;
 };
 
-export function ProductsScreen({
+export function ProductsPage({
   productCategory,
   onProductCategoryDelete,
-}: ProductsScreenProps) {
+}: ProductsPageProps) {
   return (
     <Page>
       <SidebarLayout
@@ -77,25 +77,25 @@ export function ProductsScreen({
   );
 }
 
-type ProductsScreenContainerStateProps = Pick<
-  ProductsScreenProps,
+type ProductsPageContainerStateProps = Pick<
+  ProductsPageProps,
   'productCategory'
 >;
 
-type ProductsScreenContainerDispatchProps = Required<
-  Pick<ProductsScreenProps, 'onProductCategoryDelete'>
+type ProductsPageContainerDispatchProps = Required<
+  Pick<ProductsPageProps, 'onProductCategoryDelete'>
 >;
 
-type ProductsScreenContainerOwnProps = Omit<
-  ProductsScreenProps,
-  | keyof ProductsScreenContainerStateProps
-  | keyof ProductsScreenContainerDispatchProps
+type ProductsPageContainerOwnProps = Omit<
+  ProductsPageProps,
+  | keyof ProductsPageContainerStateProps
+  | keyof ProductsPageContainerDispatchProps
 >;
 
-export const ProductsScreenContainer = connect<
-  ProductsScreenContainerStateProps,
-  ProductsScreenContainerDispatchProps,
-  ProductsScreenContainerOwnProps,
+export const ProductsPageContainer = connect<
+  ProductsPageContainerStateProps,
+  ProductsPageContainerDispatchProps,
+  ProductsPageContainerOwnProps,
   State
 >(
   state => ({
@@ -107,7 +107,7 @@ export const ProductsScreenContainer = connect<
         deleteProductCategory({ productCategoryID: productCategory.id })
       ),
   })
-)(ProductsScreen);
+)(ProductsPage);
 
 function Header({ style, ...props }: HTMLAttributes<HTMLElement>) {
   return (

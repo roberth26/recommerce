@@ -1,20 +1,20 @@
 import React from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { store } from '../store';
-import { getCurrentScreenComponent } from '../selectors';
+import { getCurrentPageComponent } from '../selectors';
 
 export function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <CurrentScreen />
+        <CurrentPage />
       </Provider>
     </React.StrictMode>
   );
 }
 
-export function CurrentScreen() {
-  const Screen = useSelector(getCurrentScreenComponent);
+export function CurrentPage() {
+  const Page = useSelector(getCurrentPageComponent);
 
-  return <Screen />;
+  return <Page />;
 }

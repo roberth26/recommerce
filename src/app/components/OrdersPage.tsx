@@ -4,7 +4,7 @@ import { Page } from './Page';
 import { OrderListContainer } from './OrderListContainer';
 import { FullLayout } from './FullLayout';
 
-export function OrdersScreen() {
+export function OrdersPage() {
   return (
     <Page>
       <FullLayout>

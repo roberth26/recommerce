@@ -15,7 +15,7 @@ import {
   ProductCategoryID,
 } from '../product-categories/types';
 import { Order, OrderID } from '../orders/types';
-import { screens } from './constants';
+import { pages } from './constants';
 import { normalizeProductReview } from '../product-reviews/utils';
 import { normalizeProduct } from '../products/utils';
 import { normalizeOrder } from '../orders/utils';
@@ -32,8 +32,8 @@ export const getCurrentRoute = selectFromRoot(
   RoutesSelectors.getCurrentRoute
 );
 
-export const getCurrentScreenComponent = (state: State) =>
-  screens[getCurrentRoute(state)];
+export const getCurrentPageComponent = (state: State) =>
+  pages[getCurrentRoute(state)];
 
 export const getCurrentRouteProductID = selectFromRoot(
   routes,

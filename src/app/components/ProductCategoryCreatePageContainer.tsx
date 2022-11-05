@@ -7,13 +7,13 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 import { ProductCategory } from '../../product-categories/types';
 import { State } from '../types';
 
-type ProductCategoryCreateScreenProps = {
+type ProductCategoryCreatePageProps = {
   onProductCategoryEdit?: (productCategory: ProductCategory) => void;
 };
 
-export function ProductCategoryCreateScreen({
+export function ProductCategoryCreatePage({
   onProductCategoryEdit,
-}: ProductCategoryCreateScreenProps) {
+}: ProductCategoryCreatePageProps) {
   return (
     <Page>
       <FullLayout>
@@ -26,25 +26,25 @@ export function ProductCategoryCreateScreen({
   );
 }
 
-type ProductCategoryCreateScreenContainerStateProps = Pick<
-  ProductCategoryCreateScreenProps,
+type ProductCategoryCreatePageContainerStateProps = Pick<
+  ProductCategoryCreatePageProps,
   never
 >;
 
-type ProductCategoryCreateScreenContainerDispatchProps = Required<
-  Pick<ProductCategoryCreateScreenProps, 'onProductCategoryEdit'>
+type ProductCategoryCreatePageContainerDispatchProps = Required<
+  Pick<ProductCategoryCreatePageProps, 'onProductCategoryEdit'>
 >;
 
-type ProductCategoryCreateScreenContainerOwnProps = Omit<
-  ProductCategoryCreateScreenProps,
-  | keyof ProductCategoryCreateScreenContainerStateProps
-  | keyof ProductCategoryCreateScreenContainerDispatchProps
+type ProductCategoryCreatePageContainerOwnProps = Omit<
+  ProductCategoryCreatePageProps,
+  | keyof ProductCategoryCreatePageContainerStateProps
+  | keyof ProductCategoryCreatePageContainerDispatchProps
 >;
 
-export const ProductCategoryCreateScreenContainer = connect<
-  ProductCategoryCreateScreenContainerStateProps,
-  ProductCategoryCreateScreenContainerDispatchProps,
-  ProductCategoryCreateScreenContainerOwnProps,
+export const ProductCategoryCreatePageContainer = connect<
+  ProductCategoryCreatePageContainerStateProps,
+  ProductCategoryCreatePageContainerDispatchProps,
+  ProductCategoryCreatePageContainerOwnProps,
   State
 >(null, dispatch => ({
   onProductCategoryEdit: productCategory =>
@@ -52,4 +52,4 @@ export const ProductCategoryCreateScreenContainer = connect<
       type: RoutesActionType.PRODUCTS,
       meta: { query: { productCategoryID: productCategory.id } },
     }),
-}))(ProductCategoryCreateScreen);
+}))(ProductCategoryCreatePage);

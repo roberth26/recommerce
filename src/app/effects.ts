@@ -102,7 +102,7 @@ export const productEditRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_EDIT),
     // TODO: after a product edit and a product receive, then redirect
-    // to product screen
+    // to product page
     mergeMap(({ payload: { productID } }: ReceivedActionMeta) =>
       merge(
         of(requestProduct({ productID }), requestProductCategories()),

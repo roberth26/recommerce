@@ -10,11 +10,11 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { SplitPane } from '../../utils/SplitPane';
 
-type UserScreenProps = {
+type UserPageProps = {
   userID: UserID | undefined | null;
 };
 
-export function UserScreen({ userID }: UserScreenProps) {
+export function UserPage({ userID }: UserPageProps) {
   return (
     <Page>
       <FullLayout>
@@ -34,20 +34,20 @@ export function UserScreen({ userID }: UserScreenProps) {
   );
 }
 
-type UserScreenContainerStateProps = Pick<UserScreenProps, 'userID'>;
+type UserPageContainerStateProps = Pick<UserPageProps, 'userID'>;
 
-type UserScreenContainerDispatchProps = Pick<UserScreenProps, never>;
+type UserPageContainerDispatchProps = Pick<UserPageProps, never>;
 
-type UserScreenContainerOwnProps = Omit<
-  UserScreenProps,
-  keyof UserScreenContainerStateProps | keyof UserScreenContainerDispatchProps
+type UserPageContainerOwnProps = Omit<
+  UserPageProps,
+  keyof UserPageContainerStateProps | keyof UserPageContainerDispatchProps
 >;
 
-export const UserScreenContainer = connect<
-  UserScreenContainerStateProps,
-  UserScreenContainerDispatchProps,
-  UserScreenContainerOwnProps,
+export const UserPageContainer = connect<
+  UserPageContainerStateProps,
+  UserPageContainerDispatchProps,
+  UserPageContainerOwnProps,
   State
 >(state => ({
   userID: getCurrentRouteUserID(state),
-}))(UserScreen);
+}))(UserPage);

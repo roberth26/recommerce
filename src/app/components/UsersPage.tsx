@@ -3,7 +3,7 @@ import { Page } from './Page';
 import { UserListContainer } from './UserListContainer';
 import { FullLayout } from './FullLayout';
 
-export function UsersScreen() {
+export function UsersPage() {
   return (
     <Page>
       <FullLayout>
