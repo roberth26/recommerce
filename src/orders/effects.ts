@@ -1,4 +1,4 @@
-import { from, EMPTY, of } from 'rxjs';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
@@ -20,9 +20,7 @@ export const requestOrdersEpic: Epic = action$ =>
     mergeMap(({ payload, meta }: RequestOrders) =>
       from(API.getOrders(payload?.userID)).pipe(
         mergeMap(res =>
-          res.error == null
-            ? of(receiveOrders({ orders: res.orders }, meta))
-            : EMPTY
+          res.error == null ? [receiveOrders({ orders: res.orders }, meta)] : []
         )
       )
     )
@@ -34,9 +32,7 @@ export const requestOrderEpic: Epic = action$ =>
     mergeMap(({ payload: { orderID }, meta }: RequestOrder) =>
       from(API.getOrder(orderID)).pipe(
         mergeMap(res =>
-          res.error == null
-            ? of(receiveOrder({ order: res.order }, meta))
-            : EMPTY
+          res.error == null ? [receiveOrder({ order: res.order }, meta)] : []
         )
       )
     )
@@ -48,9 +44,7 @@ export const createOrdersEpic: Epic = action$ =>
     mergeMap(({ payload: { order }, meta }: CreateOrder) =>
       from(API.createOrder(order)).pipe(
         mergeMap(res =>
-          res.error == null
-            ? of(receiveOrder({ order: res.order }, meta))
-            : EMPTY
+          res.error == null ? [receiveOrder({ order: res.order }, meta)] : []
         )
       )
     )
@@ -62,7 +56,7 @@ export const updateOrderEpic: Epic = action$ =>
     mergeMap(({ payload: { order }, meta }: UpdateOrder) =>
       from(API.updateOrder(order)).pipe(
         mergeMap(res =>
-          res.error == null ? of(receiveOrder({ order }, meta)) : EMPTY
+          res.error == null ? [receiveOrder({ order }, meta)] : []
         )
       )
     )
@@ -74,7 +68,7 @@ export const deleteOrdersEpic: Epic = action$ =>
     mergeMap(({ payload: { orderID }, meta }: DeleteOrder) =>
       from(API.deleteOrder(orderID)).pipe(
         mergeMap(res =>
-          res.error == null ? of(orderDeleted({ orderID }, meta)) : EMPTY
+          res.error == null ? [orderDeleted({ orderID }, meta)] : []
         )
       )
     )

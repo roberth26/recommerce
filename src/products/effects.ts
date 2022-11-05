@@ -1,4 +1,4 @@
-import { from, EMPTY, of } from 'rxjs';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
@@ -21,8 +21,8 @@ export const requestProductsEpic: Epic = action$ =>
       from(API.getProducts(payload?.productCategoryID)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(receiveProducts({ products: res.products }, meta))
-            : EMPTY
+            ? [receiveProducts({ products: res.products }, meta)]
+            : []
         )
       )
     )
@@ -35,8 +35,8 @@ export const requestProductEpic: Epic = action$ =>
       from(API.getProduct(productID)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(receiveProduct({ product: res.product }, meta))
-            : EMPTY
+            ? [receiveProduct({ product: res.product }, meta)]
+            : []
         )
       )
     )
@@ -49,8 +49,8 @@ export const createProductsEpic: Epic = action$ =>
       from(API.createProduct(product)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(receiveProduct({ product: res.product }, meta))
-            : EMPTY
+            ? [receiveProduct({ product: res.product }, meta)]
+            : []
         )
       )
     )
@@ -63,8 +63,8 @@ export const updateProductEpic: Epic = action$ =>
       from(API.updateProduct(product)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(receiveProduct({ product: res.product }, meta))
-            : EMPTY
+            ? [receiveProduct({ product: res.product }, meta)]
+            : []
         )
       )
     )
@@ -76,7 +76,7 @@ export const deleteProductsEpic: Epic = action$ =>
     mergeMap(({ payload: { productID }, meta }: DeleteProduct) =>
       from(API.deleteProduct(productID)).pipe(
         mergeMap(res =>
-          res.error == null ? of(productDeleted({ productID }, meta)) : EMPTY
+          res.error == null ? [productDeleted({ productID }, meta)] : []
         )
       )
     )

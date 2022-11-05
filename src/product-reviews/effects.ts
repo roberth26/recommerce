@@ -1,5 +1,5 @@
-import { from, EMPTY, of } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { from, EMPTY } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
   ActionType,
@@ -25,13 +25,13 @@ export const requestProductReviewsEpic: Epic = action$ =>
       ).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
+            ? [
                 receiveProductReviews(
                   { productReviews: res.productReviews },
                   meta
-                )
-              )
-            : EMPTY
+                ),
+              ]
+            : []
         )
       )
     )
@@ -44,10 +44,8 @@ export const requestProductReviewEpic: Epic = action$ =>
       from(API.getProductReview(productReviewID)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
-                receiveProductReview({ productReview: res.productReview }, meta)
-              )
-            : EMPTY
+            ? [receiveProductReview({ productReview: res.productReview }, meta)]
+            : []
         )
       )
     )
@@ -60,10 +58,8 @@ export const createProductReviewsEpic: Epic = action$ =>
       from(API.createProductReview(productReview)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
-                receiveProductReview({ productReview: res.productReview }, meta)
-              )
-            : EMPTY
+            ? [receiveProductReview({ productReview: res.productReview }, meta)]
+            : []
         )
       )
     )
@@ -76,10 +72,8 @@ export const updateProductReviewsEpic: Epic = action$ =>
       from(API.updateProductReview(productReview)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
-                receiveProductReview({ productReview: res.productReview }, meta)
-              )
-            : EMPTY
+            ? [receiveProductReview({ productReview: res.productReview }, meta)]
+            : []
         )
       )
     )
@@ -88,8 +82,8 @@ export const updateProductReviewsEpic: Epic = action$ =>
 export const deleteProductReviewsEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.DELETE_PRODUCT_REVIEW),
-    mergeMap(({ payload: { productReviewID } }: DeleteProductReview) =>
-      from(API.deleteProductReview(productReviewID)).pipe(mergeMap(() => EMPTY))
+    map(({ payload: { productReviewID } }: DeleteProductReview) =>
+      from(API.deleteProductReview(productReviewID)).pipe(map(() => EMPTY))
     )
   );
 

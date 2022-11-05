@@ -1,4 +1,4 @@
-import { from, EMPTY, of } from 'rxjs';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
@@ -20,9 +20,7 @@ export const requestUsersEpic: Epic = action$ =>
     mergeMap(({ meta }: RequestUsers) =>
       from(API.getUsers()).pipe(
         mergeMap(res =>
-          res.error == null
-            ? of(receiveUsers({ users: res.users }, meta))
-            : EMPTY
+          res.error == null ? [receiveUsers({ users: res.users }, meta)] : []
         )
       )
     )
@@ -34,7 +32,7 @@ export const requestUserEpic: Epic = action$ =>
     mergeMap(({ payload: { userID }, meta }: RequestUser) =>
       from(API.getUser(userID)).pipe(
         mergeMap(res =>
-          res.error == null ? of(receiveUser({ user: res.user }, meta)) : EMPTY
+          res.error == null ? [receiveUser({ user: res.user }, meta)] : []
         )
       )
     )
@@ -46,7 +44,7 @@ export const createUsersEpic: Epic = action$ =>
     mergeMap(({ payload: { user }, meta }: CreateUser) =>
       from(API.createUser(user)).pipe(
         mergeMap(res =>
-          res.error == null ? of(receiveUser({ user: res.user }, meta)) : EMPTY
+          res.error == null ? [receiveUser({ user: res.user }, meta)] : []
         )
       )
     )
@@ -58,7 +56,7 @@ export const updateUsersEpic: Epic = action$ =>
     mergeMap(({ payload: { user }, meta }: UpdateUser) =>
       from(API.updateUser(user)).pipe(
         mergeMap(res =>
-          res.error == null ? of(receiveUser({ user: res.user }, meta)) : EMPTY
+          res.error == null ? [receiveUser({ user: res.user }, meta)] : []
         )
       )
     )
@@ -70,7 +68,7 @@ export const deleteUsersEpic: Epic = action$ =>
     mergeMap(({ payload: { userID }, meta }: DeleteUser) =>
       from(API.deleteUser(userID)).pipe(
         mergeMap(res =>
-          res.error == null ? of(userDeleted({ userID }, meta)) : EMPTY
+          res.error == null ? [userDeleted({ userID }, meta)] : []
         )
       )
     )

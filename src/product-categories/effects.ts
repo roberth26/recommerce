@@ -1,4 +1,4 @@
-import { from, EMPTY, of } from 'rxjs';
+import { from } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
@@ -21,13 +21,13 @@ export const requestProductCategoriesEpic: Epic = action$ =>
       from(API.getProductCategories()).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
+            ? [
                 receiveProductCategories(
                   { productCategories: res.productCategories },
                   meta
-                )
-              )
-            : EMPTY
+                ),
+              ]
+            : []
         )
       )
     )
@@ -41,13 +41,13 @@ export const requestProductCategoryEpic: Epic = action$ =>
         from(API.getProductCategory(productCategoryID)).pipe(
           mergeMap(res =>
             res.error == null
-              ? of(
+              ? [
                   receiveProductCategory(
                     { productCategory: res.productCategory },
                     meta
-                  )
-                )
-              : EMPTY
+                  ),
+                ]
+              : []
           )
         )
     )
@@ -60,13 +60,13 @@ export const createProductCategoriesEpic: Epic = action$ =>
       from(API.createProductCategory(productCategory)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
+            ? [
                 receiveProductCategory(
                   { productCategory: res.productCategory },
                   meta
-                )
-              )
-            : EMPTY
+                ),
+              ]
+            : []
         )
       )
     )
@@ -79,13 +79,13 @@ export const updateProductCategoriesEpic: Epic = action$ =>
       from(API.updateProductCategory(productCategory)).pipe(
         mergeMap(res =>
           res.error == null
-            ? of(
+            ? [
                 receiveProductCategory(
                   { productCategory: res.productCategory },
                   meta
-                )
-              )
-            : EMPTY
+                ),
+              ]
+            : []
         )
       )
     )
@@ -99,8 +99,8 @@ export const deleteProductCategoriesEpic: Epic = action$ =>
         from(API.deleteProductCategory(productCategoryID)).pipe(
           mergeMap(res =>
             res.error == null
-              ? of(productCategoryDeleted({ productCategoryID }, meta))
-              : EMPTY
+              ? [productCategoryDeleted({ productCategoryID }, meta)]
+              : []
           )
         )
     )
