@@ -1,11 +1,11 @@
 import React, { HTMLAttributes, ReactNode } from 'react';
-import Link from 'redux-first-router-link';
 import { pipe, groupBy, entries } from 'lodash/fp';
 import { Order } from '../types';
 import { Product } from '../../products/types';
 import { User } from '../../users/types';
 import { ProductCategoryID } from '../../product-categories/types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
+import { NavLink } from '../../utils/NavLink';
 
 type OrderDetailProps = {
   order: Order<Product<ProductCategoryID>, User> | undefined | null;
@@ -39,11 +39,11 @@ export function OrderDetail({
         Delete
       </button>
       <h2>{new Date(order.createdAt).toDateString()}</h2>
-      <Link
+      <NavLink
         to={{ type: RoutesActionType.USER, payload: { userID: order.user.id } }}
       >
         {order.user.name}
-      </Link>
+      </NavLink>
       <div>{`${productsGrouped.length} product(s)`}</div>
       <List>
         {productsGrouped.map(

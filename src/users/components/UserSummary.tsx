@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from '../types';
-import Link from 'redux-first-router-link';
 import { ActionType as RoutesActionType } from '../../routes/actions';
+import { NavLink } from '../../utils/NavLink';
 
 type UserSummaryProps = {
   user: User | undefined | null;
@@ -14,9 +14,11 @@ export function UserSummary({ user }: UserSummaryProps) {
 
   return (
     <div>
-      <Link to={{ type: RoutesActionType.USER, payload: { userID: user.id } }}>
+      <NavLink
+        to={{ type: RoutesActionType.USER, payload: { userID: user.id } }}
+      >
         {user.name}
-      </Link>
+      </NavLink>
     </div>
   );
 }

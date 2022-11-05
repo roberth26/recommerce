@@ -1,6 +1,5 @@
 import React, { HTMLAttributes } from 'react';
 import { connect } from 'react-redux';
-import Link from 'redux-first-router-link';
 import { ProductListContainer } from './ProductListContainer';
 import { SidebarLayout } from './SidebarLayout';
 import { ProductCategoryListContainer } from './ProductCategoryListContainer';
@@ -10,6 +9,8 @@ import { State } from '../types';
 import { getCurrentProductCategory } from '../selectors';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { deleteProductCategory } from '../../product-categories/actions';
+import { NavLink } from '../../utils/NavLink';
+import { NavButton } from '../../utils/NavButton';
 
 type ProductsPageProps = {
   productCategory: ProductCategory | undefined | null;
@@ -28,9 +29,9 @@ export function ProductsPage({
             <ProductCategoryListContainer />
             <br />
             <br />
-            <Link to={{ type: RoutesActionType.PRODUCT_CATEGORY_CREATE }}>
+            <NavButton to={{ type: RoutesActionType.PRODUCT_CATEGORY_CREATE }}>
               Create Category
-            </Link>
+            </NavButton>
           </>
         }
         mainContent={
@@ -40,14 +41,14 @@ export function ProductsPage({
                 <h2>{productCategory?.name ?? 'All Products'}</h2>{' '}
                 {productCategory && (
                   <>
-                    <Link
+                    <NavLink
                       to={{
                         type: RoutesActionType.PRODUCT_CATEGORY_EDIT,
                         payload: { productCategoryID: productCategory.id },
                       }}
                     >
                       Edit Category
-                    </Link>
+                    </NavLink>
                     &nbsp; &nbsp;
                     <button
                       onClick={() => {
@@ -65,9 +66,9 @@ export function ProductsPage({
                   </>
                 )}
               </div>
-              <Link to={{ type: RoutesActionType.PRODUCT_CREATE }}>
+              <NavButton to={{ type: RoutesActionType.PRODUCT_CREATE }}>
                 Create Product
-              </Link>
+              </NavButton>
             </Header>
             <ProductListContainer productCategoryID={productCategory?.id} />
           </>

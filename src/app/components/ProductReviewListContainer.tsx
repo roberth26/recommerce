@@ -20,10 +20,8 @@ type ProductReviewListProps = {
 export function ProductReviewList({
   productReviewIDs,
 }: ProductReviewListProps) {
-  const [
-    editingProductReviewID,
-    setEditingProductReviewID,
-  ] = useState<ProductReviewID | null>(null);
+  const [editingProductReviewID, setEditingProductReviewID] =
+    useState<ProductReviewID | null>(null);
 
   if (productReviewIDs.length === 0) {
     return <div>No reviews</div>;
@@ -104,7 +102,8 @@ export const ProductReviewListContainer = connect<
 >((state, { productID, userID }) => ({
   productReviewIDs:
     productID != null
-      ? getProductReviewIDsByProductID(state, productID)
+      ? // TODO: these should be sorted by date
+        getProductReviewIDsByProductID(state, productID)
       : getProductReviewIDsByUserID(state, userID),
 }))(ProductReviewList);
 

@@ -1,5 +1,4 @@
 import React, { ReactNode, HTMLAttributes } from 'react';
-import Link from 'redux-first-router-link';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
@@ -11,12 +10,9 @@ export function Page({ children }: PageProps) {
   return (
     <Root>
       <Header>
-        <Link
-          to={{ type: RoutesActionType.PRODUCTS }}
-          style={{ textDecoration: 'none', color: 'inherit' }}
-        >
+        <NavLink to={{ type: RoutesActionType.PRODUCTS }}>
           <h1>Recommerce</h1>
-        </Link>
+        </NavLink>
         <nav>
           <NavList>
             <NavListItem>

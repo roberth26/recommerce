@@ -1,8 +1,8 @@
 import React, { ImgHTMLAttributes } from 'react';
-import Link from 'redux-first-router-link';
 import { Product } from '../types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { StarRating } from '../../utils/StarRating';
+import { NavLink } from '../../utils/NavLink';
 
 type ProductSummaryProps = {
   product: Product | undefined | null;
@@ -16,7 +16,7 @@ export function ProductSummary({ product }: ProductSummaryProps) {
   return (
     <article>
       <div>
-        <Link
+        <NavLink
           to={{
             type: RoutesActionType.PRODUCT,
             payload: { productID: product.id },
@@ -24,7 +24,7 @@ export function ProductSummary({ product }: ProductSummaryProps) {
         >
           <ProductImage src={product.imageURI} />
           {product.name}
-        </Link>
+        </NavLink>
       </div>
       <StarRating rating={product.rating} />
       <div>{`$${product.price}`}</div>

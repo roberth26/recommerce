@@ -10,11 +10,11 @@ type NavLinkProps = ReduxFirstRouterNavLinkProps;
 export function NavLink({ activeStyle, ...props }: NavLinkProps) {
   return (
     <ReduxFirstRouterNavLink
-      activeStyle={{
-        color: 'black',
+      style={{
         textDecoration: 'none',
-        ...activeStyle,
+        color: 'inherit',
       }}
+      activeStyle={{ fontWeight: 'bold', ...activeStyle }}
       {...props}
     />
   );

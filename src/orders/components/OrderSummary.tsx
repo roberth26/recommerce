@@ -1,10 +1,10 @@
 import React, { HTMLAttributes } from 'react';
-import Link from 'redux-first-router-link';
 import { uniq, pipe, map, size } from 'lodash/fp';
 import { Order } from '../types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { Product } from '../../products/types';
 import { User } from '../../users/types';
+import { NavLink } from '../../utils/NavLink';
 
 type OrderSummaryProps = {
   order: Order<Product, User> | undefined | null;
@@ -24,23 +24,23 @@ export function OrderSummary({ order }: OrderSummaryProps) {
   return (
     <Root>
       <Item>
-        <Link
+        <NavLink
           to={{ type: RoutesActionType.ORDER, payload: { orderID: order.id } }}
         >
           {new Date(order.createdAt).toDateString()}
-        </Link>
+        </NavLink>
       </Item>
       <Item>
-        <Link
+        <NavLink
           to={{ type: RoutesActionType.ORDER, payload: { orderID: order.id } }}
-        >{`${productsCount} product(s)`}</Link>
+        >{`${productsCount} product(s)`}</NavLink>
       </Item>
       <Item>
-        <Link
+        <NavLink
           to={{ type: RoutesActionType.ORDER, payload: { orderID: order.id } }}
         >
           {`Total: $${order.totalPrice}`}
-        </Link>
+        </NavLink>
       </Item>
     </Root>
   );

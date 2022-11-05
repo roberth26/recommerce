@@ -1,9 +1,9 @@
 import React from 'react';
-import Link from 'redux-first-router-link';
 import { ProductReview, ProductReviewProduct } from '../types';
 import { User } from '../../users/types';
 import { StarRating } from '../../utils/StarRating';
 import { ActionType as RoutesActionType } from '../../routes/actions';
+import { NavLink } from '../../utils/NavLink';
 
 type ProductReviewSummaryProps = {
   productReview: ProductReview<ProductReviewProduct, User> | undefined | null;
@@ -26,15 +26,17 @@ export function ProductReviewSummary({
     <div>
       <StarRating rating={productReview.rating} />
       <p>{productReview.body}</p>
-      <Link
+      <NavLink
         to={{
           type: RoutesActionType.USER,
           payload: { userID: productReview.user.id },
         }}
       >
         {productReview.user.name}
-      </Link>
+      </NavLink>
       <div>{new Date(productReview.createdAt).toDateString()}</div>
+      <button onClick={onEdit}>Edit</button>
+      &nbsp;&nbsp;
       <button
         onClick={() => {
           if (
@@ -48,7 +50,6 @@ export function ProductReviewSummary({
       >
         Delete
       </button>
-      <button onClick={onEdit}>Edit</button>
     </div>
   );
 }

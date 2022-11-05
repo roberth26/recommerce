@@ -1,8 +1,9 @@
 import React, { ImgHTMLAttributes } from 'react';
 import { Product } from '../types';
 import { ProductCategory } from '../../product-categories/types';
-import Link from 'redux-first-router-link';
 import { ActionType as RoutesActionType } from '../../routes/actions';
+import { NavLink } from '../../utils/NavLink';
+import { NavButton } from '../../utils/NavButton';
 
 type ProductDetailProps = {
   product: Product<ProductCategory> | undefined | null;
@@ -19,14 +20,14 @@ export function ProductDetail({
 
   return (
     <div>
-      <Link
+      <NavButton
         to={{
           type: RoutesActionType.PRODUCT_EDIT,
           payload: { productID: product.id },
         }}
       >
         Edit
-      </Link>
+      </NavButton>
       &nbsp; &nbsp;
       <button
         onClick={() => {
@@ -47,14 +48,14 @@ export function ProductDetail({
       {product.category == null ? (
         <div>None</div>
       ) : (
-        <Link
+        <NavLink
           to={{
             type: RoutesActionType.PRODUCTS,
             meta: { query: { productCategoryID: product.category.id } },
           }}
         >
           {product.category.name}
-        </Link>
+        </NavLink>
       )}
     </div>
   );
