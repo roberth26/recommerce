@@ -102,8 +102,13 @@ export const productRouteEpic: Epic = action$ =>
 export const productEditRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_EDIT),
+    // TODO: after a product edit and a product receive, then redirect
+    // to product screen
     mergeMap(({ payload: { productID } }: ReceivedActionMeta) =>
-      of(requestProduct({ productID }), requestProductCategories())
+      merge(
+        of(requestProduct({ productID }), requestProductCategories()),
+        action$.pipe(ofType())
+      )
     )
   );
 
@@ -175,10 +180,10 @@ export const productReviewsEpic: Epic = action$ =>
     ),
     // store related entities when receiving denormalized ProductReviews
     mergeMap((action: ReceiveProductReview | ReceiveProductReviews) => {
-      const users = (action.type ===
-      ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW
-        ? [action.payload.productReview]
-        : action.payload.productReviews
+      const users = (
+        action.type === ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW
+          ? [action.payload.productReview]
+          : action.payload.productReviews
       )
         .map(productReview => productReview.user)
         .filter(
@@ -186,10 +191,10 @@ export const productReviewsEpic: Epic = action$ =>
             typeof userOrUserID !== 'string'
         );
 
-      const products = (action.type ===
-      ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW
-        ? [action.payload.productReview]
-        : action.payload.productReviews
+      const products = (
+        action.type === ProductReviewsActionType.RECEIVE_PRODUCT_REVIEW
+          ? [action.payload.productReview]
+          : action.payload.productReviews
       )
         .map(productReview => productReview.product)
         .filter(
@@ -225,10 +230,10 @@ export const productsEpic: Epic = (action$, state$: StateObservable<State>) =>
       ),
       // store related entities when receiving denormalized Products
       mergeMap((action: ReceiveProduct | ReceiveProducts) => {
-        const productCategories = (action.type ===
-        ProductsActionType.RECEIVE_PRODUCT
-          ? [action.payload.product]
-          : action.payload.products
+        const productCategories = (
+          action.type === ProductsActionType.RECEIVE_PRODUCT
+            ? [action.payload.product]
+            : action.payload.products
         )
           .map(product => product.category)
           .filter(
@@ -271,17 +276,19 @@ export const ordersEpic: Epic = action$ =>
     ofType(OrdersActionType.RECEIVE_ORDER, OrdersActionType.RECEIVE_ORDERS),
     // store related entities when receiving denormalized Products
     mergeMap((action: ReceiveOrder | ReceiveOrders) => {
-      const products = (action.type === OrdersActionType.RECEIVE_ORDER
-        ? action.payload.order.products
-        : flatMap(order => order.products, action.payload.orders)
+      const products = (
+        action.type === OrdersActionType.RECEIVE_ORDER
+          ? action.payload.order.products
+          : flatMap(order => order.products, action.payload.orders)
       ).filter(
         (productOrProductID): productOrProductID is Product =>
           typeof productOrProductID !== 'string'
       );
 
-      const users = (action.type === OrdersActionType.RECEIVE_ORDER
-        ? [action.payload.order.user]
-        : action.payload.orders.flatMap(order => order.user)
+      const users = (
+        action.type === OrdersActionType.RECEIVE_ORDER
+          ? [action.payload.order.user]
+          : action.payload.orders.flatMap(order => order.user)
       ).filter(
         (userOrUserID): userOrUserID is User => typeof userOrUserID !== 'string'
       );

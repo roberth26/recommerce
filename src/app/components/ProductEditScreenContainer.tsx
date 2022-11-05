@@ -59,6 +59,7 @@ export const ProductEditScreenContainer = connect<
     productID: getCurrentRouteProductID(state),
   }),
   dispatch => ({
+    // TODO: handle this in app/effects
     onProductEdit: product =>
       dispatch({
         type: RoutesActionType.PRODUCT,
