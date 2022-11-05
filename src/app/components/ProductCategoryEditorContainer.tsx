@@ -33,8 +33,9 @@ type ProductCategoryEditorContainerOwnProps = Omit<
     productCategoryID?: ProductCategoryID | undefined;
   };
 
-type ProductCategoryEditorContainerMergeProps = ProductCategoryEditorContainerStateProps &
-  Required<Pick<ProductCategoryEditorProps, 'onProductCategoryEdit'>>;
+type ProductCategoryEditorContainerMergeProps =
+  ProductCategoryEditorContainerStateProps &
+    Required<Pick<ProductCategoryEditorProps, 'onProductCategoryEdit'>>;
 
 export const ProductCategoryEditorContainer = connect<
   ProductCategoryEditorContainerStateProps,

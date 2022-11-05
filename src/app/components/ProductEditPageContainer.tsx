@@ -6,7 +6,6 @@ import { getCurrentRouteProductID } from '../selectors';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductEditorContainer } from './ProductEditorContainer';
-import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductEditPageProps = {
   productID: ProductID | undefined | null;
@@ -39,9 +38,7 @@ type ProductEditPageContainerStateProps = Pick<
   'productID'
 >;
 
-type ProductEditPageContainerDispatchProps = Required<
-  Pick<ProductEditPageProps, 'onProductEdit'>
->;
+type ProductEditPageContainerDispatchProps = never;
 
 type ProductEditPageContainerOwnProps = Omit<
   ProductEditPageProps,
@@ -54,16 +51,6 @@ export const ProductEditPageContainer = connect<
   ProductEditPageContainerDispatchProps,
   ProductEditPageContainerOwnProps,
   State
->(
-  state => ({
-    productID: getCurrentRouteProductID(state),
-  }),
-  dispatch => ({
-    // TODO: handle this in app/effects
-    onProductEdit: product =>
-      dispatch({
-        type: RoutesActionType.PRODUCT,
-        payload: { productID: product.id },
-      }),
-  })
-)(ProductEditPage);
+>(state => ({
+  productID: getCurrentRouteProductID(state),
+}))(ProductEditPage);

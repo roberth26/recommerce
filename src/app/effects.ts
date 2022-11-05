@@ -34,6 +34,8 @@ import {
   receiveProductCategories,
   ActionType as ProductCategoriesActionType,
   ProductCategoryDeleted,
+  requestProductCategory,
+  ReceiveProductCategory,
 } from '../product-categories/actions';
 import {
   requestProductReviews,
@@ -101,12 +103,21 @@ export const productRouteEpic: Epic = action$ =>
 export const productEditRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_EDIT),
-    // TODO: after a product edit and a product receive, then redirect
-    // to product page
     mergeMap(({ payload: { productID } }: ReceivedActionMeta) =>
       merge(
         of(requestProduct({ productID }), requestProductCategories()),
-        action$.pipe(ofType())
+        action$.pipe(
+          ofType(ProductsActionType.UPDATE_PRODUCT),
+          take(1),
+          mergeMap(() =>
+            action$.pipe(ofType(ProductsActionType.RECEIVE_PRODUCT))
+          ),
+          take(1),
+          map(() => ({
+            type: RoutesActionType.PRODUCT,
+            payload: { productID },
+          }))
+        )
       )
     )
   );
@@ -115,6 +126,53 @@ export const productCreateRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_CREATE),
     map(() => requestProductCategories())
+  );
+
+export const productCategoryEditRouteEpic: Epic = action$ =>
+  action$.pipe(
+    ofType(RoutesActionType.PRODUCT_CATEGORY_EDIT),
+    mergeMap(({ payload: { productCategoryID } }: ReceivedActionMeta) =>
+      merge(
+        of(requestProductCategory({ productCategoryID })),
+        action$.pipe(
+          ofType(ProductCategoriesActionType.UPDATE_PRODUCT_CATEGORY),
+          take(1),
+          mergeMap(() =>
+            action$.pipe(
+              ofType(ProductCategoriesActionType.RECEIVE_PRODUCT_CATEGORY)
+            )
+          ),
+          take(1),
+          map(() => ({
+            type: RoutesActionType.PRODUCTS,
+            meta: { query: { productCategoryID } },
+          }))
+        )
+      )
+    )
+  );
+
+export const productCategoryCreateRouteEpic: Epic = action$ =>
+  action$.pipe(
+    ofType(RoutesActionType.PRODUCT_CATEGORY_CREATE),
+    mergeMap(() =>
+      merge(
+        action$.pipe(
+          ofType(ProductCategoriesActionType.CREATE_PRODUCT_CATEGORY),
+          take(1),
+          mergeMap(() =>
+            action$.pipe(
+              ofType(ProductCategoriesActionType.RECEIVE_PRODUCT_CATEGORY)
+            )
+          ),
+          take(1),
+          map(({ payload: { productCategory } }: ReceiveProductCategory) => ({
+            type: RoutesActionType.PRODUCTS,
+            meta: { query: { productCategoryID: productCategory.id } },
+          }))
+        )
+      )
+    )
   );
 
 export const ordersRouteEpic: Epic = action$ =>
@@ -303,6 +361,8 @@ export const epic = combineEpics(
   productRouteEpic,
   productEditRouteEpic,
   productCreateRouteEpic,
+  productCategoryEditRouteEpic,
+  productCategoryCreateRouteEpic,
   ordersRouteEpic,
   orderRouteEpic,
   usersRouteEpic,

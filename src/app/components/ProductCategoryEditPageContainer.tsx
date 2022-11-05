@@ -9,7 +9,6 @@ import { getCurrentRouteProductCategoryID } from '../selectors';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductCategoryEditorContainer } from './ProductCategoryEditorContainer';
-import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type ProductCategoryEditPageProps = {
   productCategoryID: ProductCategoryID | undefined | null;
@@ -42,9 +41,7 @@ type ProductCategoryEditPageContainerStateProps = Pick<
   'productCategoryID'
 >;
 
-type ProductCategoryEditPageContainerDispatchProps = Required<
-  Pick<ProductCategoryEditPageProps, 'onProductCategoryEdit'>
->;
+type ProductCategoryEditPageContainerDispatchProps = never;
 
 type ProductCategoryEditPageContainerOwnProps = Omit<
   ProductCategoryEditPageProps,
@@ -57,15 +54,6 @@ export const ProductCategoryEditPageContainer = connect<
   ProductCategoryEditPageContainerDispatchProps,
   ProductCategoryEditPageContainerOwnProps,
   State
->(
-  state => ({
-    productCategoryID: getCurrentRouteProductCategoryID(state),
-  }),
-  dispatch => ({
-    onProductCategoryEdit: productCategory =>
-      dispatch({
-        type: RoutesActionType.PRODUCTS,
-        meta: { query: { productCategoryID: productCategory.id } },
-      }),
-  })
-)(ProductCategoryEditPage);
+>(state => ({
+  productCategoryID: getCurrentRouteProductCategoryID(state),
+}))(ProductCategoryEditPage);

@@ -10,7 +10,7 @@ import { UsersPage } from './components/UsersPage';
 import { ProductEditPageContainer } from './components/ProductEditPageContainer';
 import { ProductCreatePageContainer } from './components/ProductCreatePageContainer';
 import { ProductCategoryEditPageContainer } from './components/ProductCategoryEditPageContainer';
-import { ProductCategoryCreatePageContainer } from './components/ProductCategoryCreatePageContainer';
+import { ProductCategoryCreatePage } from './components/ProductCategoryCreatePage';
 
 export const pages: Record<
   RoutesActionType | typeof NOT_FOUND,
@@ -21,8 +21,7 @@ export const pages: Record<
   [RoutesActionType.PRODUCT]: ProductPageContainer,
   [RoutesActionType.PRODUCT_EDIT]: ProductEditPageContainer,
   [RoutesActionType.PRODUCT_CATEGORY_EDIT]: ProductCategoryEditPageContainer,
-  [RoutesActionType.PRODUCT_CATEGORY_CREATE]:
-    ProductCategoryCreatePageContainer,
+  [RoutesActionType.PRODUCT_CATEGORY_CREATE]: ProductCategoryCreatePage,
   [RoutesActionType.ORDERS]: OrdersPage,
   [RoutesActionType.ORDER]: OrderPageContainer,
   [RoutesActionType.USERS]: UsersPage,
