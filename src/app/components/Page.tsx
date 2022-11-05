@@ -59,6 +59,7 @@ export function Root({ style, ...props }: HTMLAttributes<HTMLElement>) {
         display: 'grid',
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto 1fr',
+        fontFamily: 'system-ui',
         ...style,
       }}
       {...props}

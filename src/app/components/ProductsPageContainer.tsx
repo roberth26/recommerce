@@ -9,7 +9,6 @@ import { State } from '../types';
 import { getCurrentProductCategory } from '../selectors';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { deleteProductCategory } from '../../product-categories/actions';
-import { NavLink } from '../../utils/NavLink';
 import { NavButton } from '../../utils/NavButton';
 
 type ProductsPageProps = {
@@ -41,14 +40,14 @@ export function ProductsPage({
                 <h2>{productCategory?.name ?? 'All Products'}</h2>{' '}
                 {productCategory && (
                   <>
-                    <NavLink
+                    <NavButton
                       to={{
                         type: RoutesActionType.PRODUCT_CATEGORY_EDIT,
                         payload: { productCategoryID: productCategory.id },
                       }}
                     >
                       Edit Category
-                    </NavLink>
+                    </NavButton>
                     &nbsp; &nbsp;
                     <button
                       onClick={() => {
