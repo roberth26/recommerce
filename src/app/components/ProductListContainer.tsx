@@ -51,7 +51,7 @@ export function Root({ style, ...props }: HTMLAttributes<HTMLUListElement>) {
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        rowGap: 16,
+        gap: 24,
         listStyle: 'none',
         padding: 0,
         margin: 0,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { BaseHTMLAttributes } from 'react';
 import { ProductReview, ProductReviewProduct } from '../types';
 import { User } from '../../users/types';
 import { StarRating } from '../../utils/StarRating';
@@ -34,7 +34,12 @@ export function ProductReviewSummary({
       >
         {productReview.user.name}
       </NavLink>
-      <div>{new Date(productReview.createdAt).toDateString()}</div>
+      <br />
+      <CreationDate>
+        {new Date(productReview.createdAt).toDateString()}
+      </CreationDate>
+      <br />
+      <br />
       <button onClick={onEdit}>Edit</button>
       &nbsp;&nbsp;
       <button
@@ -51,5 +56,17 @@ export function ProductReviewSummary({
         Delete
       </button>
     </div>
+  );
+}
+
+function CreationDate({
+  children,
+  style,
+  ...props
+}: BaseHTMLAttributes<HTMLElement>) {
+  return (
+    <small style={{ ...style }} {...props}>
+      {children}
+    </small>
   );
 }

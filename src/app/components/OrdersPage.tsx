@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { Page } from './Page';
-import { OrderListContainer } from './OrderListContainer';
 import { FullLayout } from './FullLayout';
+import { OrdersTableContainer } from './OrdersTableContainer';
 
 export function OrdersPage() {
   return (
     <Page>
       <FullLayout>
         <h2>Orders</h2>
-        <OrderListContainer />
+        <OrdersTableContainer />
       </FullLayout>
     </Page>
   );

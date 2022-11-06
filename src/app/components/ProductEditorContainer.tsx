@@ -23,12 +23,12 @@ type ProductEditorContainerOwnProps = Omit<
   | keyof ProductEditorContainerStateProps
   | keyof ProductEditorContainerDispatchProps
 > &
-  Pick<ProductEditorProps, 'onProductEdit'> & {
+  Pick<ProductEditorProps, 'onProductEdit' | 'onCancel'> & {
     productID?: ProductID | undefined;
   };
 
 type ProductEditorContainerMergeProps = ProductEditorContainerStateProps &
-  Required<Pick<ProductEditorProps, 'onProductEdit'>>;
+  Required<Pick<ProductEditorProps, 'onProductEdit' | 'onCancel'>>;
 
 export const ProductEditorContainer = connect<
   ProductEditorContainerStateProps,
@@ -44,7 +44,7 @@ export const ProductEditorContainer = connect<
   dispatch => ({
     dispatch,
   }),
-  (stateProps, { dispatch }, { onProductEdit }) => ({
+  (stateProps, { dispatch }, { onProductEdit, onCancel }) => ({
     ...stateProps,
     onProductEdit: editedProduct => {
       const { product } = stateProps;
@@ -56,6 +56,9 @@ export const ProductEditorContainer = connect<
       } else {
         dispatch(createProduct({ product: editedProduct }));
       }
+    },
+    onCancel: () => {
+      onCancel?.();
     },
   })
 )(ProductEditor);

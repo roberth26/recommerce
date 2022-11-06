@@ -5,10 +5,10 @@ import { State } from '../types';
 import { getCurrentRouteUserID } from '../selectors';
 import { UserDetailContainer } from './UserDetailContainer';
 import { ProductReviewListContainer } from './ProductReviewListContainer';
-import { OrderListContainer } from './OrderListContainer';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { SplitPane } from '../../utils/SplitPane';
+import { OrdersTableContainer } from './OrdersTableContainer';
 
 type UserPageProps = {
   userID: UserID | undefined | null;
@@ -26,7 +26,7 @@ export function UserPage({ userID }: UserPageProps) {
           </div>
           <div>
             <h2>Orders</h2>
-            <OrderListContainer userID={userID} />
+            <OrdersTableContainer userID={userID} />
           </div>
         </SplitPane>
       </FullLayout>

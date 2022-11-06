@@ -23,6 +23,7 @@ type ProductReviewEditorProps = {
   onProductReviewEdit?: (
     productReview: ProductReview<ProductID, UserID>
   ) => void;
+  onCancel?: () => void;
 };
 
 export function ProductReviewEditor({
@@ -30,6 +31,7 @@ export function ProductReviewEditor({
   renderUserPicker,
   renderProductPicker,
   onProductReviewEdit,
+  onCancel,
 }: ProductReviewEditorProps) {
   const [state, setState] = useState<EditableProductReview>({
     body: productReview?.body ?? '',
@@ -109,6 +111,9 @@ export function ProductReviewEditor({
           ) : null}
         </Field>
       ))}
+      <br />
+      <button onClick={onCancel}>Cancel</button>
+      &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );

@@ -11,7 +11,7 @@ export function NavLink({ activeStyle, ...props }: NavLinkProps) {
   return (
     <ReduxFirstRouterNavLink
       style={{
-        textDecoration: 'none',
+        // textDecoration: 'none',
         color: 'inherit',
       }}
       activeStyle={{ fontWeight: 'bold', ...activeStyle }}

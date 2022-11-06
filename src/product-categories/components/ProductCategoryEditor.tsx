@@ -2,6 +2,8 @@ import React, { useState, ChangeEventHandler } from 'react';
 import { uuid } from 'uuidv4';
 import { ProductCategory } from '../types';
 import { Field } from '../../utils/Field';
+import { NavButton } from '../../utils/NavButton';
+import { ActionType as RoutesActionType } from '../../routes/actions';
 
 type EditableProductCategory = Pick<ProductCategory, 'name'>;
 
@@ -54,7 +56,19 @@ export function ProductCategoryEditor({
           ) : null}
         </Field>
       ))}
-      {/** TODO: add cancel button */}
+      <NavButton
+        to={{
+          type: RoutesActionType.PRODUCTS,
+          meta: {
+            query: {
+              productCategoryID: productCategory?.id,
+            },
+          },
+        }}
+      >
+        Cancel
+      </NavButton>
+      &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );

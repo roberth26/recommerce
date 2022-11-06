@@ -16,10 +16,11 @@ export function OrderSummary({ order }: OrderSummaryProps) {
   }
 
   const productsCount = pipe(
+    () => order.products,
     map((product: Product) => product.id),
     uniq,
     size
-  )(order.products);
+  )();
 
   return (
     <Root>

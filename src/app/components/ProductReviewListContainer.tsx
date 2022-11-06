@@ -27,7 +27,7 @@ export function ProductReviewList({
     return <div>No reviews</div>;
   }
 
-  const handleProductReviewEdit = () => {
+  const cancelProductReviewEdit = () => {
     setEditingProductReviewID(null);
   };
 
@@ -38,7 +38,8 @@ export function ProductReviewList({
           {productReviewID === editingProductReviewID ? (
             <ProductReviewEditorContainer
               productReviewID={productReviewID}
-              onProductReviewEdit={handleProductReviewEdit}
+              onProductReviewEdit={cancelProductReviewEdit}
+              onCancel={cancelProductReviewEdit}
               renderProductPicker={({ productID, onProductChange }) => (
                 <ProductPickerContainer
                   value={productID}

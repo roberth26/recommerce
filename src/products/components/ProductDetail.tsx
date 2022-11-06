@@ -53,6 +53,7 @@ export function ProductDetail({
             type: RoutesActionType.PRODUCTS,
             meta: { query: { productCategoryID: product.category.id } },
           }}
+          isActive={() => false}
         >
           {product.category.name}
         </NavLink>
@@ -61,8 +62,16 @@ export function ProductDetail({
   );
 }
 
-function ProductImage({ alt, ...props }: ImgHTMLAttributes<HTMLImageElement>) {
+function ProductImage({
+  alt,
+  style,
+  ...props
+}: ImgHTMLAttributes<HTMLImageElement>) {
   return (
-    <img style={{ display: 'inline-block', width: 128 }} alt={alt} {...props} />
+    <img
+      style={{ ...style, display: 'inline-block', width: 256 }}
+      alt={alt}
+      {...props}
+    />
   );
 }

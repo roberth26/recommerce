@@ -14,12 +14,14 @@ type ProductEditorProps = {
   product: Product<ProductCategory> | undefined | null;
   productCategories: Array<ProductCategory>;
   onProductEdit?: (product: Product<ProductCategory>) => void;
+  onCancel?: () => void;
 };
 
 export function ProductEditor({
   product,
   productCategories,
   onProductEdit,
+  onCancel,
 }: ProductEditorProps) {
   const [state, setState] = useState<EditableProduct>(
     getInitialState(product, productCategories)
@@ -104,6 +106,9 @@ export function ProductEditor({
           ) : null}
         </Field>
       ))}
+      <br />
+      <button onClick={onCancel}>Cancel</button>
+      &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );

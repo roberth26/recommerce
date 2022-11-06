@@ -20,7 +20,10 @@ type ProductReviewEditorContainerDispatchProps = Required<
 type ProductReviewEditorContainerOwnProps = Omit<
   ProductReviewEditorProps,
   | keyof ProductReviewEditorContainerStateProps
-  | keyof Omit<ProductReviewEditorContainerDispatchProps, 'onProductReviewEdit'>
+  | keyof Omit<
+      ProductReviewEditorContainerDispatchProps,
+      'onProductReviewEdit' | 'onCancel'
+    >
 > & {
   productReviewID: ProductReviewID | undefined | null;
 };
