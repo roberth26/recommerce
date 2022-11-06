@@ -3,11 +3,13 @@ import { ProductCategory } from '../types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
-interface ProductCategoryListProps {
+interface ProductCategoriesListProps {
   categories: ProductCategory[];
 }
 
-export function ProductCategoryList({ categories }: ProductCategoryListProps) {
+export function ProductCategoriesList({
+  categories,
+}: ProductCategoriesListProps) {
   return (
     <Root>
       {categories.map(category => (
@@ -16,11 +18,11 @@ export function ProductCategoryList({ categories }: ProductCategoryListProps) {
             to={{
               type: RoutesActionType.PRODUCTS,
               meta: {
-                query: { productCategoryID: category.id },
+                query: { productCategory: category.slug },
               },
             }}
             isActive={(_, { query }) =>
-              query?.productCategoryID === category.id
+              query?.productCategory === category.slug
             }
           >
             {category.name}

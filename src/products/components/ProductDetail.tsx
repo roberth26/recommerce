@@ -63,13 +63,22 @@ export function ProductDetail({
 }
 
 function ProductImage({
-  alt,
   style,
+  alt,
   ...props
 }: ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img
-      style={{ ...style, display: 'inline-block', width: 256 }}
+      style={{
+        display: 'block',
+        width: 256,
+        height: 256,
+        objectFit: 'cover',
+        objectPosition: 'center',
+        marginBottom: 4,
+        background: 'lightgrey',
+        ...style,
+      }}
       alt={alt}
       {...props}
     />

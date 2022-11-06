@@ -45,6 +45,11 @@ export const getCurrentRouteProductCategoryID = selectFromRoot(
   RoutesSelectors.getProductCategoryID
 );
 
+export const getCurrentRouteProductCategorySlug = selectFromRoot(
+  routes,
+  RoutesSelectors.getProductCategorySlug
+);
+
 export const getCurrentRouteUserID = selectFromRoot(
   routes,
   RoutesSelectors.getUserID
@@ -64,6 +69,11 @@ export const getProductCategories = selectFromRoot(
 export const getProductCategoryByID = selectFromRoot(
   productCategories,
   ProductCategoriesSelectors.getProductCategoryByID
+);
+
+export const getProductCategoryBySlug = selectFromRoot(
+  productCategories,
+  ProductCategoriesSelectors.getProductCategoryBySlug
 );
 
 // ProductReview selectors
@@ -275,7 +285,7 @@ export const getProductsByProductCategoryIDDenormalized = (
   )();
 
 export const getCurrentProductCategory = (state: State) =>
-  getProductCategoryByID(state, getCurrentRouteProductCategoryID(state));
+  getProductCategoryBySlug(state, getCurrentRouteProductCategorySlug(state));
 
 export const getOrderByIDDenormalized = (
   state: State,

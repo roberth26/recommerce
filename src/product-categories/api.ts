@@ -19,18 +19,37 @@ export async function getProductCategories(): Promise<
 }
 
 export async function getProductCategory(
-  productCategoryID: ProductCategoryID
+  params:
+    | {
+        productCategoryID: ProductCategoryID;
+        productCategorySlug?: never;
+      }
+    | {
+        productCategoryID?: never;
+        productCategorySlug: ProductCategory['slug'];
+      }
 ): Promise<
   | { productCategory: ProductCategory; error?: never }
   | { productCategory?: never; error: string }
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const productCategory = await DB.getProductCategory(productCategoryID);
+  const productCategory =
+    params.productCategoryID != null
+      ? await DB.getProductCategory(params.productCategoryID)
+      : await DB.getAllProductCategories().then(productCategories =>
+          productCategories.find(
+            productCategory =>
+              productCategory.slug === params.productCategorySlug
+          )
+        );
 
   if (productCategory == null) {
     return {
-      error: `ProductCategory id=${productCategoryID} not found`,
+      error:
+        params.productCategoryID != null
+          ? `ProductCategory id=${params.productCategoryID} not found`
+          : `ProductCategory slug=${params.productCategorySlug} not found`,
     };
   }
 

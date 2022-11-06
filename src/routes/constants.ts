@@ -4,11 +4,12 @@ import { State } from './types';
 import { ActionType } from './actions';
 
 const routeMap: Record<ActionType, string> = {
+  [ActionType.PRODUCT_CREATE]: '/products/create',
   [ActionType.PRODUCT]: '/products/:productID',
   [ActionType.PRODUCT_EDIT]: '/products/edit/:productID',
-  [ActionType.PRODUCT_CREATE]: '/create',
-  [ActionType.PRODUCT_CATEGORY_EDIT]: '/categories/edit/:productCategoryID',
-  [ActionType.PRODUCT_CATEGORY_CREATE]: '/categories/create',
+  [ActionType.PRODUCT_CATEGORY_EDIT]:
+    '/product-categories/edit/:productCategoryID',
+  [ActionType.PRODUCT_CATEGORY_CREATE]: '/product-categories/create',
   [ActionType.PRODUCTS]: '/',
   [ActionType.ORDER]: '/orders/:orderID',
   [ActionType.ORDERS]: '/orders/',

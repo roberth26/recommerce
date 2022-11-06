@@ -1,5 +1,8 @@
 import { ProductID, Product } from './types';
-import { ProductCategoryID } from '../product-categories/types';
+import {
+  ProductCategory,
+  ProductCategoryID,
+} from '../product-categories/types';
 
 export enum ActionType {
   REQUEST_PRODUCTS = '@@products/REQUEST_PRODUCTS',
@@ -16,6 +19,7 @@ export interface RequestProducts {
   type: ActionType.REQUEST_PRODUCTS;
   payload?: {
     productCategoryID?: ProductCategoryID | null;
+    productCategorySlug?: ProductCategory['slug'] | null;
   };
   meta?: {
     id: string;

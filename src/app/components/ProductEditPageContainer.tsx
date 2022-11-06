@@ -75,12 +75,13 @@ export const ProductEditPageContainer = connect<
   }),
   (stateProps, { dispatch }) => ({
     ...stateProps,
-    onCancel: () =>
+    onCancel: () => {
       dispatch({
         type: RoutesActionType.PRODUCT,
         payload: {
           productID: stateProps.productID,
         },
-      }),
+      });
+    },
   })
 )(ProductEditPage);

@@ -1,6 +1,15 @@
 import { Reducer } from 'redux';
-import { pipe, map, uniq, omit, without, keyBy, concat } from 'lodash/fp';
-import { State, ProductCategory } from './types';
+import {
+  pipe,
+  map,
+  omit,
+  without,
+  keyBy,
+  mapValues,
+  invert,
+  union,
+} from 'lodash/fp';
+import { State } from './types';
 import { AnyAction, ActionType } from './actions';
 import { initialState } from './constants';
 
@@ -10,65 +19,47 @@ export const reducer: Reducer<State, AnyAction> = (
 ) => {
   switch (action.type) {
     case ActionType.CREATE_PRODUCT_CATEGORY:
-      return {
-        ...state,
-        byID: {
-          ...state.byID,
-          [action.payload.productCategory.id]: action.payload.productCategory,
-        },
-        allIDs: uniq([...state.allIDs, action.payload.productCategory.id]),
-      };
-
-    case ActionType.PRODUCT_CATEGORY_DELETED:
-      return {
-        ...state,
-        byID: omit(action.payload.productCategoryID, state.byID),
-        allIDs: without([action.payload.productCategoryID], state.allIDs),
-      };
-
-    case ActionType.RECEIVE_PRODUCT_CATEGORIES:
-      return {
-        ...state,
-        byID: {
-          ...state.byID,
-          ...keyBy(
-            productCategory => productCategory.id,
-            action.payload.productCategories
-          ),
-        },
-        allIDs: pipe(
-          map((productCategory: ProductCategory) => productCategory.id),
-          concat(state.allIDs),
-          uniq
-        )(action.payload.productCategories),
-      };
-
+    case ActionType.UPDATE_PRODUCT_CATEGORY:
     case ActionType.RECEIVE_PRODUCT_CATEGORY:
-      return {
-        ...state,
-        byID: {
-          ...state.byID,
-          [action.payload.productCategory.id]: action.payload.productCategory,
-        },
-        allIDs: uniq([...state.allIDs, action.payload.productCategory.id]),
+    case ActionType.RECEIVE_PRODUCT_CATEGORIES: {
+      const productCategories =
+        action.type === ActionType.RECEIVE_PRODUCT_CATEGORIES
+          ? action.payload.productCategories
+          : [action.payload.productCategory];
+      const byID: State['byID'] = {
+        ...state.byID,
+        ...keyBy(productCategory => productCategory.id, productCategories),
       };
 
-    case ActionType.UPDATE_PRODUCT_CATEGORY: {
-      const prevProductCategory = state.byID[action.payload.productCategory.id];
+      return {
+        ...state,
+        byID,
+        idsBySlug: pipe(
+          () => byID,
+          mapValues(productCategory => productCategory?.slug),
+          invert
+        )(),
+        allIDs: pipe(
+          () => productCategories,
+          map(productCategory => productCategory.id),
+          union(state.allIDs)
+        )(),
+      };
+    }
 
-      if (prevProductCategory == null) {
+    case ActionType.PRODUCT_CATEGORY_DELETED: {
+      const productCategorySlug =
+        state.byID[action.payload.productCategory.id]?.slug;
+
+      if (productCategorySlug == null) {
         return state;
       }
 
       return {
         ...state,
-        byID: {
-          ...state.byID,
-          [action.payload.productCategory.id]: {
-            ...prevProductCategory,
-            ...action.payload.productCategory,
-          },
-        },
+        byID: omit(action.payload.productCategory.id, state.byID),
+        idsBySlug: omit(productCategorySlug, state.idsBySlug),
+        allIDs: without([action.payload.productCategory.id], state.allIDs),
       };
     }
 

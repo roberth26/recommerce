@@ -42,7 +42,7 @@ export function OrderDetail({
       <NavLink
         to={{ type: RoutesActionType.USER, payload: { userID: order.user.id } }}
       >
-        {order.user.name}
+        {order.user.fullName}
       </NavLink>
       <div>{`${productsGrouped.length} product(s)`}</div>
       <List>

@@ -96,7 +96,7 @@ const COLUMNS = Array.of<TableColumn<Order, ColumnKey>>(
           },
         }}
       >
-        {(user as User).name}
+        {(user as User).username}
       </NavLink>
     ),
     headerProps: {

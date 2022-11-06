@@ -6,11 +6,11 @@ import { State } from '../types';
 import { getProductIDsByProductCategoryID, getProductIDs } from '../selectors';
 import { ProductCategoryID } from '../../product-categories/types';
 
-interface ProductListProps {
+interface ProductsListProps {
   productIDs: Array<ProductID>;
 }
 
-export function ProductList({ productIDs }: ProductListProps) {
+export function ProductsList({ productIDs }: ProductsListProps) {
   return (
     <Root>
       {productIDs.map(productID => (
@@ -22,28 +22,29 @@ export function ProductList({ productIDs }: ProductListProps) {
   );
 }
 
-type ProductListContainerStateProps = Pick<ProductListProps, 'productIDs'>;
+type ProductsListContainerStateProps = Pick<ProductsListProps, 'productIDs'>;
 
-type ProductListContainerDispatchProps = Pick<ProductListProps, never>;
+type ProductsListContainerDispatchProps = Pick<ProductsListProps, never>;
 
-type ProductListContainerOwnProps = Omit<
-  ProductListProps,
-  keyof ProductListContainerStateProps | keyof ProductListContainerDispatchProps
+type ProductsListContainerOwnProps = Omit<
+  ProductsListProps,
+  | keyof ProductsListContainerStateProps
+  | keyof ProductsListContainerDispatchProps
 > & {
   productCategoryID?: ProductCategoryID | null;
 };
 
-export const ProductListContainer = connect<
-  ProductListContainerStateProps,
-  ProductListContainerDispatchProps,
-  ProductListContainerOwnProps,
+export const ProductsListContainer = connect<
+  ProductsListContainerStateProps,
+  ProductsListContainerDispatchProps,
+  ProductsListContainerOwnProps,
   State
 >((state, { productCategoryID }) => ({
   productIDs:
     productCategoryID != null
       ? getProductIDsByProductCategoryID(state, productCategoryID)
       : getProductIDs(state),
-}))(ProductList);
+}))(ProductsList);
 
 export function Root({ style, ...props }: HTMLAttributes<HTMLUListElement>) {
   return (

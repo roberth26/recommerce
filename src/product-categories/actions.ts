@@ -29,9 +29,15 @@ export function requestProductCategories(
 
 export interface RequestProductCategory {
   type: ActionType.REQUEST_PRODUCT_CATEGORY;
-  payload: {
-    productCategoryID: ProductCategoryID;
-  };
+  payload:
+    | {
+        productCategoryID: ProductCategoryID;
+        productCategorySlug?: never;
+      }
+    | {
+        productCategoryID?: never;
+        productCategorySlug: ProductCategory['slug'];
+      };
   meta?: {
     id: string;
   };
@@ -135,7 +141,7 @@ export function updateProductCategory(
 export interface DeleteProductCategory {
   type: ActionType.DELETE_PRODUCT_CATEGORY;
   payload: {
-    productCategoryID: ProductCategoryID;
+    productCategory: ProductCategory;
   };
   meta?: {
     id: string;
@@ -156,7 +162,7 @@ export function deleteProductCategory(
 export interface ProductCategoryDeleted {
   type: ActionType.PRODUCT_CATEGORY_DELETED;
   payload: {
-    productCategoryID: ProductCategoryID;
+    productCategory: ProductCategory;
   };
   meta?: {
     id: string;

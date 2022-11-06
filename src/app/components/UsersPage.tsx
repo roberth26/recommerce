@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from './Page';
-import { UserListContainer } from './UserListContainer';
+import { UsersTableContainer } from './UsersTableContainer';
 import { FullLayout } from './FullLayout';
 
 export function UsersPage() {
@@ -8,8 +8,7 @@ export function UsersPage() {
     <Page>
       <FullLayout>
         <h2>Users</h2>
-        {/** TODO: build users table */}
-        <UserListContainer />
+        <UsersTableContainer />
       </FullLayout>
     </Page>
   );

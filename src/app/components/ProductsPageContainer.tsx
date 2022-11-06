@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from 'react';
 import { connect } from 'react-redux';
-import { ProductListContainer } from './ProductListContainer';
+import { ProductsListContainer } from './ProductsListContainer';
 import { SidebarLayout } from './SidebarLayout';
-import { ProductCategoryListContainer } from './ProductCategoryListContainer';
+import { ProductCategoriesListContainer } from './ProductCategoriesListContainer';
 import { Page } from './Page';
 import { ProductCategory } from '../../product-categories/types';
 import { State } from '../types';
@@ -25,7 +25,7 @@ export function ProductsPage({
       <SidebarLayout
         sidebarContent={
           <>
-            <ProductCategoryListContainer />
+            <ProductCategoriesListContainer />
             <br />
             <br />
             <NavButton to={{ type: RoutesActionType.PRODUCT_CATEGORY_CREATE }}>
@@ -69,7 +69,7 @@ export function ProductsPage({
                 Create Product
               </NavButton>
             </Header>
-            <ProductListContainer productCategoryID={productCategory?.id} />
+            <ProductsListContainer productCategoryID={productCategory?.id} />
           </>
         }
       />
@@ -103,9 +103,7 @@ export const ProductsPageContainer = connect<
   }),
   dispatch => ({
     onProductCategoryDelete: productCategory =>
-      dispatch(
-        deleteProductCategory({ productCategoryID: productCategory.id })
-      ),
+      dispatch(deleteProductCategory({ productCategory })),
   })
 )(ProductsPage);
 

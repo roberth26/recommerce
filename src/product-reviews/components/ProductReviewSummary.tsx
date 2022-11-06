@@ -32,7 +32,7 @@ export function ProductReviewSummary({
           payload: { userID: productReview.user.id },
         }}
       >
-        {productReview.user.name}
+        {productReview.user.fullName}
       </NavLink>
       <br />
       <CreationDate>

@@ -1,5 +1,5 @@
 import { from, EMPTY } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ofType, Epic, combineEpics } from 'redux-observable';
 import {
   ActionType,
@@ -82,8 +82,8 @@ export const updateProductReviewsEpic: Epic = action$ =>
 export const deleteProductReviewsEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.DELETE_PRODUCT_REVIEW),
-    map(({ payload: { productReviewID } }: DeleteProductReview) =>
-      from(API.deleteProductReview(productReviewID)).pipe(map(() => EMPTY))
+    mergeMap(({ payload: { productReviewID } }: DeleteProductReview) =>
+      from(API.deleteProductReview(productReviewID)).pipe(mergeMap(() => EMPTY))
     )
   );
 

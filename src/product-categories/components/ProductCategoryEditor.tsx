@@ -1,11 +1,11 @@
-import React, { useState, ChangeEventHandler } from 'react';
+import React, { useState, ChangeEventHandler, useEffect } from 'react';
 import { uuid } from 'uuidv4';
 import { ProductCategory } from '../types';
 import { Field } from '../../utils/Field';
 import { NavButton } from '../../utils/NavButton';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 
-type EditableProductCategory = Pick<ProductCategory, 'name'>;
+type EditableProductCategory = Pick<ProductCategory, 'name' | 'slug'>;
 
 type ProductCategoryEditorProps = {
   productCategory?: ProductCategory | null;
@@ -16,9 +16,13 @@ export function ProductCategoryEditor({
   productCategory,
   onProductCategoryEdit,
 }: ProductCategoryEditorProps) {
-  const [state, setState] = useState<EditableProductCategory>({
-    name: productCategory?.name ?? '',
-  });
+  const [state, setState] = useState<EditableProductCategory>(
+    getInitialState(productCategory)
+  );
+  useEffect(() => {
+    setState(getInitialState(productCategory));
+  }, [productCategory]);
+
   const isEdit = productCategory != null;
   const handleChange =
     (
@@ -47,13 +51,20 @@ export function ProductCategoryEditor({
       {Object.entries(state).map(([key, value]) => (
         <Field key={key}>
           <label htmlFor={key}>{key}</label>
-          {key === 'name' ? (
+          {key === 'name' && (
             <input
               id={key}
               value={value as string}
               onChange={handleChange('name')}
             />
-          ) : null}
+          )}
+          {key === 'slug' && (
+            <input
+              id={key}
+              value={value as string}
+              onChange={handleChange('slug')}
+            />
+          )}
         </Field>
       ))}
       <NavButton
@@ -61,7 +72,7 @@ export function ProductCategoryEditor({
           type: RoutesActionType.PRODUCTS,
           meta: {
             query: {
-              productCategoryID: productCategory?.id,
+              productCategory: productCategory?.slug,
             },
           },
         }}
@@ -72,4 +83,13 @@ export function ProductCategoryEditor({
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );
+}
+
+function getInitialState(
+  productCategory: ProductCategory | undefined | null
+): EditableProductCategory {
+  return {
+    name: productCategory?.name ?? '',
+    slug: productCategory?.slug ?? '',
+  };
 }

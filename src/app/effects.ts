@@ -48,6 +48,7 @@ import { User } from '../users/types';
 import { Product } from '../products/types';
 import { ProductCategory } from '../product-categories/types';
 import { State } from './types';
+import { getProductCategoryByID } from './selectors';
 
 export const productsRouteEpic: Epic = action$ =>
   action$.pipe(
@@ -56,7 +57,7 @@ export const productsRouteEpic: Epic = action$ =>
       merge(
         of(
           requestProducts({
-            productCategoryID: meta?.query?.productCategoryID,
+            productCategorySlug: meta?.query?.productCategory,
           }),
           requestProductCategories()
         ),
@@ -65,9 +66,9 @@ export const productsRouteEpic: Epic = action$ =>
           take(1),
           mergeMap(
             ({
-              payload: { productCategoryID: deletedProductCategoryID },
+              payload: { productCategory: deletedProductCategory },
             }: ProductCategoryDeleted) =>
-              deletedProductCategoryID === meta?.query?.productCategoryID
+              deletedProductCategory.slug === meta?.query?.productCategory
                 ? [{ type: RoutesActionType.PRODUCTS }]
                 : []
           )
@@ -122,7 +123,7 @@ export const productEditRouteEpic: Epic = action$ =>
     )
   );
 
-export const productCreateRouteEpic: Epic = action$ =>
+export const productCreateRouteEpic: Epic = (action$, state$) =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT_CREATE),
     mergeMap(() =>
@@ -138,16 +139,27 @@ export const productCreateRouteEpic: Epic = action$ =>
           map(
             ({
               payload: {
-                product: { category: productCategoryID },
+                product: { category },
               },
-            }: ReceiveProduct) => ({
-              type: RoutesActionType.PRODUCTS,
-              meta: {
-                query: {
-                  productCategoryID,
-                },
-              },
-            })
+            }: ReceiveProduct) => {
+              const productCategorySlug = (
+                category == null
+                  ? null
+                  : typeof category === 'string'
+                  ? getProductCategoryByID(state$.value, category)
+                  : category
+              )?.slug;
+              return {
+                type: RoutesActionType.PRODUCTS,
+                ...(productCategorySlug && {
+                  meta: {
+                    query: {
+                      productCategory: productCategorySlug,
+                    },
+                  },
+                }),
+              };
+            }
           )
         )
       )
@@ -169,9 +181,9 @@ export const productCategoryEditRouteEpic: Epic = action$ =>
             )
           ),
           take(1),
-          map(() => ({
+          map(({ payload: { productCategory } }: ReceiveProductCategory) => ({
             type: RoutesActionType.PRODUCTS,
-            meta: { query: { productCategoryID } },
+            meta: { query: { productCategory: productCategory.slug } },
           }))
         )
       )
@@ -194,7 +206,7 @@ export const productCategoryCreateRouteEpic: Epic = action$ =>
           take(1),
           map(({ payload: { productCategory } }: ReceiveProductCategory) => ({
             type: RoutesActionType.PRODUCTS,
-            meta: { query: { productCategoryID: productCategory.id } },
+            meta: { query: { productCategory: productCategory.slug } },
           }))
         )
       )

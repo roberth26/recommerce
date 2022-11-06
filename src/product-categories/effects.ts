@@ -36,20 +36,19 @@ export const requestProductCategoriesEpic: Epic = action$ =>
 export const requestProductCategoryEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.REQUEST_PRODUCT_CATEGORY),
-    mergeMap(
-      ({ payload: { productCategoryID }, meta }: RequestProductCategory) =>
-        from(API.getProductCategory(productCategoryID)).pipe(
-          mergeMap(res =>
-            res.error == null
-              ? [
-                  receiveProductCategory(
-                    { productCategory: res.productCategory },
-                    meta
-                  ),
-                ]
-              : []
-          )
+    mergeMap(({ payload: queryParams, meta }: RequestProductCategory) =>
+      from(API.getProductCategory(queryParams)).pipe(
+        mergeMap(res =>
+          res.error == null
+            ? [
+                receiveProductCategory(
+                  { productCategory: res.productCategory },
+                  meta
+                ),
+              ]
+            : []
         )
+      )
     )
   );
 
@@ -94,15 +93,14 @@ export const updateProductCategoriesEpic: Epic = action$ =>
 export const deleteProductCategoriesEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.DELETE_PRODUCT_CATEGORY),
-    mergeMap(
-      ({ payload: { productCategoryID }, meta }: DeleteProductCategory) =>
-        from(API.deleteProductCategory(productCategoryID)).pipe(
-          mergeMap(res =>
-            res.error == null
-              ? [productCategoryDeleted({ productCategoryID }, meta)]
-              : []
-          )
+    mergeMap(({ payload: { productCategory }, meta }: DeleteProductCategory) =>
+      from(API.deleteProductCategory(productCategory.id)).pipe(
+        mergeMap(res =>
+          res.error == null
+            ? [productCategoryDeleted({ productCategory }, meta)]
+            : []
         )
+      )
     )
   );
 

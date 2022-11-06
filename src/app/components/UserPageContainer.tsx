@@ -7,7 +7,6 @@ import { UserDetailContainer } from './UserDetailContainer';
 import { ProductReviewListContainer } from './ProductReviewListContainer';
 import { Page } from './Page';
 import { FullLayout } from './FullLayout';
-import { SplitPane } from '../../utils/SplitPane';
 import { OrdersTableContainer } from './OrdersTableContainer';
 
 const ORDERS_TABLE_EXCLUDED_COLUMN_KEYS =
@@ -26,19 +25,13 @@ export function UserPage({ userID }: UserPageProps) {
     <Page>
       <FullLayout>
         <UserDetailContainer userID={userID} />
-        <SplitPane>
-          <div>
-            <h2>Reviews</h2>
-            <ProductReviewListContainer userID={userID} />
-          </div>
-          <div>
-            <h2>Orders</h2>
-            <OrdersTableContainer
-              userID={userID}
-              excludeColumnKeys={ORDERS_TABLE_EXCLUDED_COLUMN_KEYS}
-            />
-          </div>
-        </SplitPane>
+        <h3>Orders</h3>
+        <OrdersTableContainer
+          userID={userID}
+          excludeColumnKeys={ORDERS_TABLE_EXCLUDED_COLUMN_KEYS}
+        />
+        <h3>Reviews</h3>
+        <ProductReviewListContainer userID={userID} />
       </FullLayout>
     </Page>
   );

@@ -37,7 +37,7 @@ export const reducer: Reducer<State, AnyAction> = (
 
       const allIDs: typeof state['allIDs'] = pipe(
         values,
-        sortBy<User>(user => user.name),
+        sortBy<User>(user => user.fullName),
         map(user => user.id)
       )(byID);
 
@@ -59,7 +59,7 @@ export const reducer: Reducer<State, AnyAction> = (
           values,
           concat(action.payload.users),
           uniqBy(user => user.id),
-          sortBy(user => user.name),
+          sortBy(user => user.fullName),
           map(user => user.id)
         )(state.byID),
       };

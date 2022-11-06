@@ -117,10 +117,14 @@ export function generateProductReviews(
 export function generateProductCategories(): Array<ProductCategory> {
   return pipe(
     () => Math.floor(Math.random() * 10 + 10),
-    times<ProductCategory>(() => ({
-      id: uuid(),
-      name: Faker.commerce.department(),
-    })),
+    times<ProductCategory>(() => {
+      const name = Faker.commerce.department();
+      return {
+        id: uuid(),
+        name,
+        slug: name.replace(/ /g, '-').toLowerCase(),
+      };
+    }),
     uniqBy(productCategory => productCategory.name)
   )();
 }
@@ -149,10 +153,23 @@ export function generateProducts(
 export function generateUsers(): Array<User> {
   return Array.from(new Array(50))
     .fill(null)
-    .map<User>(() => ({
-      id: uuid(),
-      name: `${Faker.name.firstName()} ${Faker.name.lastName()}`,
-    }));
+    .map<User>(() => {
+      const firstName = Faker.name.firstName();
+      const lastName = Faker.name.lastName();
+      return {
+        id: uuid(),
+        username: `${firstName
+          .replace(/'/g, '')
+          .replace(/-/g, '')
+          .charAt(0)
+          .toLowerCase()}${lastName
+          .replace(/'/g, '')
+          .replace(/-/g, '')
+          .toLowerCase()}`,
+        fullName: `${firstName} ${lastName}`,
+        email: Faker.internet.email(),
+      };
+    });
 }
 
 export async function populateStore(

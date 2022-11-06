@@ -2,14 +2,18 @@ import { NOT_FOUND } from 'redux-first-router';
 import { ProductID } from '../products/types';
 import { OrderID } from '../orders/types';
 import { UserID } from '../users/types';
-import { ProductCategoryID } from '../product-categories/types';
+import {
+  ProductCategory,
+  ProductCategoryID,
+} from '../product-categories/types';
 import { ActionType } from './actions';
 
 export type State =
   | {
       currentRoute: ActionType.PRODUCTS;
       productID?: never;
-      productCategoryID?: ProductCategoryID;
+      productCategoryID?: never;
+      productCategorySlug?: ProductCategory['slug'];
       orderID?: never;
       userID?: never;
     }
@@ -17,6 +21,7 @@ export type State =
       currentRoute: ActionType.PRODUCT;
       productID: ProductID;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -24,6 +29,7 @@ export type State =
       currentRoute: ActionType.PRODUCT_EDIT;
       productID: ProductID;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -31,6 +37,7 @@ export type State =
       currentRoute: ActionType.PRODUCT_CREATE;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -38,6 +45,7 @@ export type State =
       currentRoute: ActionType.PRODUCT_CATEGORY_EDIT;
       productID?: never;
       productCategoryID: ProductCategoryID;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -45,6 +53,7 @@ export type State =
       currentRoute: ActionType.PRODUCT_CATEGORY_CREATE;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -52,6 +61,7 @@ export type State =
       currentRoute: ActionType.ORDERS;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -59,6 +69,7 @@ export type State =
       currentRoute: ActionType.ORDER;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID: OrderID;
       userID?: never;
     }
@@ -66,6 +77,7 @@ export type State =
       currentRoute: ActionType.USERS;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     }
@@ -73,6 +85,7 @@ export type State =
       currentRoute: ActionType.USER;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID: UserID;
     }
@@ -80,6 +93,7 @@ export type State =
       currentRoute: typeof NOT_FOUND;
       productID?: never;
       productCategoryID?: never;
+      productCategorySlug?: never;
       orderID?: never;
       userID?: never;
     };

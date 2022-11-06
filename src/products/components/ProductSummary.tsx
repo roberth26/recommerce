@@ -45,7 +45,16 @@ function ProductImage({
 }: ImgHTMLAttributes<HTMLImageElement>) {
   return (
     <img
-      style={{ display: 'block', width: 128, marginBottom: 4, ...style }}
+      style={{
+        display: 'block',
+        width: 128,
+        height: 128,
+        objectFit: 'cover',
+        objectPosition: 'center',
+        marginBottom: 4,
+        background: 'lightgrey',
+        ...style,
+      }}
       alt={alt}
       {...props}
     />

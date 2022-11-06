@@ -2,7 +2,9 @@ export type UserID = string;
 
 export interface User {
   id: UserID;
-  name: string;
+  username: string;
+  fullName: string;
+  email: string;
 }
 
 export interface State {

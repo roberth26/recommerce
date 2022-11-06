@@ -12,7 +12,7 @@ export const reducer: Reducer<State, ReceivedActionMeta> = (
     case ActionType.PRODUCTS:
       return {
         currentRoute: action.type,
-        productCategoryID: action.meta.query?.productCategoryID,
+        productCategorySlug: action.meta.query?.productCategory,
       };
 
     case ActionType.PRODUCT:
