@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { NavLink } from '../../utils/NavLink';
 import { Table, TableColumn } from '../../utils/Table';
 import { ActionType as RoutesActionType } from '../../routes/actions';
@@ -6,13 +6,17 @@ import { Order, OrderProduct } from '../types';
 import { map, pipe, size, uniq } from 'lodash/fp';
 import { User } from '../../users/types';
 
+type ColumnKey = Extract<
+  keyof Order,
+  'id' | 'createdAt' | 'products' | 'totalPrice' | 'user'
+>;
+
 interface OrdersTableProps {
   orders: Array<Order<OrderProduct, User>>;
+  excludeColumnKeys?: Array<ColumnKey>;
 }
 
-const COLUMNS = Array.of<
-  TableColumn<Order, 'id' | 'createdAt' | 'products' | 'totalPrice' | 'user'>
->(
+const COLUMNS = Array.of<TableColumn<Order, ColumnKey>>(
   {
     key: 'id',
     header: 'ID',
@@ -34,10 +38,15 @@ const COLUMNS = Array.of<
     key: 'createdAt',
     header: 'Date',
     renderCell: ({ value: createdAt }) => (
-      <>{new Date(createdAt as string).toDateString()}</>
+      <>{new Date(createdAt as string).toLocaleDateString()}</>
     ),
     headerProps: {
-      align: 'left',
+      align: 'right',
+    },
+    cellProps: {
+      style: {
+        textAlign: 'right',
+      },
     },
   },
   {
@@ -54,7 +63,12 @@ const COLUMNS = Array.of<
       </>
     ),
     headerProps: {
-      align: 'left',
+      align: 'right',
+    },
+    cellProps: {
+      style: {
+        textAlign: 'right',
+      },
     },
   },
   {
@@ -86,16 +100,16 @@ const COLUMNS = Array.of<
       </NavLink>
     ),
     headerProps: {
-      align: 'right',
-    },
-    cellProps: {
-      style: {
-        textAlign: 'right',
-      },
+      align: 'left',
     },
   }
 );
 
-export function OrdersTable({ orders }: OrdersTableProps) {
-  return <Table items={orders} columns={COLUMNS} />;
+export function OrdersTable({ orders, excludeColumnKeys }: OrdersTableProps) {
+  const filteredColumns = useMemo(() => {
+    const set = new Set(excludeColumnKeys);
+    return COLUMNS.filter(column => !set.has(column.key));
+  }, [excludeColumnKeys]);
+
+  return <Table items={orders} columns={filteredColumns} />;
 }

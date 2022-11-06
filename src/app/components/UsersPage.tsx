@@ -8,6 +8,7 @@ export function UsersPage() {
     <Page>
       <FullLayout>
         <h2>Users</h2>
+        {/** TODO: build users table */}
         <UserListContainer />
       </FullLayout>
     </Page>

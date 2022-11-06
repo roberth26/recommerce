@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import { connect } from 'react-redux';
 import { UserID } from '../../users/types';
 import { State } from '../types';
@@ -9,6 +9,13 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { SplitPane } from '../../utils/SplitPane';
 import { OrdersTableContainer } from './OrdersTableContainer';
+
+const ORDERS_TABLE_EXCLUDED_COLUMN_KEYS =
+  Array.of<
+    NonNullable<
+      ComponentProps<typeof OrdersTableContainer>['excludeColumnKeys']
+    >[number]
+  >('user');
 
 interface UserPageProps {
   userID: UserID | undefined | null;
@@ -26,7 +33,10 @@ export function UserPage({ userID }: UserPageProps) {
           </div>
           <div>
             <h2>Orders</h2>
-            <OrdersTableContainer userID={userID} />
+            <OrdersTableContainer
+              userID={userID}
+              excludeColumnKeys={ORDERS_TABLE_EXCLUDED_COLUMN_KEYS}
+            />
           </div>
         </SplitPane>
       </FullLayout>
