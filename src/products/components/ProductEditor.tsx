@@ -10,12 +10,12 @@ type EditableProduct = Pick<
   'category' | 'name' | 'price' | 'imageURI' | 'description'
 >;
 
-type ProductEditorProps = {
+interface ProductEditorProps {
   product: Product<ProductCategory> | undefined | null;
   productCategories: Array<ProductCategory>;
   onProductEdit?: (product: Product<ProductCategory>) => void;
   onCancel?: () => void;
-};
+}
 
 export function ProductEditor({
   product,

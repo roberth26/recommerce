@@ -3,7 +3,7 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductEditorContainer } from './ProductEditorContainer';
 
-type ProductCreatePageProps = {};
+interface ProductCreatePageProps {}
 
 export function ProductCreatePage(_props: ProductCreatePageProps) {
   return (

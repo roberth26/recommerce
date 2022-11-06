@@ -11,10 +11,10 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 import { deleteProductCategory } from '../../product-categories/actions';
 import { NavButton } from '../../utils/NavButton';
 
-type ProductsPageProps = {
+interface ProductsPageProps {
   productCategory: ProductCategory | undefined | null;
   onProductCategoryDelete?: (productCategory: ProductCategory) => void;
-};
+}
 
 export function ProductsPage({
   productCategory,

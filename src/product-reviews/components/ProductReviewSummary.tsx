@@ -5,13 +5,13 @@ import { StarRating } from '../../utils/StarRating';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
-type ProductReviewSummaryProps = {
+interface ProductReviewSummaryProps {
   productReview: ProductReview<ProductReviewProduct, User> | undefined | null;
   onProductReviewDelete?: (
     productReview: ProductReview<ProductReviewProduct, User>
   ) => void;
   onEdit?: () => void;
-};
+}
 
 export function ProductReviewSummary({
   productReview,

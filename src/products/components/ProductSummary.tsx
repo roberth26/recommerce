@@ -4,9 +4,9 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 import { StarRating } from '../../utils/StarRating';
 import { NavLink } from '../../utils/NavLink';
 
-type ProductSummaryProps = {
+interface ProductSummaryProps {
   product: Product | undefined | null;
-};
+}
 
 export function ProductSummary({ product }: ProductSummaryProps) {
   if (product == null) {

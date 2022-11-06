@@ -13,9 +13,9 @@ import { ProductReviewEditorContainer } from './ProductReviewEditorContainer';
 import { ProductPickerContainer } from './ProductPickerContainer';
 import { UserPickerContainer } from './UserPickerContainer';
 
-type ProductReviewListProps = {
+interface ProductReviewListProps {
   productReviewIDs: Array<ProductReviewID>;
-};
+}
 
 export function ProductReviewList({
   productReviewIDs,

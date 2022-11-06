@@ -13,7 +13,7 @@ export enum ActionType {
   DELETE_PRODUCT_REVIEWS = '@@product-reviews/DELETE_PRODUCT_REVIEWS',
 }
 
-export type RequestProductReviews = {
+export interface RequestProductReviews {
   type: ActionType.REQUEST_PRODUCT_REVIEWS;
   payload?: {
     productID?: ProductID | null;
@@ -22,7 +22,7 @@ export type RequestProductReviews = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProductReviews(
   payload?: RequestProductReviews['payload'],
@@ -35,7 +35,7 @@ export function requestProductReviews(
   };
 }
 
-export type RequestProductReview = {
+export interface RequestProductReview {
   type: ActionType.REQUEST_PRODUCT_REVIEW;
   payload: {
     productReviewID: ProductReviewID;
@@ -43,7 +43,7 @@ export type RequestProductReview = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProductReview(
   payload: RequestProductReview['payload'],
@@ -56,7 +56,7 @@ export function requestProductReview(
   };
 }
 
-export type ReceiveProductReviews = {
+export interface ReceiveProductReviews {
   type: ActionType.RECEIVE_PRODUCT_REVIEWS;
   payload: {
     productReviews: Array<ProductReview>;
@@ -64,7 +64,7 @@ export type ReceiveProductReviews = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProductReviews(
   payload: ReceiveProductReviews['payload'],
@@ -77,7 +77,7 @@ export function receiveProductReviews(
   };
 }
 
-export type ReceiveProductReview = {
+export interface ReceiveProductReview {
   type: ActionType.RECEIVE_PRODUCT_REVIEW;
   payload: {
     productReview: ProductReview;
@@ -85,7 +85,7 @@ export type ReceiveProductReview = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProductReview(
   payload: ReceiveProductReview['payload'],
@@ -98,7 +98,7 @@ export function receiveProductReview(
   };
 }
 
-export type CreateProductReview = {
+export interface CreateProductReview {
   type: ActionType.CREATE_PRODUCT_REVIEW;
   payload: {
     productReview: ProductReview;
@@ -106,7 +106,7 @@ export type CreateProductReview = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function createProductReview(
   payload: CreateProductReview['payload'],
@@ -119,7 +119,7 @@ export function createProductReview(
   };
 }
 
-export type UpdateProductReview = {
+export interface UpdateProductReview {
   type: ActionType.UPDATE_PRODUCT_REVIEW;
   payload: {
     productReview: ProductReview;
@@ -127,7 +127,7 @@ export type UpdateProductReview = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function updateProductReview(
   payload: UpdateProductReview['payload'],
@@ -140,7 +140,7 @@ export function updateProductReview(
   };
 }
 
-export type DeleteProductReview = {
+export interface DeleteProductReview {
   type: ActionType.DELETE_PRODUCT_REVIEW;
   payload: {
     productReviewID: ProductReviewID;
@@ -148,7 +148,7 @@ export type DeleteProductReview = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteProductReview(
   payload: DeleteProductReview['payload'],
@@ -161,7 +161,7 @@ export function deleteProductReview(
   };
 }
 
-export type DeleteProductReviews = {
+export interface DeleteProductReviews {
   type: ActionType.DELETE_PRODUCT_REVIEWS;
   payload: {
     productReviewIDs?: Array<ProductReviewID>;
@@ -171,7 +171,7 @@ export type DeleteProductReviews = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteProductReviews(
   payload: DeleteProductReviews['payload'],

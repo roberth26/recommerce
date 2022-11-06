@@ -6,9 +6,9 @@ import { Product } from '../../products/types';
 import { User } from '../../users/types';
 import { NavLink } from '../../utils/NavLink';
 
-type OrderSummaryProps = {
+interface OrderSummaryProps {
   order: Order<Product, User> | undefined | null;
-};
+}
 
 export function OrderSummary({ order }: OrderSummaryProps) {
   if (order == null) {

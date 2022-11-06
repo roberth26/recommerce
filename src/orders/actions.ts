@@ -13,7 +13,7 @@ export enum ActionType {
   DELETE_ORDERS = '@@orders/DELETE_ORDERS',
 }
 
-export type RequestOrders = {
+export interface RequestOrders {
   type: ActionType.REQUEST_ORDERS;
   payload?: {
     userID?: UserID | null;
@@ -21,7 +21,7 @@ export type RequestOrders = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestOrders(
   payload?: RequestOrders['payload'],
@@ -34,7 +34,7 @@ export function requestOrders(
   };
 }
 
-export type RequestOrder = {
+export interface RequestOrder {
   type: ActionType.REQUEST_ORDER;
   payload: {
     orderID: OrderID;
@@ -42,7 +42,7 @@ export type RequestOrder = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestOrder(
   payload: RequestOrder['payload'],
@@ -55,7 +55,7 @@ export function requestOrder(
   };
 }
 
-export type ReceiveOrders = {
+export interface ReceiveOrders {
   type: ActionType.RECEIVE_ORDERS;
   payload: {
     orders: Array<Order>;
@@ -63,7 +63,7 @@ export type ReceiveOrders = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveOrders(
   payload: ReceiveOrders['payload'],
@@ -76,7 +76,7 @@ export function receiveOrders(
   };
 }
 
-export type ReceiveOrder = {
+export interface ReceiveOrder {
   type: ActionType.RECEIVE_ORDER;
   payload: {
     order: Order;
@@ -84,7 +84,7 @@ export type ReceiveOrder = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveOrder(
   payload: ReceiveOrder['payload'],
@@ -97,7 +97,7 @@ export function receiveOrder(
   };
 }
 
-export type CreateOrder = {
+export interface CreateOrder {
   type: ActionType.CREATE_ORDER;
   payload: {
     order: Order;
@@ -105,7 +105,7 @@ export type CreateOrder = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function createOrder(
   payload: CreateOrder['payload'],
@@ -118,7 +118,7 @@ export function createOrder(
   };
 }
 
-export type UpdateOrder = {
+export interface UpdateOrder {
   type: ActionType.UPDATE_ORDER;
   payload: {
     order: Order;
@@ -126,7 +126,7 @@ export type UpdateOrder = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function updateOrder(
   payload: UpdateOrder['payload'],
@@ -139,7 +139,7 @@ export function updateOrder(
   };
 }
 
-export type DeleteOrder = {
+export interface DeleteOrder {
   type: ActionType.DELETE_ORDER;
   payload: {
     orderID: OrderID;
@@ -147,7 +147,7 @@ export type DeleteOrder = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteOrder(
   payload: DeleteOrder['payload'],
@@ -160,7 +160,7 @@ export function deleteOrder(
   };
 }
 
-export type OrderDeleted = {
+export interface OrderDeleted {
   type: ActionType.ORDER_DELETED;
   payload: {
     orderID: OrderID;
@@ -168,7 +168,7 @@ export type OrderDeleted = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function orderDeleted(
   payload: OrderDeleted['payload'],
@@ -181,7 +181,7 @@ export function orderDeleted(
   };
 }
 
-export type DeleteOrders = {
+export interface DeleteOrders {
   type: ActionType.DELETE_ORDERS;
   payload: {
     orderIDs?: Array<OrderID>;
@@ -190,7 +190,7 @@ export type DeleteOrders = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteOrders(
   payload: DeleteOrders['payload'],

@@ -7,11 +7,11 @@ import { ProductCategoryID } from '../../product-categories/types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
-type OrderDetailProps = {
+interface OrderDetailProps {
   order: Order<Product<ProductCategoryID>, User> | undefined | null;
   onOrderDelete?: (order: Order<Product<ProductCategoryID>, User>) => void;
   renderProduct: (product: Product<ProductCategoryID>) => ReactNode;
-};
+}
 
 export function OrderDetail({
   order,

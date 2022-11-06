@@ -1,9 +1,9 @@
 import React, { ReactNode, HTMLAttributes } from 'react';
 
-type SidebarLayoutProps = {
+interface SidebarLayoutProps {
   sidebarContent?: ReactNode | null;
   mainContent?: ReactNode | null;
-};
+}
 
 export function SidebarLayout({
   sidebarContent,

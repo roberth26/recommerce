@@ -6,7 +6,7 @@ import { State as UsersState } from '../users/types';
 import { State as OrdersState } from '../orders/types';
 import { State as RoutesState } from '../routes/types';
 
-export type State = {
+export interface State {
   productCategories: ProductCategoriesState;
   productReviews: ProductReviewsState;
   products: ProductsState;
@@ -14,4 +14,4 @@ export type State = {
   orders: OrdersState;
   routes: RoutesState;
   location: LocationState;
-};
+}

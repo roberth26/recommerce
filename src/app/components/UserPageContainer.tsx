@@ -10,9 +10,9 @@ import { FullLayout } from './FullLayout';
 import { SplitPane } from '../../utils/SplitPane';
 import { OrdersTableContainer } from './OrdersTableContainer';
 
-type UserPageProps = {
+interface UserPageProps {
   userID: UserID | undefined | null;
-};
+}
 
 export function UserPage({ userID }: UserPageProps) {
   return (

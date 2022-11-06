@@ -12,7 +12,7 @@ export enum ActionType {
   PRODUCT_DELETED = '@@products/PRODUCT_DELETED',
 }
 
-export type RequestProducts = {
+export interface RequestProducts {
   type: ActionType.REQUEST_PRODUCTS;
   payload?: {
     productCategoryID?: ProductCategoryID | null;
@@ -20,7 +20,7 @@ export type RequestProducts = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProducts(
   payload?: RequestProducts['payload'],
@@ -33,7 +33,7 @@ export function requestProducts(
   };
 }
 
-export type RequestProduct = {
+export interface RequestProduct {
   type: ActionType.REQUEST_PRODUCT;
   payload: {
     productID: ProductID;
@@ -41,7 +41,7 @@ export type RequestProduct = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProduct(
   payload: RequestProduct['payload'],
@@ -54,7 +54,7 @@ export function requestProduct(
   };
 }
 
-export type ReceiveProducts = {
+export interface ReceiveProducts {
   type: ActionType.RECEIVE_PRODUCTS;
   payload: {
     products: Array<Product>;
@@ -62,7 +62,7 @@ export type ReceiveProducts = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProducts(
   payload: ReceiveProducts['payload'],
@@ -75,7 +75,7 @@ export function receiveProducts(
   };
 }
 
-export type ReceiveProduct = {
+export interface ReceiveProduct {
   type: ActionType.RECEIVE_PRODUCT;
   payload: {
     product: Product;
@@ -83,7 +83,7 @@ export type ReceiveProduct = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProduct(
   payload: ReceiveProduct['payload'],
@@ -96,7 +96,7 @@ export function receiveProduct(
   };
 }
 
-export type CreateProduct = {
+export interface CreateProduct {
   type: ActionType.CREATE_PRODUCT;
   payload: {
     product: Product;
@@ -104,7 +104,7 @@ export type CreateProduct = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function createProduct(
   payload: CreateProduct['payload'],
@@ -117,7 +117,7 @@ export function createProduct(
   };
 }
 
-export type UpdateProduct = {
+export interface UpdateProduct {
   type: ActionType.UPDATE_PRODUCT;
   payload: {
     product: Product;
@@ -125,7 +125,7 @@ export type UpdateProduct = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function updateProduct(
   payload: UpdateProduct['payload'],
@@ -138,7 +138,7 @@ export function updateProduct(
   };
 }
 
-export type DeleteProduct = {
+export interface DeleteProduct {
   type: ActionType.DELETE_PRODUCT;
   payload: {
     productID: ProductID;
@@ -146,7 +146,7 @@ export type DeleteProduct = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteProduct(
   payload: DeleteProduct['payload'],
@@ -159,7 +159,7 @@ export function deleteProduct(
   };
 }
 
-export type ProductDeleted = {
+export interface ProductDeleted {
   type: ActionType.PRODUCT_DELETED;
   payload: {
     productID: ProductID;
@@ -167,7 +167,7 @@ export type ProductDeleted = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function productDeleted(
   payload: ProductDeleted['payload'],

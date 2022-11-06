@@ -2,9 +2,9 @@ import React, { ReactNode, HTMLAttributes } from 'react';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
-type PageProps = {
+interface PageProps {
   children: ReactNode;
-};
+}
 
 export function Page({ children }: PageProps) {
   return (

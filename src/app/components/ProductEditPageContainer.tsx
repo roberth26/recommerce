@@ -9,11 +9,11 @@ import { FullLayout } from './FullLayout';
 import { ProductEditorContainer } from './ProductEditorContainer';
 import { Dispatch } from 'redux';
 
-type ProductEditPageProps = {
+interface ProductEditPageProps {
   productID: ProductID | undefined | null;
   onProductEdit?: (product: Product) => void;
   onCancel?: () => void;
-};
+}
 
 export function ProductEditPage({
   productID,

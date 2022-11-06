@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import { State } from '../types';
 import { getUserIDs } from '../selectors';
 
-type UserListProps = {
+interface UserListProps {
   userIDs: Array<UserID>;
-};
+}
 
 export function UserList({ userIDs }: UserListProps) {
   return (

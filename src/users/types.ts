@@ -1,11 +1,11 @@
 export type UserID = string;
 
-export type User = {
+export interface User {
   id: UserID;
   name: string;
-};
+}
 
-export type State = {
+export interface State {
   byID: Partial<Record<UserID, User>>;
   allIDs: Array<UserID>;
-};
+}

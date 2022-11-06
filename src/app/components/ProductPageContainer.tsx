@@ -9,10 +9,10 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductCategory } from '../../product-categories/types';
 
-type ProductPageProps = {
+interface ProductPageProps {
   productID: ProductID | undefined | null;
   onProductDelete?: (product: Product<ProductCategory>) => void;
-};
+}
 
 export function ProductPage({ productID, onProductDelete }: ProductPageProps) {
   return (

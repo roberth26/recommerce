@@ -1,11 +1,11 @@
 export type ProductCategoryID = string;
 
-export type ProductCategory = {
+export interface ProductCategory {
   id: ProductCategoryID;
   name: string;
-};
+}
 
-export type State = {
+export interface State {
   byID: Partial<Record<ProductCategoryID, ProductCategory>>;
   allIDs: Array<ProductCategoryID>;
-};
+}

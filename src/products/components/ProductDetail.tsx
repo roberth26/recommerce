@@ -5,10 +5,10 @@ import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 import { NavButton } from '../../utils/NavButton';
 
-type ProductDetailProps = {
+interface ProductDetailProps {
   product: Product<ProductCategory> | undefined | null;
   onProductDelete?: (product: Product<ProductCategory>) => void;
-};
+}
 
 export function ProductDetail({
   product,

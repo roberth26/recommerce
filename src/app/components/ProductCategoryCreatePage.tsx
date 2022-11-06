@@ -3,7 +3,7 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductCategoryEditorContainer } from './ProductCategoryEditorContainer';
 
-type ProductCategoryCreatePageProps = {};
+interface ProductCategoryCreatePageProps {}
 
 export function ProductCategoryCreatePage(
   _props: ProductCategoryCreatePageProps

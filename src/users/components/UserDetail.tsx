@@ -1,10 +1,10 @@
 import React from 'react';
 import { User } from '../types';
 
-type UserDetailProps = {
+interface UserDetailProps {
   user: User | undefined | null;
   onUserDelete?: (user: User) => void;
-};
+}
 
 export function UserDetail({ user, onUserDelete }: UserDetailProps) {
   if (user == null) {

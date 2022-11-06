@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from 'react';
 
-type StarRatingProps = {
+interface StarRatingProps {
   rating: number | undefined | null;
-};
+}
 
 export function StarRating({ rating }: StarRatingProps) {
   if (rating == null) {

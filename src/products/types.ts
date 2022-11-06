@@ -7,9 +7,9 @@ export type ProductID = string;
 
 export type ProductProductCategory = ProductCategoryID | ProductCategory;
 
-export type Product<
+export interface Product<
   TProductProductCategory extends ProductProductCategory = ProductProductCategory
-> = {
+> {
   id: ProductID;
   name: string;
   price: number;
@@ -17,10 +17,10 @@ export type Product<
   imageURI: string;
   rating: number | null;
   description: string;
-};
+}
 
-export type State = {
+export interface State {
   byID: Partial<Record<ProductID, Product<ProductCategoryID>>>;
   allIDs: Array<ProductID>;
   idsByProductCategoryID: Partial<Record<ProductCategoryID, Array<ProductID>>>;
-};
+}

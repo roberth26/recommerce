@@ -1,8 +1,8 @@
 import React, { ReactNode, HTMLAttributes } from 'react';
 
-type FullLayoutProps = {
+interface FullLayoutProps {
   children?: ReactNode | null;
-};
+}
 
 export function FullLayout({ children }: FullLayoutProps) {
   return <Root>{children}</Root>;

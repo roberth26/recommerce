@@ -6,9 +6,9 @@ import { State } from '../types';
 import { getProductIDsByProductCategoryID, getProductIDs } from '../selectors';
 import { ProductCategoryID } from '../../product-categories/types';
 
-type ProductListProps = {
+interface ProductListProps {
   productIDs: Array<ProductID>;
-};
+}
 
 export function ProductList({ productIDs }: ProductListProps) {
   return (

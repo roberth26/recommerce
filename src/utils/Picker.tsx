@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, SelectHTMLAttributes } from 'react';
 
-export type PickerProps<T> = {
+export interface PickerProps<T> {
   value: string | null;
   items: T[];
   getItemKey: (item: T) => string;
@@ -10,7 +10,7 @@ export type PickerProps<T> = {
     SelectHTMLAttributes<HTMLSelectElement>,
     'value' | 'onChange'
   >;
-};
+}
 
 export function Picker<T>({
   value,

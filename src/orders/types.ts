@@ -7,19 +7,19 @@ export type OrderProduct = ProductID | Product;
 
 export type OrderUser = UserID | User;
 
-export type Order<
+export interface Order<
   TOrderProduct extends OrderProduct = OrderProduct,
   TOrderUser extends OrderUser = OrderUser
-> = {
+> {
   id: OrderID;
   createdAt: string;
   products: Array<TOrderProduct>;
   totalPrice: number;
   user: TOrderUser;
-};
+}
 
-export type State = {
+export interface State {
   byID: Partial<Record<OrderID, Order<ProductID, UserID>>>;
   allIDs: Array<OrderID>;
   idsByUserID: Partial<Record<UserID, Array<OrderID>>>;
-};
+}

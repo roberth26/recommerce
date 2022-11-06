@@ -10,10 +10,10 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductCategoryEditorContainer } from './ProductCategoryEditorContainer';
 
-type ProductCategoryEditPageProps = {
+interface ProductCategoryEditPageProps {
   productCategoryID: ProductCategoryID | undefined | null;
   onProductCategoryEdit?: (productCategory: ProductCategory) => void;
-};
+}
 
 export function ProductCategoryEditPage({
   productCategoryID,

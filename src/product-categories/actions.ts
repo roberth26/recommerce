@@ -11,12 +11,12 @@ export enum ActionType {
   PRODUCT_CATEGORY_DELETED = '@@product-categories/PRODUCT_CATEGORY_DELETED',
 }
 
-export type RequestProductCategories = {
+export interface RequestProductCategories {
   type: ActionType.REQUEST_PRODUCT_CATEGORIES;
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProductCategories(
   meta?: RequestProductCategories['meta']
@@ -27,7 +27,7 @@ export function requestProductCategories(
   };
 }
 
-export type RequestProductCategory = {
+export interface RequestProductCategory {
   type: ActionType.REQUEST_PRODUCT_CATEGORY;
   payload: {
     productCategoryID: ProductCategoryID;
@@ -35,7 +35,7 @@ export type RequestProductCategory = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestProductCategory(
   payload: RequestProductCategory['payload'],
@@ -48,7 +48,7 @@ export function requestProductCategory(
   };
 }
 
-export type ReceiveProductCategories = {
+export interface ReceiveProductCategories {
   type: ActionType.RECEIVE_PRODUCT_CATEGORIES;
   payload: {
     productCategories: Array<ProductCategory>;
@@ -56,7 +56,7 @@ export type ReceiveProductCategories = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProductCategories(
   payload: ReceiveProductCategories['payload'],
@@ -69,7 +69,7 @@ export function receiveProductCategories(
   };
 }
 
-export type ReceiveProductCategory = {
+export interface ReceiveProductCategory {
   type: ActionType.RECEIVE_PRODUCT_CATEGORY;
   payload: {
     productCategory: ProductCategory;
@@ -77,7 +77,7 @@ export type ReceiveProductCategory = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveProductCategory(
   payload: ReceiveProductCategory['payload'],
@@ -90,7 +90,7 @@ export function receiveProductCategory(
   };
 }
 
-export type CreateProductCategory = {
+export interface CreateProductCategory {
   type: ActionType.CREATE_PRODUCT_CATEGORY;
   payload: {
     productCategory: ProductCategory;
@@ -98,7 +98,7 @@ export type CreateProductCategory = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function createProductCategory(
   payload: CreateProductCategory['payload'],
@@ -111,7 +111,7 @@ export function createProductCategory(
   };
 }
 
-export type UpdateProductCategory = {
+export interface UpdateProductCategory {
   type: ActionType.UPDATE_PRODUCT_CATEGORY;
   payload: {
     productCategory: ProductCategory;
@@ -119,7 +119,7 @@ export type UpdateProductCategory = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function updateProductCategory(
   payload: UpdateProductCategory['payload'],
@@ -132,7 +132,7 @@ export function updateProductCategory(
   };
 }
 
-export type DeleteProductCategory = {
+export interface DeleteProductCategory {
   type: ActionType.DELETE_PRODUCT_CATEGORY;
   payload: {
     productCategoryID: ProductCategoryID;
@@ -140,7 +140,7 @@ export type DeleteProductCategory = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteProductCategory(
   payload: DeleteProductCategory['payload'],
@@ -153,7 +153,7 @@ export function deleteProductCategory(
   };
 }
 
-export type ProductCategoryDeleted = {
+export interface ProductCategoryDeleted {
   type: ActionType.PRODUCT_CATEGORY_DELETED;
   payload: {
     productCategoryID: ProductCategoryID;
@@ -161,7 +161,7 @@ export type ProductCategoryDeleted = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function productCategoryDeleted(
   payload: ProductCategoryDeleted['payload'],

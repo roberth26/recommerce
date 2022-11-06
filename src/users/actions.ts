@@ -11,12 +11,12 @@ export enum ActionType {
   USER_DELETED = '@@users/USER_DELETED',
 }
 
-export type RequestUsers = {
+export interface RequestUsers {
   type: ActionType.REQUEST_USERS;
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestUsers(meta?: RequestUsers['meta']): RequestUsers {
   return {
@@ -25,7 +25,7 @@ export function requestUsers(meta?: RequestUsers['meta']): RequestUsers {
   };
 }
 
-export type RequestUser = {
+export interface RequestUser {
   type: ActionType.REQUEST_USER;
   payload: {
     userID: UserID;
@@ -33,7 +33,7 @@ export type RequestUser = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function requestUser(
   payload: RequestUser['payload'],
@@ -46,7 +46,7 @@ export function requestUser(
   };
 }
 
-export type ReceiveUsers = {
+export interface ReceiveUsers {
   type: ActionType.RECEIVE_USERS;
   payload: {
     users: Array<User>;
@@ -54,7 +54,7 @@ export type ReceiveUsers = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveUsers(
   payload: ReceiveUsers['payload'],
@@ -67,7 +67,7 @@ export function receiveUsers(
   };
 }
 
-export type ReceiveUser = {
+export interface ReceiveUser {
   type: ActionType.RECEIVE_USER;
   payload: {
     user: User;
@@ -75,7 +75,7 @@ export type ReceiveUser = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function receiveUser(
   payload: ReceiveUser['payload'],
@@ -88,7 +88,7 @@ export function receiveUser(
   };
 }
 
-export type CreateUser = {
+export interface CreateUser {
   type: ActionType.CREATE_USER;
   payload: {
     user: User;
@@ -96,7 +96,7 @@ export type CreateUser = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function createUser(
   payload: CreateUser['payload'],
@@ -109,7 +109,7 @@ export function createUser(
   };
 }
 
-export type UpdateUser = {
+export interface UpdateUser {
   type: ActionType.UPDATE_USER;
   payload: {
     user: User;
@@ -117,7 +117,7 @@ export type UpdateUser = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function updateUser(
   payload: UpdateUser['payload'],
@@ -130,7 +130,7 @@ export function updateUser(
   };
 }
 
-export type DeleteUser = {
+export interface DeleteUser {
   type: ActionType.DELETE_USER;
   payload: {
     userID: UserID;
@@ -138,7 +138,7 @@ export type DeleteUser = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function deleteUser(
   payload: DeleteUser['payload'],
@@ -151,7 +151,7 @@ export function deleteUser(
   };
 }
 
-export type UserDeleted = {
+export interface UserDeleted {
   type: ActionType.USER_DELETED;
   payload: {
     userID: UserID;
@@ -159,7 +159,7 @@ export type UserDeleted = {
   meta?: {
     id: string;
   };
-};
+}
 
 export function userDeleted(
   payload: UserDeleted['payload'],

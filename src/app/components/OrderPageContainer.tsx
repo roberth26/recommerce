@@ -8,10 +8,10 @@ import { Page } from './Page';
 import { FullLayout } from './FullLayout';
 import { ProductSummary } from '../../products/components/ProductSummary';
 
-type OrderPageProps = {
+interface OrderPageProps {
   orderID: OrderID | undefined | null;
   onOrderDelete?: (order: Order) => void;
-};
+}
 
 export function OrderPage({ orderID, onOrderDelete }: OrderPageProps) {
   return (

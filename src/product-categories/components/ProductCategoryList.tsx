@@ -3,9 +3,9 @@ import { ProductCategory } from '../types';
 import { ActionType as RoutesActionType } from '../../routes/actions';
 import { NavLink } from '../../utils/NavLink';
 
-type ProductCategoryListProps = {
+interface ProductCategoryListProps {
   categories: ProductCategory[];
-};
+}
 
 export function ProductCategoryList({ categories }: ProductCategoryListProps) {
   return (
