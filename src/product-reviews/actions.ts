@@ -1,5 +1,5 @@
 import { ProductReviewID, ProductReview } from './types';
-import { ProductID } from '../products/types';
+import { Product, ProductID } from '../products/types';
 import { UserID } from '../users/types';
 
 export enum ActionType {
@@ -15,10 +15,17 @@ export enum ActionType {
 
 export interface RequestProductReviews {
   type: ActionType.REQUEST_PRODUCT_REVIEWS;
-  payload?: {
-    productID?: ProductID | null;
-    userID?: UserID | null;
-  };
+  payload?:
+    | {
+        productID?: ProductID | null;
+        productSlug?: never;
+        userID?: UserID | null;
+      }
+    | {
+        product?: never;
+        productSlug?: Product['slug'] | null;
+        userID?: UserID | null;
+      };
   meta?: {
     id: string;
   };

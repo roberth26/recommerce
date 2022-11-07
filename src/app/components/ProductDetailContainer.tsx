@@ -2,8 +2,11 @@ import { ComponentProps } from 'react';
 import { connect } from 'react-redux';
 import { ProductDetail } from '../../products/components/ProductDetail';
 import { State } from '../types';
-import { getProductByIDDenormalized } from '../selectors';
-import { ProductID } from '../../products/types';
+import {
+  getProductByIDDenormalized,
+  getProductBySlugDenormalized,
+} from '../selectors';
+import { Product, ProductID } from '../../products/types';
 import { deleteProduct } from '../../products/actions';
 
 type ProductDetailProps = ComponentProps<typeof ProductDetail>;
@@ -18,9 +21,17 @@ type ProductDetailContainerOwnProps = Omit<
   ProductDetailProps,
   | keyof ProductDetailContainerStateProps
   | keyof Omit<ProductDetailContainerDispatchProps, 'onProductDelete'>
-> & {
-  productID: ProductID | undefined | null;
-};
+> &
+  (
+    | {
+        productID: ProductID | undefined | null;
+        productSlug?: never;
+      }
+    | {
+        productID?: never;
+        productSlug: Product['slug'] | undefined | null;
+      }
+  );
 
 export const ProductDetailContainer = connect<
   ProductDetailContainerStateProps,
@@ -28,8 +39,11 @@ export const ProductDetailContainer = connect<
   ProductDetailContainerOwnProps,
   State
 >(
-  (state, { productID }) => ({
-    product: getProductByIDDenormalized(state, productID),
+  (state, { productID, productSlug }) => ({
+    product:
+      productID != null
+        ? getProductByIDDenormalized(state, productID)
+        : getProductBySlugDenormalized(state, productSlug),
   }),
   (dispatch, { onProductDelete }) => ({
     onProductDelete: product => {

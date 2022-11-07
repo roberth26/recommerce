@@ -14,7 +14,7 @@ interface ProductEditorProps {
   product: Product<ProductCategory> | undefined | null;
   productCategories: Array<ProductCategory>;
   onProductEdit?: (product: Product<ProductCategory>) => void;
-  onCancel?: () => void;
+  onCancel?: (product: Product<ProductCategory>) => void;
 }
 
 export function ProductEditor({
@@ -61,6 +61,11 @@ export function ProductEditor({
 
     if (editedProduct.category) {
       onProductEdit?.(editedProduct);
+    }
+  };
+  const handleCancelClick = () => {
+    if (product) {
+      onCancel?.(product);
     }
   };
 
@@ -118,7 +123,7 @@ export function ProductEditor({
         </Field>
       ))}
       <br />
-      <button onClick={onCancel}>Cancel</button>
+      <button onClick={handleCancelClick}>Cancel</button>
       &nbsp;&nbsp;
       <button onClick={() => alert('TODO')}>Delete</button>
       &nbsp;&nbsp;

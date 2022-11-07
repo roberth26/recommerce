@@ -2,11 +2,12 @@ import React, { Fragment, HTMLAttributes, useState } from 'react';
 import { connect } from 'react-redux';
 import { ProductReviewID } from '../../product-reviews/types';
 import { ProductReviewSummaryContainer } from './ProductReviewSummaryContainer';
-import { ProductID } from '../../products/types';
+import { Product, ProductID } from '../../products/types';
 import { State } from '../types';
 import {
   getProductReviewIDsByProductID,
   getProductReviewIDsByUserID,
+  getProductReviewIDsByProductSlug,
 } from '../selectors';
 import { UserID } from '../../users/types';
 import { ProductReviewEditorContainer } from './ProductReviewEditorContainer';
@@ -91,10 +92,17 @@ type ProductReviewListContainerOwnProps = Omit<
   (
     | {
         productID: ProductID | undefined | null;
+        productSlug?: never;
         userID?: never;
       }
     | {
         productID?: never;
+        productSlug: Product['slug'] | undefined | null;
+        userID?: never;
+      }
+    | {
+        productID?: never;
+        productSlug?: never;
         userID: UserID | undefined | null;
       }
   );
@@ -104,11 +112,13 @@ export const ProductReviewListContainer = connect<
   ProductReviewListContainerDispatchProps,
   ProductReviewListContainerOwnProps,
   State
->((state, { productID, userID }) => ({
+>((state, { productID, productSlug, userID }) => ({
   productReviewIDs:
+    // TODO: these should be sorted by date
     productID != null
-      ? // TODO: these should be sorted by date
-        getProductReviewIDsByProductID(state, productID)
+      ? getProductReviewIDsByProductID(state, productID)
+      : productSlug != null
+      ? getProductReviewIDsByProductSlug(state, productSlug)
       : getProductReviewIDsByUserID(state, userID),
 }))(ProductReviewList);
 

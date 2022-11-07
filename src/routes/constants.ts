@@ -5,7 +5,7 @@ import { ActionType } from './actions';
 
 const routeMap: Record<ActionType, string> = {
   [ActionType.PRODUCT_CREATE]: '/products/create',
-  [ActionType.PRODUCT]: '/products/:productID',
+  [ActionType.PRODUCT]: '/products/:productSlug',
   [ActionType.PRODUCT_EDIT]: '/products/edit/:productID',
   [ActionType.PRODUCT_CATEGORY_EDIT]:
     '/product-categories/edit/:productCategoryID',

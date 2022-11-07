@@ -57,8 +57,8 @@ export const ProductEditorContainer = connect<
         dispatch(createProduct({ product: editedProduct }));
       }
     },
-    onCancel: () => {
-      onCancel?.();
+    onCancel: product => {
+      onCancel?.(product);
     },
   })
 )(ProductEditor);

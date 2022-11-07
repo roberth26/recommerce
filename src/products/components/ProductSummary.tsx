@@ -15,21 +15,19 @@ export function ProductSummary({ product }: ProductSummaryProps) {
 
   return (
     <article>
-      <div>
-        <NavLink
-          to={{
-            type: RoutesActionType.PRODUCT,
-            payload: { productID: product.id },
-          }}
-        >
-          {product.imageURI ? (
-            <ProductImage src={product.imageURI} />
-          ) : (
-            <PlaceholderImage />
-          )}
-          <Title>{product.name}</Title>
-        </NavLink>
-      </div>
+      <NavLink
+        to={{
+          type: RoutesActionType.PRODUCT,
+          payload: { productSlug: product.slug },
+        }}
+      >
+        {product.imageURI ? (
+          <ProductImage src={product.imageURI} />
+        ) : (
+          <PlaceholderImage />
+        )}
+        <Title>{product.name}</Title>
+      </NavLink>
       <Meta>
         <div>{`$${product.price}`}</div>
         <StarRating rating={product.rating} />

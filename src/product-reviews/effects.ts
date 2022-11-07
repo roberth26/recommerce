@@ -16,13 +16,8 @@ import * as API from './api';
 export const requestProductReviewsEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.REQUEST_PRODUCT_REVIEWS),
-    mergeMap(({ payload, meta }: RequestProductReviews) =>
-      from(
-        API.getProductReviews({
-          productID: payload?.productID,
-          userID: payload?.userID,
-        })
-      ).pipe(
+    mergeMap(({ payload: queryParams, meta }: RequestProductReviews) =>
+      from(API.getProductReviews(queryParams)).pipe(
         mergeMap(res =>
           res.error == null
             ? [

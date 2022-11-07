@@ -84,22 +84,17 @@ export const productsRouteEpic: Epic = action$ =>
 export const productRouteEpic: Epic = action$ =>
   action$.pipe(
     ofType(RoutesActionType.PRODUCT),
-    mergeMap(({ payload: { productID } }: ReceivedActionMeta) =>
+    mergeMap(({ payload: { productSlug } }: ReceivedActionMeta) =>
       merge(
         of(
-          requestProduct({ productID }),
-          requestProductReviews({ productID }),
+          requestProduct({ productSlug }),
+          requestProductReviews({ productSlug }),
           requestUsers()
         ),
         action$.pipe(
           ofType(ProductsActionType.PRODUCT_DELETED),
           take(1),
-          mergeMap(
-            ({ payload: { productID: deletedProductID } }: ProductDeleted) =>
-              deletedProductID === productID
-                ? [{ type: RoutesActionType.PRODUCTS }]
-                : []
-          )
+          map(() => ({ type: RoutesActionType.PRODUCTS }))
         )
       )
     )
@@ -118,9 +113,9 @@ export const productEditRouteEpic: Epic = action$ =>
             action$.pipe(ofType(ProductsActionType.RECEIVE_PRODUCT))
           ),
           take(1),
-          map(() => ({
+          map(({ payload: { product } }: ReceiveProduct) => ({
             type: RoutesActionType.PRODUCT,
-            payload: { productID },
+            payload: { productSlug: product.slug },
           }))
         )
       )
@@ -353,8 +348,8 @@ export const productsEpic: Epic = (action$, state$: StateObservable<State>) =>
     action$.pipe(
       ofType(ProductsActionType.PRODUCT_DELETED),
       // remove deleted Product's ProductReviews
-      map(({ payload: { productID } }: ProductDeleted) =>
-        deleteProductReviews({ productID })
+      map(({ payload: { productID: deletedProductID } }: ProductDeleted) =>
+        deleteProductReviews({ productID: deletedProductID })
       )
     )
   );

@@ -7,10 +7,19 @@ import { Product, ProductID } from '../products/types';
 import { User, UserID } from '../users/types';
 import { ProductCategoryID } from '../product-categories/types';
 
-export async function getProductReviews(params?: {
-  userID?: UserID | null;
-  productID?: ProductID | null;
-}): Promise<
+export async function getProductReviews(
+  params?:
+    | {
+        userID?: UserID | null;
+        productID?: ProductID | null;
+        productSlug?: never;
+      }
+    | {
+        userID?: UserID | null;
+        productID?: never;
+        productSlug?: Product['slug'] | null;
+      }
+): Promise<
   | {
       productReviews: Array<ProductReview<Product<ProductCategoryID>, User>>;
       error?: never;
@@ -36,13 +45,16 @@ export async function getProductReviews(params?: {
           : productReview.user === params.userID) &&
         (params?.productID == null
           ? true
-          : productReview.product === params.productID)
+          : productReview.product === params.productID) &&
+        (params?.productSlug == null
+          ? true
+          : productsByID[productReview.product]?.slug === params.productSlug)
     )
     .map<ProductReview<Product<ProductCategoryID>, User>>(productReview => ({
       ...productReview,
-      product: productsByID[productReview.product] as Product<
-        ProductCategoryID
-      >,
+      product: productsByID[
+        productReview.product
+      ] as Product<ProductCategoryID>,
       user: usersByID[productReview.user],
     }));
 

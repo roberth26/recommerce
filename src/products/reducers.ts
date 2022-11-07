@@ -8,6 +8,7 @@ import {
   values,
   groupBy,
   mapValues,
+  invert,
 } from 'lodash/fp';
 import { State, Product, ProductID } from './types';
 import { AnyAction, ActionType } from './actions';
@@ -52,11 +53,18 @@ export const reducer: Reducer<State, AnyAction> = (
           mapValues(map(product => product.id))
         )(byID);
 
+      const idsBySlug: typeof state['idsBySlug'] = pipe(
+        () => byID,
+        mapValues(product => product?.slug),
+        invert
+      )();
+
       return {
         ...state,
         byID,
         allIDs,
         idsByProductCategoryID,
+        idsBySlug,
       };
     }
 
@@ -90,6 +98,7 @@ export const reducer: Reducer<State, AnyAction> = (
                   prevProductIDsForProductCategoryID
                 ),
               },
+        idsBySlug: omit(prevProduct.slug, state.idsBySlug),
       };
     }
 
@@ -105,22 +114,31 @@ export const reducer: Reducer<State, AnyAction> = (
       };
 
       const allIDs: typeof state['allIDs'] = pipe(
+        () => byID,
         values,
         map<Product<ProductCategoryID>, ProductID>(product => product.id)
-      )(byID);
+      )();
 
       const idsByProductCategoryID: typeof state['idsByProductCategoryID'] =
         pipe(
+          () => byID,
           values,
           groupBy<Product<ProductCategoryID>>(product => product.category),
           mapValues(map(product => product.id))
-        )(byID);
+        )();
+
+      const idsBySlug: typeof state['idsBySlug'] = pipe(
+        () => byID,
+        mapValues(product => product?.slug),
+        invert
+      )();
 
       return {
         ...state,
         byID,
         allIDs,
         idsByProductCategoryID,
+        idsBySlug,
       };
     }
 

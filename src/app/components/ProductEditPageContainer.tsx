@@ -12,7 +12,7 @@ import { Dispatch } from 'redux';
 interface ProductEditPageProps {
   productID: ProductID | undefined | null;
   onProductEdit?: (product: Product) => void;
-  onCancel?: () => void;
+  onCancel?: (product: Product) => void;
 }
 
 export function ProductEditPage({
@@ -75,11 +75,11 @@ export const ProductEditPageContainer = connect<
   }),
   (stateProps, { dispatch }) => ({
     ...stateProps,
-    onCancel: () => {
+    onCancel: product => {
       dispatch({
         type: RoutesActionType.PRODUCT,
         payload: {
-          productID: stateProps.productID,
+          productSlug: product.slug,
         },
       });
     },

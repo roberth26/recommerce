@@ -1,5 +1,5 @@
 import { NOT_FOUND } from 'redux-first-router';
-import { ProductID } from '../products/types';
+import { Product, ProductID } from '../products/types';
 import { OrderID } from '../orders/types';
 import { UserID } from '../users/types';
 import {
@@ -12,6 +12,7 @@ export type State =
   | {
       currentRoute: ActionType.PRODUCTS;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: ProductCategory['slug'];
       orderID?: never;
@@ -19,7 +20,8 @@ export type State =
     }
   | {
       currentRoute: ActionType.PRODUCT;
-      productID: ProductID;
+      productID?: ProductID;
+      productSlug: Product['slug'];
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -28,6 +30,7 @@ export type State =
   | {
       currentRoute: ActionType.PRODUCT_EDIT;
       productID: ProductID;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -36,6 +39,7 @@ export type State =
   | {
       currentRoute: ActionType.PRODUCT_CREATE;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -44,6 +48,7 @@ export type State =
   | {
       currentRoute: ActionType.PRODUCT_CATEGORY_EDIT;
       productID?: never;
+      productSlug?: never;
       productCategoryID: ProductCategoryID;
       productCategorySlug?: never;
       orderID?: never;
@@ -52,6 +57,7 @@ export type State =
   | {
       currentRoute: ActionType.PRODUCT_CATEGORY_CREATE;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -60,6 +66,7 @@ export type State =
   | {
       currentRoute: ActionType.ORDERS;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -68,6 +75,7 @@ export type State =
   | {
       currentRoute: ActionType.ORDER;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID: OrderID;
@@ -76,6 +84,7 @@ export type State =
   | {
       currentRoute: ActionType.USERS;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -84,6 +93,7 @@ export type State =
   | {
       currentRoute: ActionType.USER;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;
@@ -92,6 +102,7 @@ export type State =
   | {
       currentRoute: typeof NOT_FOUND;
       productID?: never;
+      productSlug?: never;
       productCategoryID?: never;
       productCategorySlug?: never;
       orderID?: never;

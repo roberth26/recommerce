@@ -40,6 +40,11 @@ export const getCurrentRouteProductID = selectFromRoot(
   RoutesSelectors.getProductID
 );
 
+export const getCurrentRouteProductSlug = selectFromRoot(
+  routes,
+  RoutesSelectors.getProductSlug
+);
+
 export const getCurrentRouteProductCategoryID = selectFromRoot(
   routes,
   RoutesSelectors.getProductCategoryID
@@ -116,6 +121,11 @@ export const getProductByID = selectFromRoot(
 export const getProductIDsByProductCategoryID = selectFromRoot(
   products,
   ProductsSelectors.getProductIDsByProductCategoryID
+);
+
+export const getProductIDBySlug = selectFromRoot(
+  products,
+  ProductsSelectors.getProductIDBySlug
 );
 
 // User selectors
@@ -259,10 +269,27 @@ export const getProductReviewsByUserIDDenormalized = (
     sortBy(productReview => productReview.createdAt)
   )();
 
+export const getProductReviewIDsByProductSlug = (
+  state: State,
+  productSlug: Product['slug'] | undefined | null
+) =>
+  getProductReviewIDsByProductID(state, getProductIDBySlug(state, productSlug));
+
 export const getProductByIDDenormalized = (
   state: State,
   productID: ProductID | undefined | null
 ) => denormalizeProduct(state, getProductByID(state, productID));
+
+export const getProductBySlugDenormalized = (
+  state: State,
+  productSlug: Product['slug'] | undefined | null
+) => {
+  console.log('getProductBySlugDenormalized', productSlug);
+  return getProductByIDDenormalized(
+    state,
+    getProductIDBySlug(state, productSlug)
+  );
+};
 
 export const getCurrentProductDenormalized = (state: State) =>
   getProductByIDDenormalized(state, getCurrentRouteProductID(state));

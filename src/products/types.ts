@@ -24,4 +24,5 @@ export interface State {
   byID: Partial<Record<ProductID, Product<ProductCategoryID>>>;
   allIDs: Array<ProductID>;
   idsByProductCategoryID: Partial<Record<ProductCategoryID, Array<ProductID>>>;
+  idsBySlug: Partial<Record<Product['slug'], ProductID>>;
 }

@@ -51,7 +51,7 @@ export function ProductDetail({
         <NavLink
           to={{
             type: RoutesActionType.PRODUCTS,
-            meta: { query: { productCategoryID: product.category.id } },
+            meta: { query: { productCategory: product.category.slug } },
           }}
           isActive={() => false}
         >

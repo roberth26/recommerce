@@ -18,7 +18,7 @@ export const reducer: Reducer<State, ReceivedActionMeta> = (
     case ActionType.PRODUCT:
       return {
         currentRoute: action.type,
-        productID: action.payload.productID,
+        productSlug: action.payload.productSlug,
       };
 
     case ActionType.PRODUCT_EDIT:
