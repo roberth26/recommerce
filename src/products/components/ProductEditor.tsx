@@ -69,26 +69,29 @@ export function ProductEditor({
       {Object.entries(state).map(([key, value]) => (
         <Field key={key}>
           <label htmlFor={key}>{key}</label>
-          {key === 'name' ? (
+          {key === 'name' && (
             <input
               id={key}
               value={value as string}
               onChange={handleChange('name')}
             />
-          ) : key === 'imageURI' ? (
+          )}
+          {key === 'imageURI' && (
             <input
               id={key}
               value={value as string}
               onChange={handleChange('imageURI')}
             />
-          ) : key === 'price' ? (
+          )}
+          {key === 'price' && (
             <input
               id={key}
               type="number"
               value={value as number}
               onChange={handleChange('price')}
             />
-          ) : key === 'category' ? (
+          )}
+          {key === 'category' && (
             <Picker
               value={(value as ProductCategory | null)?.id ?? ''}
               items={productCategories}
@@ -97,17 +100,27 @@ export function ProductEditor({
               onChange={handleCategoryChange}
               selectElementAttributes={{ id: key, required: true }}
             />
-          ) : key === 'description' ? (
+          )}
+          {key === 'description' && (
             <textarea
               id={key}
               value={value as string}
               onChange={handleChange('description')}
             />
-          ) : null}
+          )}
+          {key === 'slug' && (
+            <input
+              id={key}
+              value={value as string}
+              onChange={handleChange('slug')}
+            />
+          )}
         </Field>
       ))}
       <br />
       <button onClick={onCancel}>Cancel</button>
+      &nbsp;&nbsp;
+      <button onClick={() => alert('TODO')}>Delete</button>
       &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>

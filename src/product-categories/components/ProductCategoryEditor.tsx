@@ -80,6 +80,8 @@ export function ProductCategoryEditor({
         Cancel
       </NavButton>
       &nbsp;&nbsp;
+      <button onClick={() => alert('TODO')}>Delete</button>
+      &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
   );

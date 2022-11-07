@@ -82,13 +82,14 @@ export function ProductReviewEditor({
       {Object.entries(state).map(([key, value]) => (
         <Field key={key}>
           <label htmlFor={key}>{key}</label>
-          {key === 'body' ? (
+          {key === 'body' && (
             <textarea
               id={key}
               value={value as string}
               onChange={handleChange('body')}
             />
-          ) : key === 'rating' ? (
+          )}
+          {key === 'rating' && (
             <select
               id={key}
               value={value as number}
@@ -98,21 +99,23 @@ export function ProductReviewEditor({
                 <option key={index} value={index} children={index} />
               ))}
             </select>
-          ) : key === 'user' ? (
+          )}
+          {key === 'user' &&
             renderUserPicker({
               userID: state.user,
               onUserChange: handleUserChange,
-            })
-          ) : key === 'product' ? (
+            })}
+          {key === 'product' &&
             renderProductPicker({
               productID: state.product,
               onProductChange: handleProductChange,
-            })
-          ) : null}
+            })}
         </Field>
       ))}
       <br />
       <button onClick={onCancel}>Cancel</button>
+      &nbsp;&nbsp;
+      <button onClick={() => alert('TODO')}>Delete</button>
       &nbsp;&nbsp;
       <button onClick={handleConfirmClick}>{isEdit ? 'Save' : 'Create'}</button>
     </section>
