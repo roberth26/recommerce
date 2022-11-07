@@ -9,7 +9,15 @@ import { ProductID, Product } from './types';
 import { normalizeProduct } from './utils';
 
 export async function getProducts(
-  productCategoryID?: ProductCategoryID | null
+  params?:
+    | {
+        productCategoryID: ProductCategoryID;
+        productCategorySlug?: never;
+      }
+    | {
+        productCategoryID?: never;
+        productCategorySlug: ProductCategory['slug'];
+      }
 ): Promise<
   | { products: Array<Product<ProductCategory>>; error?: never }
   | { products?: never; error: string }
@@ -28,7 +36,12 @@ export async function getProducts(
 
   const filteredProducts = (products as Product<ProductCategoryID>[])
     .filter((product: Product<ProductCategoryID>) =>
-      productCategoryID == null ? true : product.category === productCategoryID
+      params?.productCategoryID != null
+        ? product.category === params.productCategoryID
+        : params?.productCategorySlug != null
+        ? productCategoriesByID[product.category ?? '']?.slug ===
+          params.productCategorySlug
+        : true
     )
     .map<Product<ProductCategory>>(product => ({
       ...product,
@@ -44,18 +57,34 @@ export async function getProducts(
 }
 
 export async function getProduct(
-  productID: ProductID
+  params:
+    | {
+        productID: ProductID;
+        productSlug?: never;
+      }
+    | {
+        productID?: never;
+        productSlug: Product['slug'];
+      }
 ): Promise<
   | { product: Product<ProductCategory>; error?: never }
   | { product?: never; error: string }
 > {
   await delay(Math.random() * 2000 + 500);
 
-  const product = await DB.getProduct(productID);
+  const product =
+    params.productID != null
+      ? await DB.getProduct(params.productID)
+      : await DB.getAllProducts().then(products =>
+          products.find(product => product.slug === params.productSlug)
+        );
 
   if (product == null) {
     return {
-      error: `Product id=${productID} not found`,
+      error:
+        params.productID != null
+          ? `Product id=${params.productID} not found`
+          : `Product slug=${params.productSlug} not found`,
     };
   }
 

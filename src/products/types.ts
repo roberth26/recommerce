@@ -11,6 +11,7 @@ export interface Product<
   TProductProductCategory extends ProductProductCategory = ProductProductCategory
 > {
   id: ProductID;
+  slug: string;
   name: string;
   price: number;
   category: TProductProductCategory | null;

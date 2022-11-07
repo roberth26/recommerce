@@ -135,19 +135,24 @@ export function generateProducts(
   const keywords = ['product', 'car', 'watch', 'jewelry', 'book', 'toy'];
   return Array.from(new Array(100))
     .fill(null)
-    .map<Product<ProductCategoryID>>((_, index) => ({
-      id: uuid(),
-      name: Faker.commerce.productName(),
-      price: parseFloat((Math.random() * 100).toFixed(2)),
-      category:
-        productCategories[Math.floor(Math.random() * productCategories.length)]
-          .id,
-      imageURI: `https://loremflickr.com/480/480/${sample(keywords)}?lock=${
-        index + 1
-      }`,
-      rating: Math.floor(Math.random() * 5),
-      description: Faker.lorem.paragraph(),
-    }));
+    .map<Product<ProductCategoryID>>((_, index) => {
+      const name = Faker.commerce.productName();
+      return {
+        id: uuid(),
+        slug: name.replace(/ /g, '-').toLowerCase(),
+        name,
+        price: parseFloat((Math.random() * 100).toFixed(2)),
+        category:
+          productCategories[
+            Math.floor(Math.random() * productCategories.length)
+          ].id,
+        imageURI: `https://loremflickr.com/480/480/${sample(keywords)}?lock=${
+          index + 1
+        }`,
+        rating: Math.floor(Math.random() * 5),
+        description: Faker.lorem.paragraph(),
+      };
+    });
 }
 
 export function generateUsers(): Array<User> {

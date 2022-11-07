@@ -56,9 +56,13 @@ export const productsRouteEpic: Epic = action$ =>
     mergeMap(({ meta }: ReceivedActionMeta) =>
       merge(
         of(
-          requestProducts({
-            productCategorySlug: meta?.query?.productCategory,
-          }),
+          requestProducts(
+            meta?.query?.productCategory != null
+              ? {
+                  productCategorySlug: meta.query.productCategory,
+                }
+              : undefined
+          ),
           requestProductCategories()
         ),
         action$.pipe(

@@ -7,7 +7,7 @@ import { Picker } from '../../utils/Picker';
 
 type EditableProduct = Pick<
   Product<ProductCategory>,
-  'category' | 'name' | 'price' | 'imageURI' | 'description'
+  'category' | 'name' | 'price' | 'imageURI' | 'description' | 'slug'
 >;
 
 interface ProductEditorProps {
@@ -120,6 +120,7 @@ function getInitialState(
 ): EditableProduct {
   return {
     name: product?.name ?? '',
+    slug: product?.slug ?? '',
     price: product?.price ?? 0,
     category: product?.category ?? productCategories[0],
     imageURI: product?.imageURI ?? '',

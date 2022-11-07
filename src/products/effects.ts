@@ -17,8 +17,8 @@ import * as API from './api';
 export const requestProductsEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.REQUEST_PRODUCTS),
-    mergeMap(({ payload, meta }: RequestProducts) =>
-      from(API.getProducts(payload?.productCategoryID)).pipe(
+    mergeMap(({ payload: queryParams, meta }: RequestProducts) =>
+      from(API.getProducts(queryParams)).pipe(
         mergeMap(res =>
           res.error == null
             ? [receiveProducts({ products: res.products }, meta)]
@@ -31,8 +31,8 @@ export const requestProductsEpic: Epic = action$ =>
 export const requestProductEpic: Epic = action$ =>
   action$.pipe(
     ofType(ActionType.REQUEST_PRODUCT),
-    mergeMap(({ payload: { productID }, meta }: RequestProduct) =>
-      from(API.getProduct(productID)).pipe(
+    mergeMap(({ payload: queryParams, meta }: RequestProduct) =>
+      from(API.getProduct(queryParams)).pipe(
         mergeMap(res =>
           res.error == null
             ? [receiveProduct({ product: res.product }, meta)]

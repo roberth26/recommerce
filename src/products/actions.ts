@@ -17,10 +17,15 @@ export enum ActionType {
 
 export interface RequestProducts {
   type: ActionType.REQUEST_PRODUCTS;
-  payload?: {
-    productCategoryID?: ProductCategoryID | null;
-    productCategorySlug?: ProductCategory['slug'] | null;
-  };
+  payload?:
+    | {
+        productCategoryID: ProductCategoryID;
+        productCategorySlug?: never;
+      }
+    | {
+        productCategoryID?: never;
+        productCategorySlug: ProductCategory['slug'];
+      };
   meta?: {
     id: string;
   };
@@ -39,9 +44,15 @@ export function requestProducts(
 
 export interface RequestProduct {
   type: ActionType.REQUEST_PRODUCT;
-  payload: {
-    productID: ProductID;
-  };
+  payload:
+    | {
+        productID: ProductID;
+        productSlug?: never;
+      }
+    | {
+        productID?: never;
+        productSlug: Product['slug'];
+      };
   meta?: {
     id: string;
   };
