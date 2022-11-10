@@ -154,21 +154,13 @@ export const getOrderIDsByUserID = selectFromRoot(
 export const denormalizeProductReview = (
   state: State,
   productReview: ProductReview | undefined | null
-): ProductReview<Product, User> | null => {
+): ProductReview<ProductID, User> | null => {
   if (productReview == null) {
     return null;
   }
 
   const { product: productID, user: userID } =
     normalizeProductReview(productReview);
-
-  const product = getProductByID(state, productID);
-
-  if (product == null) {
-    console.warn(`Product id=${productID} not found`);
-
-    return null;
-  }
 
   const user = getUserByID(state, userID);
 
@@ -181,7 +173,7 @@ export const denormalizeProductReview = (
   return {
     ...productReview,
     user,
-    product,
+    product: productID,
   };
 };
 
@@ -283,13 +275,7 @@ export const getProductByIDDenormalized = (
 export const getProductBySlugDenormalized = (
   state: State,
   productSlug: Product['slug'] | undefined | null
-) => {
-  console.log('getProductBySlugDenormalized', productSlug);
-  return getProductByIDDenormalized(
-    state,
-    getProductIDBySlug(state, productSlug)
-  );
-};
+) => getProductByIDDenormalized(state, getProductIDBySlug(state, productSlug));
 
 export const getCurrentProductDenormalized = (state: State) =>
   getProductByIDDenormalized(state, getCurrentRouteProductID(state));

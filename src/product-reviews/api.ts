@@ -21,7 +21,7 @@ export async function getProductReviews(
       }
 ): Promise<
   | {
-      productReviews: Array<ProductReview<Product<ProductCategoryID>, User>>;
+      productReviews: Array<ProductReview<ProductID, User>>;
       error?: never;
     }
   | { productReviews?: never; error: string }
@@ -50,11 +50,8 @@ export async function getProductReviews(
           ? true
           : productsByID[productReview.product]?.slug === params.productSlug)
     )
-    .map<ProductReview<Product<ProductCategoryID>, User>>(productReview => ({
+    .map<ProductReview<ProductID, User>>(productReview => ({
       ...productReview,
-      product: productsByID[
-        productReview.product
-      ] as Product<ProductCategoryID>,
       user: usersByID[productReview.user],
     }));
 

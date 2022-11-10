@@ -1,4 +1,9 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import {
+  createStore,
+  applyMiddleware,
+  combineReducers,
+  StoreEnhancer,
+} from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import { State } from './types';
@@ -20,7 +25,35 @@ const epicMiddleware = createEpicMiddleware();
 
 const middleware = [epicMiddleware, Location.middleware];
 
-const enhancers = [Location.enhancer, applyMiddleware(...middleware)];
+const performanceEnhancer: StoreEnhancer =
+  createStore =>
+  (...args) => {
+    const store = createStore(...args);
+    let prevState = store.getState();
+    return {
+      ...store,
+      dispatch: action => {
+        prevState = store.getState();
+        store.dispatch(action);
+        return action;
+      },
+      subscribe: subscriber => {
+        return store.subscribe(() => {
+          const newState = store.getState();
+          const hasStateChanged = newState !== prevState;
+          if (hasStateChanged) {
+            subscriber();
+          }
+        });
+      },
+    };
+  };
+
+const enhancers = [
+  Location.enhancer,
+  applyMiddleware(...middleware),
+  performanceEnhancer,
+];
 
 const rootReducer = combineReducers<State>({
   productCategories: productCategoriesReducer,
@@ -29,7 +62,7 @@ const rootReducer = combineReducers<State>({
   users: usersReducer,
   orders: ordersReducer,
   routes: routesReducer,
-  location: Location.reducer as any, // TODO:
+  location: Location.reducer,
 });
 
 const rootEpic = combineEpics(
